@@ -1,0 +1,90 @@
+{
+  "nav": {
+    "brand": "Sun Prairie Tamil Society",
+    "brandTa": "சன் ப்ரேரி தமிழ்ச் சமூகம்",
+    "programs": "Programs",
+    "events": "Events",
+    "achievements": "Achievements",
+    "about": "About",
+    "join": "Join the Society"
+  },
+  "kurinci": {
+    "tinaiLabel": "குறிஞ்சி Tinai · Mountain · Union",
+    "tinaiTa": "யாதும் ஊரே · யாவரும் கேளிர்",
+    "heading": "A Tamil community took root here.",
+    "body": "Mountains are where the deepest bonds form. In Tamil literary tradition, குறிஞ்சி — the mountain landscape — is the tinai of union, belonging, and love that endures. This is the spirit that brought our community together."
+  },
+  "mullai": {
+    "tinaiLabel": "முல்லை Tinai · Forest · Learning & Patience",
+    "tinaiTa": "கற்றல் — Knowledge Grows Here",
+    "heading": "Five roots. One tree.",
+    "poemTa": "முல்லை — காடு\nகற்றல்",
+    "poemEn": "In the forest, seeds grow in patient darkness. This is Mullai — the landscape of learning.",
+    "cta": "Enroll in a program",
+    "programs": {
+      "school": { "ta": "தமிழ்ப் பள்ளி", "en": "Tamil Language School — K through High School" },
+      "library": { "ta": "நூலகம்", "en": "Community Library — Tamil books & classics" },
+      "pattarai": { "ta": "பட்டறை", "en": "Pattarai Creative Studio — Arts & cultural expression" },
+      "music": { "ta": "இசை மன்றம்", "en": "Carnatic Music Club — Tradition in practice" },
+      "volunteer": { "ta": "தன்னார்வல", "en": "Volunteer Program — Serving the broader community" }
+    }
+  },
+  "marutam": {
+    "tinaiLabel": "மருதம் Tinai · Field · Celebration & Harvest",
+    "tinaiTa": "நிகழ்வுகள் — Our Festivals",
+    "heading": "Every gathering, a ceremony.",
+    "poemTa": "மருதம் — வயல்\nகொண்டாட்டம்",
+    "poemEn": "In the cultivated field, community gathers for the harvest. This is Marutam — the landscape of celebration.",
+    "cta": "View all events",
+    "rsvp": "RSVP",
+    "notify": "Notify"
+  },
+  "neytal": {
+    "tinaiLabel": "நெய்தல் Tinai · Sea · Longing & Achievement",
+    "tinaiTa": "சாதனைகள் — Our Community's Glory",
+    "heading": "Our children carry the light forward.",
+    "body": "From Tamil oratory to Carnatic music, our community's children are showing Wisconsin — and the world — what Tamil excellence looks like.",
+    "poemTa": "நெய்தல் — கடல்\nசாதனை",
+    "poemEn": "Across the sea, they carried culture. This is Neytal — the landscape of longing and achievement.",
+    "cta": "View full achievement wall",
+    "submitAchievement": "Submit your achievement →"
+  },
+  "palai": {
+    "tinaiLabel": "பாலை Tinai · Desert · Courage & Welcome",
+    "tinaiTa": "சமூகம் — Community & Welcome",
+    "heading": "New to Wisconsin? You are home.",
+    "body": "Whether you arrived last month or fifteen years ago, Sun Prairie Tamil Society is your community. Our board volunteers their time so that no Tamil family faces the desert journey alone.",
+    "poemTa": "பாலை — வறண்ட நிலம்\nதைரியம்",
+    "poemEn": "The desert journey takes courage. Newcomers and volunteers — you are welcome here.",
+    "cta": "Join the community",
+    "helpRequestsLabel": "Open Help Requests",
+    "board": {
+      "president": "President",
+      "vicePresident": "Vice President",
+      "secretary": "Secretary"
+    }
+  },
+  "footer": {
+    "brandTa": "சன் ப்ரேரி தமிழ்ச் சமூகம்",
+    "brandEn": "Sun Prairie Tamil Society",
+    "desc": "Tamil culture, alive in Wisconsin since 2012. A volunteer-run community of families.",
+    "programs": "Programs",
+    "community": "Community",
+    "links": {
+      "tamilSchool": "Tamil School",
+      "library": "Library",
+      "pattarai": "Pattarai",
+      "musicClub": "Music Club",
+      "volunteer": "Volunteer",
+      "activityFeed": "Activity Feed",
+      "achievementWall": "Achievement Wall",
+      "helpBoard": "Help Board",
+      "events": "Events"
+    },
+    "copyright": "© 2026 Sun Prairie Tamil Society",
+    "kural": "யாதும் ஊரே யாவரும் கேளிர்"
+  },
+  "photo": {
+    "label": "Photo"
+  }
+}
