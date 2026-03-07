@@ -6,10 +6,10 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 1 — Landing Page Implementation
-**Status:** Landing page visually complete. All sections rendering. No open defects. Dev server verified via Playwright.
-**Last Updated:** 2026-03-01
-**Release Branch:** Not yet created
+**Phase:** Phase 1 — Landing Page Visual Polish Complete
+**Status:** All 6 sections fully rebuilt with cinematic animations, Framer Motion scroll-reveal, no shadow pills, Playwright-verified. Not yet deployed to Vercel.
+**Last Updated:** 2026-03-07
+**Release Branch:** Not yet created (still on main)
 
 ### What's Done
 - [x] CLAUDE.md with ground rules, tech stack, standards
@@ -26,34 +26,33 @@ Track session-by-session progress. Always read this at session start.
 - [x] `src/i18n/messages/en.json` + `ta.json` — all translations, Tamil spelling correct (ப்ரேரி, தமிழ்ச்)
 - [x] `src/lib/supabase/client.ts` + `server.ts` — Supabase clients
 - [x] `src/types/index.ts` — all TypeScript types
-- [x] `src/app/globals.css` — SPTS colors, Google Fonts (Playfair Display + Poppins + Noto Serif Tamil)
+- [x] `src/app/globals.css` — SPTS colors, Google Fonts + Kolam ring CSS keyframe animations
 - [x] `src/app/[locale]/layout.tsx` — locale root layout with next-intl provider
-- [x] **All layout components** — Nav.tsx, DotNav.tsx (6 dots: hero + 5 tinai), Footer.tsx
-- [x] **LandingHero.tsx** — Section 0: org identity, Thiruvalluvar SVG watermark, stats, founding story, 2 CTAs (single source of truth)
-- [x] **All 5 tinai section components** — KurinciHero, MullaiPrograms, MarutamEvents, NeytalAchievements, PalaiBoard
-  - Each has tinai label pill (shadow backdrop, alignSelf: flex-start)
-  - Each has landscape SVG silhouette watermark (opacity 0.06):
-    - Kurinci: mountain range
-    - Mullai: forest tree row
-    - Marutam: paddy field waves
-    - Neytal: ocean waves (3 layers)
-    - Palai: desert dunes
+- [x] **All layout components** — Nav.tsx (scroll-aware glass blur), DotNav.tsx (6 dots), Footer.tsx
+- [x] **`ScrollReveal.tsx`** — reusable Framer Motion scroll-trigger wrapper (direction + delay props)
+- [x] **`KolamDivider.tsx`** — SVG gold kolam dot-motif horizontal divider between sections
+- [x] **`LandingHero.tsx`** — FULL REBUILD: Thiruvalluvar SVG illustration + animated Kolam ring + identity pillars (no fake stats), cinematic staggered entrance
+- [x] **`KurinciHero.tsx`** — REBUILT: ScrollReveal, CTA added, shadow pill removed
+- [x] **`MullaiPrograms.tsx`** — FULL REBUILD: 5 line-art SVG icons, card grid, whileHover lift, shadow pill removed
+- [x] **`MarutamEvents.tsx`** — FULL REBUILD: featured hero event + secondary list, RSVP buttons, shadow pill removed
+- [x] **`NeytalAchievements.tsx`** — FULL REBUILD: initials avatars, 3-col grid + submit slot, cinematic rotate entrance, shadow pill removed
+- [x] **`PalaiBoard.tsx`** — FULL REBUILD: initials board avatars, help request chips, shadow pill removed
 - [x] **PoemScreen.tsx** + **ThirukkuralLoader.tsx** — Thirukkural rotation (all 1330)
-- [x] 5 PoemScreen transitions (LandingHero→Kurinci + 4 between tinai sections)
-- [x] `src/app/[locale]/page.tsx` — landing page assembled (6 sections + 5 poem transitions + footer)
-- [x] `vitest.config.ts` + `tests/setup.ts` + first unit test
-- [x] `package.json` scripts — dev, build, typecheck, test, test:e2e
+- [x] 5 PoemScreen transitions + KolamDividers between every section
+- [x] `src/app/[locale]/page.tsx` — landing page assembled (6 sections + 5 poem transitions + dividers + footer)
 - [x] **Build passes** (`npm run build` — clean, no TypeScript errors)
-- [x] **DEF-202603-001 fixed** — MullaiPrograms "use client" added
+- [x] **Playwright screenshot verification** — all 6 sections confirmed rendering correctly
 
 ### What's Pending (Next Session)
+- [ ] **GitHub repo creation + Vercel deployment** — site is not yet hosted
 - [ ] Supabase project connection (confirm project ID with user)
-- [ ] GitHub repo creation + Vercel setup
 - [ ] Database initial schema (events, achievements, board members)
 - [ ] Auth pages (login, signup)
 - [ ] Inner pages (Programs detail, Events list, Achievements wall, About)
 - [ ] Sentry integration
-- [ ] Real photos replacing all grey placeholder boxes
+- [ ] Real photos replacing all grey placeholder boxes (user to supply)
+- [ ] Real board member names (user to supply)
+- [ ] Real event dates (user to confirm)
 
 ### Open Defects
 None.
@@ -64,6 +63,42 @@ None.
 ---
 
 ## Session Log
+
+### Session 5 — 2026-03-07
+
+**Focus:** Full landing page visual redesign — cinematic animations, Thiruvalluvar illustration, Kolam ring, shadow pill removal, Playwright verification
+
+**Completed:**
+- Full redesign Q&A with user: no photos → illustration version, cinematic animation style, Thiruvalluvar hero, identity pillars replacing fake stats, initials avatars for board/achievements, animated Kolam ring
+- `globals.css` — Added 3 Kolam ring CSS keyframe animations (outer/mid/inner ring draw-in)
+- `ScrollReveal.tsx` (NEW) — Reusable Framer Motion scroll-trigger wrapper with direction, delay, distance props
+- `KolamDivider.tsx` (NEW) — SVG gold dot-motif horizontal section divider
+- `LandingHero.tsx` — Full rebuild: Thiruvalluvar SVG illustration (two-tone, gold accents), animated KolamRing (3 concentric rings, 8-star center), KolamBackgroundTexture, identity pillars, cinematic staggered entrance, Nav scroll-aware glass blur
+- `KurinciHero.tsx` — ScrollReveal wrappers, CTA added, shadow pill removed
+- `MullaiPrograms.tsx` — Full rebuild: 5 inline SVG line-art icons, card grid with whileHover lift + gold left-border, Tailwind responsive cols (fixed inline gridTemplateColumns override bug)
+- `MarutamEvents.tsx` — Full rebuild: featured event card (large gold date, RSVP CTA) + secondary staggered event rows, shadow pill removed
+- `NeytalAchievements.tsx` — Full rebuild: InitialsAvatar component, 3-col grid + submit CTA slot, rotation entrance animation, shadow pill removed
+- `PalaiBoard.tsx` — Full rebuild: BoardAvatar component, board member cards with whileHover, help request chips, final CTA, shadow pill removed
+- `page.tsx` — KolamDivider added between every section
+- Playwright screenshot loop: all 6 sections verified rendering correctly
+- Fixed Thiruvalluvar opacity (was 0.78-0.82 → solid grey blob, reduced to 0.14-0.22 with stronger gold accents)
+- Removed `rgba(0,0,0,0.28)` + `backdropFilter: blur(6px)` shadow pills from ALL 5 tinai label divs
+
+**New Defects Found:**
+None.
+
+**Key Design Decisions (this session):**
+- No photos version: Thiruvalluvar SVG illustration as hero visual, initials-based circular avatars for board/achievements
+- Identity pillars replace fake stats: Est. 2012 / 5 Programs / Sun Prairie / Tamil Heritage
+- Kolam ring: 3 concentric rings with CSS stroke-dasharray draw-in animation (3.6s / 3.0s / 2.5s staggered)
+- Shadow pills removed per user feedback: "I don't like shadow background in each page"
+- Thiruvalluvar opacity: white fills 0.14-0.22 (not 0.78-0.82), gold accents dominant
+
+**Not Yet Done:**
+- Site not hosted — GitHub repo and Vercel setup pending
+- No real content yet (photos, board names, event dates all placeholders)
+
+---
 
 ### Session 4 — 2026-03-01
 

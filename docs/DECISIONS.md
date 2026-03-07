@@ -16,13 +16,13 @@ Format:
 
 ---
 
-## D-001: Next.js 15 App Router as Framework
+## D-001: Next.js 16.1.6 App Router as Framework
 **Date:** 2026-03-01
 **Status:** Accepted
 **Context:** Needed a React framework for a full-stack community management app.
-**Decision:** Next.js 15 with App Router and TypeScript strict mode.
-**Rationale:** Both spts-clean and zenith use this. Vercel-native. App Router enables server components and streaming. Turbopack for fast dev experience.
-**Consequences:** Must use `'use client'` pragma for interactive components. Cannot mix with Pages Router.
+**Decision:** Next.js **16.1.6** with App Router and TypeScript strict mode.
+**Rationale:** Both spts-clean and zenith use Next.js. Vercel-native. App Router enables server components and streaming. Turbopack for fast dev experience.
+**Consequences:** Must use `'use client'` pragma for interactive components. Cannot mix with Pages Router. Next.js 16 uses `src/proxy.ts` for locale routing instead of `src/middleware.ts`. next-intl v4.x required (v3 only supports up to Next.js 15).
 **References:** spts-clean/next.config.ts, zenith/next.config.ts
 
 ---

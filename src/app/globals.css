@@ -168,3 +168,34 @@
   50% { transform: translateY(6px); }
 }
 .animate-bounce-hint { animation: bounce-hint 2s infinite; }
+
+/* ── Kolam ring draw-in animations ─────────────────────────────────────────
+   Each ring draws itself from dashoffset=C (invisible) to 0 (fully visible).
+   Circumferences: outer r=240 → 1508, mid r=192 → 1207, inner r=144 → 905.
+   D-013: Framer Motion handles component-level motion; CSS handles SVG strokes.
+*/
+@keyframes kolam-ring-outer {
+  from { stroke-dashoffset: 1508; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes kolam-ring-mid {
+  from { stroke-dashoffset: 1207; }
+  to   { stroke-dashoffset: 0; }
+}
+@keyframes kolam-ring-inner {
+  from { stroke-dashoffset: 905; }
+  to   { stroke-dashoffset: 0; }
+}
+
+.kolam-ring-outer {
+  stroke-dashoffset: 1508;
+  animation: kolam-ring-outer 3.6s cubic-bezier(0.22, 1, 0.36, 1) 1.0s forwards;
+}
+.kolam-ring-mid {
+  stroke-dashoffset: 1207;
+  animation: kolam-ring-mid 3.0s cubic-bezier(0.22, 1, 0.36, 1) 1.6s forwards;
+}
+.kolam-ring-inner {
+  stroke-dashoffset: 905;
+  animation: kolam-ring-inner 2.5s cubic-bezier(0.22, 1, 0.36, 1) 2.2s forwards;
+}

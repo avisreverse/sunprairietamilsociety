@@ -1,16 +1,20 @@
+"use client";
+
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 /**
  * Section 1: Kurinci — Mountain — Union
- * Pure tinai landscape section. No stats, no CTAs, no scroll hint —
- * those live in LandingHero. This section is atmospheric and thematic:
- * the spirit of union, belonging, and roots that define the community.
+ * Pure tinai landscape section. The spirit of union, belonging, and roots.
+ * No stats, no founding story — those live in LandingHero.
  *
- * Background watermark: mountain range silhouette (SVG, ~6% opacity).
- * Mountain silhouette decorative shape at bottom edge.
+ * Scroll-reveal added (Framer Motion via ScrollReveal wrapper).
+ * CTA added: "Enroll a child" — primary action for the mountain/union section.
  *
  * @see REQ-202603-001 — Landing page
  * @see D-007 — Strategic Tamil placement
+ * @see D-013 — Framer Motion scroll-reveal
  */
 export default function KurinciHero() {
   const t = useTranslations("kurinci");
@@ -23,13 +27,11 @@ export default function KurinciHero() {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        padding: "8rem 6rem",
         position: "relative",
         overflow: "hidden",
-        background:
-          "linear-gradient(160deg, #0B3D2E 0%, #1A6B4A 40%, #0A2E1A 100%)",
+        background: "linear-gradient(160deg, #0B3D2E 0%, #1A6B4A 40%, #0A2E1A 100%)",
       }}
-      className="px-8 md:px-24"
+      className="px-8 md:px-24 py-32"
     >
       {/* Mountain range watermark — background silhouette */}
       <div
@@ -69,7 +71,7 @@ export default function KurinciHero() {
           style={{
             fontFamily: "var(--font-tamil)",
             fontSize: "clamp(1rem, 2.5vw, 1.6rem)",
-            opacity: 0.4,
+            opacity: 0.38,
             lineHeight: 1.8,
           }}
         >
@@ -80,72 +82,99 @@ export default function KurinciHero() {
       </div>
 
       {/* Tinai label — shadow backdrop */}
-      <div
-        style={{
-          display: "inline-flex",
-          flexDirection: "column",
-          alignSelf: "flex-start",
-          gap: "0.35rem",
-          background: "rgba(0,0,0,0.28)",
-          backdropFilter: "blur(6px)",
-          borderRadius: "8px",
-          padding: "0.6rem 1rem",
-          marginBottom: "1.5rem",
-        }}
-      >
-        <p
+      <ScrollReveal delay={0}>
+        <div
           style={{
-            fontSize: "0.72rem",
-            letterSpacing: "0.22em",
-            textTransform: "uppercase",
-            opacity: 0.75,
-            fontFamily: "var(--font-body)",
-            margin: 0,
+            display: "inline-flex",
+            flexDirection: "column",
+            alignSelf: "flex-start",
+            gap: "0.35rem",
+            marginBottom: "1.5rem",
           }}
         >
-          {t("tinaiLabel")}
-        </p>
-        <p
-          style={{
-            fontFamily: "var(--font-tamil)",
-            fontSize: "0.9rem",
-            opacity: 0.8,
-            margin: 0,
-          }}
-        >
-          {t("tinaiTa")}
-        </p>
-      </div>
+          <p
+            style={{
+              fontSize: "0.72rem",
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              opacity: 0.75,
+              fontFamily: "var(--font-body)",
+              margin: 0,
+            }}
+          >
+            {t("tinaiLabel")}
+          </p>
+          <p
+            style={{
+              fontFamily: "var(--font-tamil)",
+              fontSize: "0.9rem",
+              opacity: 0.8,
+              margin: 0,
+            }}
+          >
+            {t("tinaiTa")}
+          </p>
+        </div>
+      </ScrollReveal>
 
       {/* Section heading */}
-      <h2
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "clamp(2.2rem, 4.2vw, 3.8rem)",
-          fontWeight: 700,
-          fontStyle: "normal",
-          lineHeight: 1.15,
-          maxWidth: "600px",
-          marginBottom: "1.5rem",
-          color: "rgba(245, 240, 228, 0.96)",
-        }}
-      >
-        {t("heading")}
-      </h2>
+      <ScrollReveal delay={0.1}>
+        <h2
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(2.2rem, 4.2vw, 3.8rem)",
+            fontWeight: 700,
+            fontStyle: "normal",
+            lineHeight: 1.15,
+            maxWidth: "600px",
+            marginBottom: "1.5rem",
+            color: "rgba(245,240,228,0.96)",
+          }}
+        >
+          {t("heading")}
+        </h2>
+      </ScrollReveal>
 
-      {/* Body — Kurinci-specific, no founding story (that lives in LandingHero) */}
-      <p
-        style={{
-          fontFamily: "var(--font-body)",
-          fontWeight: 300,
-          fontSize: "1.05rem",
-          maxWidth: "520px",
-          lineHeight: 1.85,
-          opacity: 0.78,
-        }}
-      >
-        {t("body")}
-      </p>
+      {/* Body */}
+      <ScrollReveal delay={0.2}>
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontWeight: 300,
+            fontSize: "1.05rem",
+            maxWidth: "520px",
+            lineHeight: 1.85,
+            opacity: 0.76,
+            marginBottom: "2.5rem",
+          }}
+        >
+          {t("body")}
+        </p>
+      </ScrollReveal>
+
+      {/* CTA */}
+      <ScrollReveal delay={0.3}>
+        <Link
+          href="#mullai"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            padding: "0.875rem 2rem",
+            borderRadius: "999px",
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            fontFamily: "var(--font-body)",
+            textDecoration: "none",
+            background: "rgba(255,255,255,0.12)",
+            color: "white",
+            border: "1px solid rgba(255,255,255,0.25)",
+            width: "fit-content",
+          }}
+        >
+          Explore our programs ↓
+        </Link>
+      </ScrollReveal>
 
       {/* Mountain silhouette — decorative bottom edge */}
       <div

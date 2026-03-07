@@ -4,28 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
-## ⚠️ SESSION START PROTOCOL
+## ⚠️ AUTO-ORCHESTRATION — HOW THIS PROJECT WORKS
 
-Every session MUST begin by reading these files in order:
-1. `CLAUDE.md` (this file)
+**You do not need to type commands. Just describe what you want. Claude detects the situation and runs the right workflow automatically.**
+
+### Auto-triggered workflows
+
+| What you say | What Claude runs automatically |
+|-------------|-------------------------------|
+| "I want to add X feature" / "build X" / "we need X" | req intake → review gates → testplan → blueprint → forge → verify |
+| "X is broken" / "there's a bug" / "not working" | DEF-### capture → link to REQ-### → add to DEFECTS.md |
+| First message of session / "where were we" / "continue" | Read all 6 docs + PARKING_LOT → session start report |
+| "looks good" / "ship it" / "deploy" | /ship workflow → quality gates → preview → waits for your confirm |
+| Topic change mid-feature | Save in-progress work to PARKING_LOT → switch topic cleanly |
+| Significant question/analysis | Proceed normally → if decision emerges, add to DECISIONS.md |
+| Session ending | Reminder to save progress |
+
+### Only 3 things need your explicit command
+
+| Command | Why it stays manual |
+|---------|-------------------|
+| `/ship` | Irreversible — you decide when to push to production |
+| `/milestone` | You decide what moments are significant |
+| `/deploy` | One-time setup — needs your GitHub/Vercel/Supabase credentials |
+
+### Session start (automatic)
+
+When you start a session, Claude automatically reads:
+1. `CLAUDE.md` — ground rules and standards
 2. `docs/BUILD_SUMMARY.md` — where we left off
 3. `docs/REQUIREMENTS.md` — active requirements
 4. `docs/DEFECTS.md` — open defects
-5. `docs/DECISIONS.md` — architectural decisions already made
+5. `docs/DECISIONS.md` — architectural decisions
+6. `docs/PARKING_LOT.md` — interrupted work and pending decisions
 
-Then respond with:
-```
-SPTS SESSION START
-Last session: [date from BUILD_SUMMARY.md]
-Where we left off: [summary]
-Open defects: [count + severity]
-Active requirements: [count in-progress]
-Next priority: [what to build next]
-Blockers: [if any]
-Questions before starting: [max 2, only if truly blocking]
-```
-
-Use `/start` command to trigger this automatically.
+And reports what's open, what's next, what needs your decision.
 
 ---
 
@@ -107,7 +120,7 @@ Every function, every non-obvious logic block, every decision. See comment stand
 
 | Layer | Technology | Decision |
 |-------|-----------|---------|
-| Framework | Next.js 15 App Router | D-001 |
+| Framework | Next.js **16.1.6** App Router (uses `src/proxy.ts`, not `middleware.ts`) | D-001 |
 | Language | TypeScript (strict mode) | D-002 |
 | Styling | Tailwind CSS + Shadcn/UI + Framer Motion | D-003 |
 | Database | Supabase PostgreSQL | D-004 |
@@ -373,11 +386,17 @@ npm run test:e2e      # Playwright E2E tests
 
 | Command | Purpose |
 |---------|---------|
-| `/start` | Begin session: read docs, report status, state plan |
-| `/status` | Show current state from BUILD_SUMMARY.md |
-| `/wrap` | End session: update BUILD_SUMMARY.md, commit docs |
-| `/ship` | Commit + push to release branch workflow |
-| `/review` | Trigger all parallel review agents (arch, security, QA, UX, DevOps) |
+| `/start` | Begin session: read all docs + PARKING_LOT, report state |
+| `/status` | Show current state snapshot |
+| `/wrap` | End session: auto-update all docs, convert parking lot decisions to D-NNN, commit |
+| `/req` | New requirement intake: impact analysis, scalability check, dependency check |
+| `/review` | 7-gate review: Architect, Security, UX, QA, PM, DevOps, SRE |
+| `/testplan` | Define unit + integration + E2E + regression test cases BEFORE code is written |
+| `/test` | Run full suite + Playwright browser validation at 375px + 1280px |
+| `/ship` | Quality gates (typecheck → lint → test → build) → preview deploy → explicit prod confirm |
+| `/migrate` | Create/review/apply database migrations with DOWN file safety check |
+| `/deploy` | First-time GitHub + Vercel + Supabase infrastructure setup |
+| `/milestone` | Record a significant project moment permanently in docs/MILESTONES.md |
 
 ---
 
@@ -385,11 +404,11 @@ npm run test:e2e      # Playwright E2E tests
 
 | Agent | File | Purpose |
 |-------|------|---------|
-| blueprint | `.claude/agents/blueprint.md` | Architecture planning before implementation |
-| forge | `.claude/agents/forge.md` | Code implementation with standards |
-| verify | `.claude/agents/verify.md` | QA, security, UI validation |
-| scout | `.claude/agents/scout.md` | Research patterns across spts-clean and zenith |
-| devops | `.claude/agents/devops.md` | CI/CD, migration safety, deployment |
+| blueprint | `.claude/agents/blueprint.md` | Plan: data model, API, component tree, Definition of Done (claude-haiku-4-5) |
+| forge | `.claude/agents/forge.md` | Build: code to standards, tests alongside, never deploys alone (claude-sonnet-4-6) |
+| verify | `.claude/agents/verify.md` | Gate: PASS or FAIL only — no middle ground, file+line specifics (claude-sonnet-4-6) |
+| scout | `.claude/agents/scout.md` | Research: spts-clean vs zenith patterns, confidence-rated findings (claude-haiku-4-5) |
+| devops | `.claude/agents/devops.md` | Pipeline: migration safety, env vars, build health, rollback runbook (claude-haiku-4-5) |
 
 ---
 
