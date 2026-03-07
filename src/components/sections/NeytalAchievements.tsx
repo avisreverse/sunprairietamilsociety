@@ -6,23 +6,31 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 /**
  * Achievements section — Design D: Warm Cultural.
  * Dark ink background. Floating cards. Submit achievement links to dedicated page.
- * Static data — Admin CMS (REQ-202603-004) will replace this.
+ * Data from Supabase via page.tsx server fetch (REQ-202603-004).
+ * Admin approves + publishes before they appear here.
  *
  * @see REQ-202603-001 — Landing page
+ * @see REQ-202603-004 — Admin CMS
+ * @see REQ-202603-005 — Achievement submit + detail pages
  */
 
-const ACHIEVEMENTS = [
-  { initials: "SA", name: "Siva Arumugam", category: "Education", achievement: "Tamil School Top Student", year: "2024", color: "#C0392B" },
-  { initials: "PM", name: "Priya Murugan", category: "Arts", achievement: "State Bharatanatyam Award", year: "2024", color: "#27AE60" },
-  { initials: "KV", name: "Karthik Vel", category: "Music", achievement: "Carnatic Music Excellence", year: "2024", color: "#E67E22" },
-  { initials: "DL", name: "Divya Lakshmi", category: "Community", achievement: "Volunteer of the Year", year: "2023", color: "#2980B9" },
-  { initials: "AR", name: "Arun Raj", category: "Education", achievement: "Tamil Literature Prize", year: "2023", color: "#8E44AD" },
-  { initials: "MN", name: "Meena Nathan", category: "Arts", achievement: "Kolam Design Champion", year: "2023", color: "#C0392B" },
-];
+interface DbAchievement {
+  id: string;
+  name: string;
+  initials: string;
+  category: string;
+  achievement: string;
+  year: string;
+  color: string;
+}
+
+interface Props {
+  achievements: DbAchievement[];
+}
 
 const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
 
-export default function NeytalAchievements() {
+export default function NeytalAchievements({ achievements }: Props) {
   return (
     <section id="neytal" style={{ background: "#111010", padding: "6rem 3.5rem" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
@@ -52,10 +60,15 @@ export default function NeytalAchievements() {
 
         {/* Grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
-          {ACHIEVEMENTS.map((item, i) => (
-            <ScrollReveal key={item.initials + i} delay={i * 0.07}>
+          {achievements.length === 0 && (
+            <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "3rem 0", fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.25)" }}>
+              Achievements coming soon.
+            </div>
+          )}
+          {achievements.map((item, i) => (
+            <ScrollReveal key={item.id} delay={i * 0.07}>
               <motion.a
-                href={`/achievements/${i}`}
+                href={`/achievements/${item.id}`}
                 style={{
                   padding: "2rem",
                   borderRadius: "16px",

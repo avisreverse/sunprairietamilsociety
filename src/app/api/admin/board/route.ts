@@ -1,0 +1,80 @@
+import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
+import { NextRequest, NextResponse } from "next/server";
+
+/**
+ * GET /api/admin/board — list all board members (active and inactive)
+ * POST /api/admin/board — add a new board member
+ *
+ * @see REQ-202603-004 — Admin CMS
+ */
+
+async function verifyAuth(): Promise<string | null> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  return user?.id ?? null;
+}
+
+export async function GET() {
+  const userId = await verifyAuth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("board_members")
+    .select("*")
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("❌ [API/admin/board] GET error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json(data);
+}
+
+export async function POST(request: NextRequest) {
+  const userId = await verifyAuth();
+  if (!userId) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await request.json();
+  const { slug, name, initials, role, bio, email, color, display_order, is_active } = body;
+
+  if (!slug || !name || !role) {
+    return NextResponse.json(
+      { error: "slug, name, and role are required" },
+      { status: 400 }
+    );
+  }
+
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("board_members")
+    .insert({
+      slug,
+      name,
+      initials: initials || name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase(),
+      role,
+      bio: bio || null,
+      email: email || null,
+      color: color || "#C0392B",
+      display_order: display_order ?? 0,
+      is_active: is_active ?? true,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.error("❌ [API/admin/board] POST error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  console.log(`✅ [API/admin/board] POST — created member: ${data.id}`);
+  return NextResponse.json(data, { status: 201 });
+}

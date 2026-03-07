@@ -168,6 +168,17 @@ Format:
 
 ---
 
+## D-017: Admin Auth — Share spts-clean Supabase Project (Deferred Implementation)
+**Date:** 2026-03-09
+**Status:** Accepted (implementation deferred — after site is feature-complete)
+**Context:** Community site needs multi-admin access. Tamil school (spts-clean) already has working admin accounts in its Supabase project with `user_roles` table (role_type: admin/principal/teacher/parent).
+**Decision:** Point community site to spts-clean's Supabase project. Add `community_admin` role to existing school admins' `user_roles`. Reuse spts-clean's proven auth pattern: email+password, `requireAdminAuth()` server utility, cookie-based sessions.
+**Rationale:** Same admin people manage both school and community site. One login is simpler than two. spts-clean auth is battle-tested. No new auth infrastructure needed.
+**Consequences:** Community site tables (events, achievements, board members) will live in spts-clean's Supabase DB. Community site `.env.local` will be updated to use spts-clean's SUPABASE_URL and keys. Implementation deferred until rest of site is feature-complete.
+**References:** spts-clean/lib/auth.tsx, spts-clean/lib/api-auth.ts, PL-004
+
+---
+
 ## D-014: Keep [locale] Routing with next-intl (Strategic Tamil, Not Full Translation)
 **Date:** 2026-03-07
 **Status:** Accepted

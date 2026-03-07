@@ -7,22 +7,30 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 /**
  * Board / About section — Design D: Warm Cultural.
  * Parchment background. Board member cards with floating shadows.
- * Clicking a card goes to /board for full details.
- * Static data — Admin CMS (REQ-202603-004) will replace this.
+ * Clicking a card goes to /board/[slug] individual page.
+ * Data from Supabase via page.tsx server fetch (REQ-202603-004).
  *
  * @see REQ-202603-001 — Landing page
+ * @see REQ-202603-004 — Admin CMS
+ * @see REQ-202603-006 — Board management
  */
 
-const BOARD = [
-  { slug: "sivasankar", initials: "SA", name: "Sivasankar A.", role: "President", color: "#C0392B" },
-  { slug: "kavitha", initials: "KV", name: "Kavitha V.", role: "Secretary", color: "#27AE60" },
-  { slug: "murali", initials: "MG", name: "Murali G.", role: "Treasurer", color: "#E67E22" },
-  { slug: "divya", initials: "DK", name: "Divya K.", role: "Programs Director", color: "#2980B9" },
-];
+interface DbBoardMember {
+  id: string;
+  slug: string;
+  name: string;
+  initials: string;
+  role: string;
+  color: string;
+}
+
+interface Props {
+  board: DbBoardMember[];
+}
 
 const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
 
-export default function PalaiBoard() {
+export default function PalaiBoard({ board }: Props) {
   return (
     <section id="palai" style={{ background: "#FDF8F0", padding: "6rem 3.5rem" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
@@ -45,8 +53,8 @@ export default function PalaiBoard() {
         </ScrollReveal>
 
         {/* Board grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem", marginBottom: "4rem" }}>
-          {BOARD.map((member, i) => (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: "1.5rem", marginBottom: "4rem" }}>
+          {board.map((member, i) => (
             <ScrollReveal key={member.initials} delay={i * 0.08}>
               <motion.div
                 style={{

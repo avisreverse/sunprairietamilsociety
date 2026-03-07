@@ -17,6 +17,7 @@ Items land here when:
 |----|------|---------|------------|-------|
 | PL-002 | Real content from user | Photos (event, board headshots), real board names/bios, real event dates, real org stats | User to supply when ready | 2026-03-07 |
 | PL-003 | Admin CMS priority | REQ-202603-004 — user actively using site and giving feedback. When to start Supabase schema + admin portal? | User to confirm priority | 2026-03-07 |
+| PL-004 | Admin auth — share spts-clean Supabase (D-017) | Decision made: Option A — point community site to spts-clean's Supabase project. Add `community_admin` role to existing school admins' `user_roles`. Reuse spts-clean auth pattern (email+password, requireAdminAuth). Implement AFTER rest of site is complete. | Implement when site is feature-complete | 2026-03-09 |
 
 ---
 
