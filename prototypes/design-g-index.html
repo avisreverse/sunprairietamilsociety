@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sangam Scroll — 4 Typography Systems</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+Tamil:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #070707; color: white; min-height: 100vh; }
+
+  header {
+    padding: 4rem 3rem 3rem; text-align: center;
+    border-bottom: 1px solid #141414;
+  }
+  .h-eyebrow { font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase; color: #444; margin-bottom: 0.875rem; }
+  .h-title { font-size: 2rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+  .h-ta { font-family: 'Noto Serif Tamil', serif; font-size: 0.95rem; color: #666; }
+  .h-desc {
+    font-size: 0.85rem; color: #3A3A3A; margin-top: 1.25rem;
+    max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.75;
+  }
+  .h-note {
+    display: inline-block; margin-top: 1.25rem; font-size: 0.72rem; color: #2A2A2A;
+    background: #0F0F0F; border: 1px solid #1A1A1A; padding: 0.45rem 1.25rem;
+    border-radius: 999px;
+  }
+
+  main {
+    max-width: 1300px; margin: 0 auto;
+    padding: 3rem 2rem 5rem;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem;
+  }
+
+  .card {
+    background: #0D0D0D; border: 1px solid #1A1A1A; border-radius: 16px;
+    overflow: hidden; transition: all 0.3s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: #2A2A2A; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+
+  /* Live iframe preview */
+  .card-preview {
+    height: 240px; position: relative; overflow: hidden;
+    background: #0B3D2E;
+  }
+  .card-preview iframe {
+    width: 200%; height: 200%;
+    transform: scale(0.5) translate(-50%, -50%);
+    transform-origin: top left;
+    pointer-events: none; border: none;
+  }
+
+  .card-body { padding: 1.75rem; }
+  .card-meta { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+  .card-id { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+  .card-name { font-size: 1.15rem; font-weight: 700; color: white; margin-bottom: 0.2rem; }
+  .card-concept { font-size: 0.75rem; color: #444; font-style: italic; margin-bottom: 1rem; }
+
+  /* Font stack display */
+  .font-stack { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.25rem; }
+  .font-row { display: flex; align-items: baseline; gap: 0.75rem; }
+  .font-role { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #333; min-width: 5.5rem; }
+  .font-name { font-size: 0.82rem; color: #666; }
+  .font-name em { color: #444; font-style: normal; font-size: 0.75rem; }
+
+  /* Character treatment — shows the headline font in actual rendering */
+  .type-sample {
+    padding: 1rem 0; border-top: 1px solid #141414; border-bottom: 1px solid #141414;
+    margin-bottom: 1.25rem; overflow: hidden;
+  }
+
+  /* Tag pills */
+  .pillars { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.25rem; }
+  .pill { font-size: 0.65rem; padding: 0.22rem 0.6rem; border-radius: 4px; }
+  .pill-en { color: #4A9EFF; border: 1px solid rgba(74,158,255,0.2); background: rgba(74,158,255,0.05); }
+  .pill-ta { color: #34D399; border: 1px solid rgba(52,211,153,0.2); background: rgba(52,211,153,0.05); }
+  .pill-feel { color: #F59E0B; border: 1px solid rgba(245,158,11,0.2); background: rgba(245,158,11,0.05); }
+
+  .card-cta {
+    display: block; text-align: center; padding: 0.75rem;
+    border-radius: 8px; font-weight: 600; font-size: 0.82rem;
+    text-decoration: none; transition: all 0.2s;
+    background: #141414; color: rgba(255,255,255,0.7); border: 1px solid #1E1E1E;
+  }
+  .card-cta:hover { background: #1C1C1C; color: white; border-color: #2A2A2A; }
+
+  /* Per-card accent colors */
+  .g1 .card-id { color: #C6881A; }
+  .g2 .card-id { color: #38BDF8; }
+  .g3 .card-id { color: #A78BFA; }
+  .g4 .card-id { color: #4ADE80; }
+
+  .g1 .card-cta { background: #1A1208; border-color: #2A1E0A; color: #C6881A; }
+  .g2 .card-cta { background: #061620; border-color: #0A2035; color: #38BDF8; }
+  .g3 .card-cta { background: #100A1E; border-color: #1A1030; color: #A78BFA; }
+  .g4 .card-cta { background: #081A0E; border-color: #0C2A14; color: #4ADE80; }
+
+  /* Type sample text inside each card (rendered live with Google Fonts) */
+  .sample-g1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 2rem; font-weight: 700; font-style: italic;
+    color: rgba(255,255,255,0.7); line-height: 1.1; letter-spacing: -0.02em;
+  }
+  .sample-g1-ta {
+    font-family: 'Tiro Tamil', serif;
+    font-size: 1rem; color: rgba(255,255,255,0.35);
+    margin-top: 0.3rem; letter-spacing: 0;
+  }
+  .sample-g2 {
+    font-family: 'Anek Tamil', sans-serif;
+    font-size: 2rem; font-weight: 800; letter-spacing: 0;
+    color: rgba(255,255,255,0.75); line-height: 1.1;
+  }
+  .sample-g2-en {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem; font-weight: 400; color: rgba(255,255,255,0.28);
+    margin-top: 0.3rem; letter-spacing: -0.01em;
+  }
+  .sample-g3 {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 2rem; font-weight: 900; font-style: italic;
+    font-variation-settings: 'opsz' 9, 'WONK' 1;
+    color: rgba(255,255,255,0.72); line-height: 1.1; letter-spacing: -0.02em;
+  }
+  .sample-g3-ta {
+    font-family: 'Noto Serif Tamil', serif;
+    font-size: 0.95rem; font-weight: 600; color: rgba(255,255,255,0.32);
+    margin-top: 0.3rem; letter-spacing: 0;
+  }
+  .sample-g4 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-size: 2rem; font-style: italic;
+    color: rgba(255,255,255,0.72); line-height: 1.1; letter-spacing: -0.015em;
+  }
+  .sample-g4-ta {
+    font-family: 'Catamaran', sans-serif;
+    font-size: 1.2rem; font-weight: 800; color: rgba(255,255,255,0.3);
+    margin-top: 0.15rem; letter-spacing: 0;
+  }
+
+  /* Load fonts needed for samples */
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&family=Tiro+Tamil&family=Anek+Tamil:wdth,wght@100,800&family=Syne:wght@400&family=Fraunces:ital,opsz,wght@1,9..144,900&family=Noto+Serif+Tamil:wght@600&family=DM+Serif+Display:ital@1&family=Catamaran:wght@800&display=swap');
+
+  .back-link {
+    display: block; text-align: center; padding: 2rem;
+    font-size: 0.75rem; color: #333; text-decoration: none;
+    border-top: 1px solid #141414;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: #555; }
+
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; }
+  }
+</style>
+<!-- Extra fonts for type samples -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,700&family=Tiro+Tamil&family=Anek+Tamil:wdth,wght@100,800&family=Syne:wght@400&family=Fraunces:ital,opsz,wght@1,9..144,900&family=Noto+Serif+Tamil:wght@600&family=DM+Serif+Display:ital@1&family=Catamaran:wght@800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header>
+  <p class="h-eyebrow">Sangam Scroll · Design G · Typography Comparison · 2026</p>
+  <h1 class="h-title">Four Typography Systems — One Structure</h1>
+  <p class="h-ta">சங்கம் உருளல் — நான்கு எழுத்துரு அமைப்புகள்</p>
+  <p class="h-desc">Same 5-tinai scroll architecture, same content, same section gradients. Everything that differs is typography: font choices, heading hierarchy, label treatment, Tamil/English balance.</p>
+  <span class="h-note">↓ Live previews load the actual prototype — click any card to open full page</span>
+</header>
+
+<main>
+
+  <!-- G1 Literary Ancestral -->
+  <div class="card g1">
+    <div class="card-preview">
+      <iframe src="design-g1.html" title="G1 preview" loading="lazy"></iframe>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">G1</span>
+      </div>
+      <h2 class="card-name">Literary Ancestral</h2>
+      <p class="card-concept">Classical italic serif — pride of the archive</p>
+
+      <div class="type-sample">
+        <p class="sample-g1">Tamil culture,<br>deep as time.</p>
+        <p class="sample-g1-ta">தமிழ் கலாச்சாரம், காலத்தைப் போல ஆழமானது.</p>
+      </div>
+
+      <div class="font-stack">
+        <div class="font-row"><span class="font-role">EN Display</span><span class="font-name">Cormorant Garamond 700 italic <em>— deep classical serif</em></span></div>
+        <div class="font-row"><span class="font-role">TA Display</span><span class="font-name">Tiro Tamil <em>— Murty Classical Library face</em></span></div>
+        <div class="font-row"><span class="font-role">EN Body</span><span class="font-name">Source Serif 4 300 italic <em>— optical size variable</em></span></div>
+        <div class="font-row"><span class="font-role">Labels</span><span class="font-name">Cormorant SC 600 <em>— small caps, 0.25em spacing</em></span></div>
+      </div>
+
+      <div class="pillars">
+        <span class="pill pill-en">English-first heading</span>
+        <span class="pill pill-ta">Tiro Tamil display</span>
+        <span class="pill pill-feel">Literary · Heritage · Timeless</span>
+      </div>
+      <a href="design-g1.html" target="_blank" class="card-cta">Open G1 →</a>
+    </div>
+  </div>
+
+  <!-- G2 Tamil First -->
+  <div class="card g2">
+    <div class="card-preview">
+      <iframe src="design-g2.html" title="G2 preview" loading="lazy"></iframe>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">G2</span>
+      </div>
+      <h2 class="card-name">Tamil First</h2>
+      <p class="card-concept">Tamil as the primary voice — English as translation</p>
+
+      <div class="type-sample">
+        <p class="sample-g2">ஒரு சமூகம்<br>வேரூன்றியது.</p>
+        <p class="sample-g2-en">A Tamil community taking root.</p>
+      </div>
+
+      <div class="font-stack">
+        <div class="font-row"><span class="font-role">TA Display</span><span class="font-name">Anek Tamil 800 Expanded <em>— designed simultaneously with Latin</em></span></div>
+        <div class="font-row"><span class="font-role">EN Subtitle</span><span class="font-name">Syne 400 <em>— geometric, secondary role</em></span></div>
+        <div class="font-row"><span class="font-role">TA Body</span><span class="font-name">Mukta Malar 300 <em>— readable Tamil prose</em></span></div>
+        <div class="font-row"><span class="font-role">EN Body</span><span class="font-name">DM Sans 300 <em>— neutral companion</em></span></div>
+      </div>
+
+      <div class="pillars">
+        <span class="pill pill-ta">Tamil-first heading</span>
+        <span class="pill pill-en">English as subtitle</span>
+        <span class="pill pill-feel">Bold · Modern · Tamil-proud</span>
+      </div>
+      <a href="design-g2.html" target="_blank" class="card-cta">Open G2 →</a>
+    </div>
+  </div>
+
+  <!-- G3 Grand Occasion -->
+  <div class="card g3">
+    <div class="card-preview">
+      <iframe src="design-g3.html" title="G3 preview" loading="lazy"></iframe>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">G3</span>
+      </div>
+      <h2 class="card-name">Grand Occasion</h2>
+      <p class="card-concept">Theatrical serif energy — like a cultural gala programme</p>
+
+      <div class="type-sample">
+        <p class="sample-g3">A Tamil community<br>taking root.</p>
+        <p class="sample-g3-ta">ஒரு சமூகம் வேரூன்றியது.</p>
+      </div>
+
+      <div class="font-stack">
+        <div class="font-row"><span class="font-role">EN Display</span><span class="font-name">Fraunces 900 italic WONK=1 <em>— expressive theatrical serif</em></span></div>
+        <div class="font-row"><span class="font-role">TA Display</span><span class="font-name">Noto Serif Tamil 700 <em>— dignified, authoritative</em></span></div>
+        <div class="font-row"><span class="font-role">Body + Labels</span><span class="font-name">Space Grotesk 300–600 <em>— quirky geometric sans</em></span></div>
+        <div class="font-row"><span class="font-role">TA Body</span><span class="font-name">Hind Madurai 400 <em>— clean Tamil prose</em></span></div>
+      </div>
+
+      <div class="pillars">
+        <span class="pill pill-en">English-first heading</span>
+        <span class="pill pill-ta">Noto Serif Tamil display</span>
+        <span class="pill pill-feel">Festive · Dramatic · Celebratory</span>
+      </div>
+      <a href="design-g3.html" target="_blank" class="card-cta">Open G3 →</a>
+    </div>
+  </div>
+
+  <!-- G4 Modernist Institution -->
+  <div class="card g4">
+    <div class="card-preview">
+      <iframe src="design-g4.html" title="G4 preview" loading="lazy"></iframe>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">G4</span>
+      </div>
+      <h2 class="card-name">Modernist Institution</h2>
+      <p class="card-concept">Bilingual compound headings — quiet editorial authority</p>
+
+      <div class="type-sample">
+        <p class="sample-g4">A Tamil community<br>taking root.</p>
+        <p class="sample-g4-ta">ஒரு சமூகம் வேரூன்றியது.</p>
+      </div>
+
+      <div class="font-stack">
+        <div class="font-row"><span class="font-role">EN Display</span><span class="font-name">DM Serif Display italic <em>— editorial, institutional gravitas</em></span></div>
+        <div class="font-row"><span class="font-role">TA Display</span><span class="font-name">Catamaran 800 <em>— monolinear, harmonizes with Latin</em></span></div>
+        <div class="font-row"><span class="font-role">Body</span><span class="font-name">Inter 300–500 <em>— zero noise, pure clarity</em></span></div>
+        <div class="font-row"><span class="font-role">Structure</span><span class="font-name">Thin overline above labels <em>— document/report feel</em></span></div>
+      </div>
+
+      <div class="pillars">
+        <span class="pill pill-en">Compound bilingual heading</span>
+        <span class="pill pill-ta">Catamaran Tamil partner</span>
+        <span class="pill pill-feel">Clean · Institutional · Bilingual</span>
+      </div>
+      <a href="design-g4.html" target="_blank" class="card-cta">Open G4 →</a>
+    </div>
+  </div>
+
+</main>
+
+<a href="index.html" class="back-link">← Back to all six design directions</a>
+
+</body>
+</html>

@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design E — The Tanjore Mandala</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&family=Noto+Serif+Tamil:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --crimson: #9B1C1C;
+    --crimson-dark: #6B1212;
+    --gold: #D4A017;
+    --gold-light: #F0C040;
+    --gold-pale: #F7E8B0;
+    --indigo: #1F1B4E;
+    --ivory: #FFF8E7;
+    --ivory-dark: #F5E8C0;
+    --gem-emerald: #0B6B4A;
+    --gem-sapphire: #0F3460;
+    --border-gold: rgba(212,160,23,0.4);
+    --serif: 'Cinzel', Georgia, serif;
+    --body: 'Noto Serif', Georgia, serif;
+    --sans: 'Inter', sans-serif;
+    --tamil: 'Noto Serif Tamil', serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--body); background: var(--ivory); color: var(--indigo); }
+
+  /* ── TEMPLE BORDER PATTERN ── */
+  .temple-border {
+    height: 20px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--gold) 0px, var(--gold) 8px,
+      var(--crimson) 8px, var(--crimson) 16px,
+      var(--gold) 16px, var(--gold) 24px
+    );
+    position: relative;
+  }
+  .temple-border::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      90deg,
+      transparent 0, transparent 4px,
+      rgba(0,0,0,0.2) 4px, rgba(0,0,0,0.2) 8px,
+      transparent 8px, transparent 12px,
+      rgba(0,0,0,0.2) 12px, rgba(0,0,0,0.2) 16px
+    );
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--crimson-dark);
+    padding: 0;
+    border-bottom: 3px solid var(--gold);
+  }
+  .nav-top { padding: 0.75rem 3rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(212,160,23,0.2); }
+  .nav-tagline { font-family: var(--tamil); font-size: 0.85rem; color: var(--gold-light); text-align: center; flex: 1; }
+  .nav-login { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(212,160,23,0.7); text-decoration: none; transition: color 0.2s; }
+  .nav-login:hover { color: var(--gold-light); }
+  .nav-main { padding: 1rem 3rem; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { text-align: center; }
+  .nav-logo-en { font-family: var(--serif); font-size: 1.1rem; color: var(--gold); letter-spacing: 0.1em; text-transform: uppercase; }
+  .nav-logo-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 0.3rem auto; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-family: var(--serif); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: rgba(212,160,23,0.8); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-cta-btn { font-family: var(--serif); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; color: var(--gold); border: 1px solid var(--border-gold); padding: 0.5rem 1.5rem; text-decoration: none; transition: all 0.2s; }
+  .nav-cta-btn:hover { background: var(--gold); color: var(--crimson-dark); }
+
+  /* ── HERO ── */
+  .hero {
+    background: radial-gradient(ellipse at center top, var(--crimson) 0%, var(--crimson-dark) 40%, #2A0A0A 100%);
+    min-height: 88vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 4rem 2rem; position: relative; overflow: hidden;
+  }
+  /* Decorative rings */
+  .hero::before, .hero::after {
+    content: ''; position: absolute; border-radius: 50%;
+    border: 1px solid rgba(212,160,23,0.15); pointer-events: none;
+  }
+  .hero::before { width: 700px; height: 700px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .hero::after { width: 500px; height: 500px; top: 50%; left: 50%; transform: translate(-50%,-50%); border-color: rgba(212,160,23,0.1); }
+  .hero-ring-outer { position: absolute; width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%,-50%); border-radius: 50%; border: 1px solid rgba(212,160,23,0.08); pointer-events: none; }
+  .hero-emblem { text-align: center; position: relative; z-index: 2; }
+  .hero-emblem-top { font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(212,160,23,0.6); margin-bottom: 1rem; }
+  .hero-lotus { font-size: 4rem; margin-bottom: 1rem; }
+  .hero-divider-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .hero-divider-top::before, .hero-divider-top::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .hero-divider-top span { color: var(--gold); font-size: 0.8rem; }
+  .hero-ta { font-family: var(--tamil); font-size: clamp(1.8rem, 4vw, 3rem); color: var(--gold-light); margin-bottom: 0.5rem; font-weight: 700; text-shadow: 0 2px 20px rgba(212,160,23,0.3); }
+  .hero-en { font-family: var(--serif); font-size: clamp(0.9rem, 2vw, 1.3rem); color: rgba(212,160,23,0.7); letter-spacing: 0.08em; margin-bottom: 2rem; }
+  .hero-desc { font-size: 0.9rem; color: rgba(247,232,176,0.65); max-width: 480px; text-align: center; line-height: 1.8; margin-bottom: 2.5rem; }
+  .hero-programs-arc { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
+  .hero-prog-gem { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; text-decoration: none; }
+  .hero-prog-gem-icon { width: 60px; height: 60px; border-radius: 50%; border: 1px solid var(--border-gold); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; background: rgba(212,160,23,0.08); transition: all 0.3s; }
+  .hero-prog-gem:hover .hero-prog-gem-icon { background: rgba(212,160,23,0.2); transform: scale(1.1); box-shadow: 0 0 20px rgba(212,160,23,0.3); }
+  .hero-prog-gem-label { font-family: var(--tamil); font-size: 0.7rem; color: rgba(212,160,23,0.7); text-align: center; }
+  .hero-cta-group { display: flex; gap: 1rem; }
+  .btn-jewel { font-family: var(--serif); font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%); color: var(--crimson-dark); padding: 0.875rem 2.5rem; text-decoration: none; transition: all 0.3s; border: none; }
+  .btn-jewel:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,160,23,0.4); }
+  .btn-ghost { font-family: var(--serif); font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid var(--border-gold); color: var(--gold); padding: 0.875rem 2.5rem; text-decoration: none; transition: all 0.3s; }
+  .btn-ghost:hover { background: rgba(212,160,23,0.1); }
+
+  /* ── ORNATE SECTION DIVIDER ── */
+  .ornate-divider { text-align: center; padding: 2rem; background: var(--crimson-dark); }
+  .ornate-inner { display: flex; align-items: center; justify-content: center; gap: 1rem; max-width: 600px; margin: 0 auto; }
+  .ornate-inner::before, .ornate-inner::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .ornate-icon { color: var(--gold); font-size: 1.2rem; }
+
+  /* ── PROGRAMS ── */
+  .programs-bg { background: var(--indigo); padding: 5rem 3rem; }
+  .programs-bg .section-label { color: var(--gold); }
+  .programs-bg .section-title { color: var(--ivory); font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem); letter-spacing: 0.05em; text-transform: uppercase; }
+  .programs-jewel-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .prog-jewel { padding: 2rem 1.25rem; text-align: center; border: 1px solid var(--border-gold); position: relative; transition: all 0.3s; text-decoration: none; display: block; }
+  .prog-jewel::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(212,160,23,0.03), rgba(212,160,23,0.08)); pointer-events: none; }
+  .prog-jewel:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 12px 40px rgba(212,160,23,0.2), inset 0 0 30px rgba(212,160,23,0.05); }
+  .prog-jewel-top { position: absolute; top: -1px; left: 20px; right: 20px; height: 3px; background: var(--gold); }
+  .prog-jewel-num { font-family: var(--serif); font-size: 2rem; color: rgba(212,160,23,0.2); font-weight: 900; margin-bottom: 0.75rem; }
+  .prog-jewel-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .prog-jewel-ta { font-family: var(--tamil); font-size: 0.85rem; color: rgba(212,160,23,0.6); margin-bottom: 0.3rem; }
+  .prog-jewel-en { font-family: var(--serif); font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ivory); margin-bottom: 0.75rem; }
+  .prog-jewel-desc { font-size: 0.78rem; color: rgba(247,232,176,0.5); line-height: 1.6; }
+
+  /* ── EVENTS ── */
+  .events-section { background: var(--ivory-dark); padding: 5rem 3rem; }
+  .section-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin-bottom: 1rem; }
+  .section-title { font-family: var(--serif); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+  .section-sub { font-size: 0.9rem; color: var(--crimson); max-width: 520px; line-height: 1.8; margin-bottom: 3rem; }
+  .max-content { max-width: 1100px; margin: 0 auto; }
+  .events-ornate { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .event-jewel { background: var(--crimson-dark); border: 1px solid var(--border-gold); padding: 0; overflow: hidden; position: relative; }
+  .event-jewel-top { height: 4px; background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold)); }
+  .event-jewel-body { padding: 2rem; }
+  .event-jewel-date { display: inline-flex; align-items: baseline; gap: 0.5rem; margin-bottom: 1.25rem; }
+  .event-day-large { font-family: var(--serif); font-size: 3rem; color: var(--gold); font-weight: 700; line-height: 1; }
+  .event-month-year { font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(212,160,23,0.6); }
+  .event-jewel-title-ta { font-family: var(--tamil); font-size: 0.9rem; color: rgba(212,160,23,0.7); margin-bottom: 0.25rem; }
+  .event-jewel-title-en { font-family: var(--serif); font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ivory); margin-bottom: 0.5rem; }
+  .event-jewel-loc { font-size: 0.78rem; color: rgba(247,232,176,0.4); margin-bottom: 1.5rem; }
+  .event-jewel-rsvp { display: inline-block; font-family: var(--serif); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(212,160,23,0.3); padding: 0.4rem 1.25rem; text-decoration: none; transition: all 0.2s; }
+  .event-jewel-rsvp:hover { background: var(--gold); color: var(--crimson-dark); }
+
+  /* ── ACHIEVEMENTS ── */
+  .ach-section { background: var(--crimson-dark); padding: 5rem 3rem; }
+  .ach-section .section-title { color: var(--gold-light); }
+  .ach-section .section-sub { color: rgba(247,232,176,0.6); }
+  .ach-ornate-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .ach-jewel { background: rgba(212,160,23,0.05); border: 1px solid rgba(212,160,23,0.2); padding: 2.5rem; position: relative; }
+  .ach-jewel::before { content: '⬥'; position: absolute; top: 1.25rem; right: 1.25rem; color: var(--gold); font-size: 0.8rem; opacity: 0.4; }
+  .ach-jewel-award { font-family: var(--serif); font-size: 1.6rem; color: var(--gold); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .ach-jewel-name { font-size: 1rem; font-weight: 600; color: var(--ivory); margin-bottom: 0.25rem; }
+  .ach-jewel-event { font-size: 0.82rem; color: rgba(247,232,176,0.5); font-style: italic; }
+
+  /* ── GALLERY ── */
+  .gallery-section { background: var(--indigo); padding: 5rem 3rem; }
+  .gallery-section .section-title { color: var(--ivory); }
+  .gallery-frame { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; height: 380px; border: 2px solid rgba(212,160,23,0.3); }
+  .gallery-frame-cell { background: rgba(212,160,23,0.05); display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; overflow: hidden; border: 1px solid rgba(212,160,23,0.1); }
+  .gallery-frame-cell:first-child { grid-row: span 2; font-size: 5rem; }
+  .gallery-frame-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.75rem; font-family: var(--serif); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(212,160,23,0.7); background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
+
+  /* ── BOARD ── */
+  .board-section { background: var(--ivory); padding: 5rem 3rem; }
+  .board-section .section-title { color: var(--crimson-dark); }
+  .board-ornate { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .board-portrait { text-align: center; }
+  .board-frame { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1.25rem; background: var(--ivory-dark); border: 3px solid var(--gold); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; box-shadow: 0 4px 20px rgba(212,160,23,0.3), inset 0 0 0 3px rgba(212,160,23,0.1); }
+  .board-title-ornate { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+  .board-name-ornate { font-family: var(--serif); font-size: 1.1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--crimson-dark); margin-bottom: 0.75rem; }
+  .board-bio-ornate { font-size: 0.82rem; color: #5A4A3A; line-height: 1.7; font-style: italic; }
+
+  /* ── STATS BAR ── */
+  .stats-jewel { background: var(--gold); padding: 2.5rem 3rem; }
+  .stats-jewel-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; gap: 2px; }
+  .stat-j { padding: 1rem; }
+  .stat-j-num { font-family: var(--serif); font-size: 2.5rem; font-weight: 700; color: var(--crimson-dark); letter-spacing: 0.05em; }
+  .stat-j-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(107,18,18,0.65); margin-top: 0.25rem; }
+
+  /* ── FOOTER ── */
+  footer { background: #0A0505; border-top: 3px solid var(--gold); padding: 4rem 3rem 2rem; }
+  .footer-inner { max-width: 1100px; margin: 0 auto; }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(212,160,23,0.15); }
+  .footer-brand-ta { font-family: var(--tamil); font-size: 1.4rem; color: var(--gold); margin-bottom: 0.5rem; }
+  .footer-brand-en { font-family: var(--serif); font-size: 0.9rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(212,160,23,0.7); margin-bottom: 1rem; }
+  .footer-brand-desc { font-size: 0.8rem; color: rgba(247,232,176,0.3); line-height: 1.7; }
+  .footer-col-title { font-family: var(--serif); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .footer-links a { font-size: 0.82rem; color: rgba(247,232,176,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-bottom { padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: 0.75rem; color: rgba(247,232,176,0.2); }
+  .footer-kural { font-family: var(--tamil); font-size: 0.8rem; color: rgba(212,160,23,0.3); }
+
+  /* ── ANIMATIONS ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.in-view { opacity: 1; transform: none; }
+  @media (max-width: 768px) {
+    .programs-jewel-grid { grid-template-columns: 1fr 1fr; }
+    .events-ornate, .ach-ornate-grid, .board-ornate { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .footer-top { grid-template-columns: 1fr; }
+    .gallery-frame { grid-template-columns: 1fr 1fr; height: auto; }
+    .gallery-frame-cell:first-child { grid-row: span 1; }
+    .stats-jewel-inner { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="temple-border"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-top">
+    <a href="#" class="nav-login">Login</a>
+    <p class="nav-tagline">யாதும் ஊரே · யாவரும் கேளிர் — All lands are my home · All people my kin</p>
+    <a href="#" class="nav-login">Join SPTS</a>
+  </div>
+  <div class="nav-main">
+    <ul class="nav-links" style="flex:1; justify-content:flex-end;">
+      <li><a href="#">Programs</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Gallery</a></li>
+    </ul>
+    <div class="nav-logo">
+      <p class="nav-logo-en">Sun Prairie Tamil Society</p>
+      <div class="nav-logo-divider"></div>
+    </div>
+    <ul class="nav-links" style="flex:1;">
+      <li><a href="#">Community</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#"><a href="#" class="nav-cta-btn">Donate</a></a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-ring-outer"></div>
+  <div class="hero-emblem">
+    <p class="hero-emblem-top">Est. 2012 · Sun Prairie, Wisconsin</p>
+    <div class="hero-lotus">🪷</div>
+    <div class="hero-divider-top"><span>⬥ ⬥ ⬥</span></div>
+    <h1 class="hero-ta">சன் பிரேரி தமிழ் சமூகம்</h1>
+    <p class="hero-en">Sun Prairie Tamil Society</p>
+    <p class="hero-desc">Two thousand years of classical civilization — carried forward by families who chose Wisconsin as their home, and Tamil as their gift to their children.</p>
+    <!-- Program gems arranged in arc -->
+    <div class="hero-programs-arc">
+      <a href="#" class="hero-prog-gem">
+        <div class="hero-prog-gem-icon">🏫</div>
+        <span class="hero-prog-gem-label">தமிழ்ப் பள்ளி</span>
+      </a>
+      <a href="#" class="hero-prog-gem">
+        <div class="hero-prog-gem-icon">📚</div>
+        <span class="hero-prog-gem-label">நூலகம்</span>
+      </a>
+      <a href="#" class="hero-prog-gem">
+        <div class="hero-prog-gem-icon">🎨</div>
+        <span class="hero-prog-gem-label">பட்டறை</span>
+      </a>
+      <a href="#" class="hero-prog-gem">
+        <div class="hero-prog-gem-icon">🎵</div>
+        <span class="hero-prog-gem-label">இசை மன்றம்</span>
+      </a>
+      <a href="#" class="hero-prog-gem">
+        <div class="hero-prog-gem-icon">🤝</div>
+        <span class="hero-prog-gem-label">தன்னார்வ</span>
+      </a>
+    </div>
+    <div class="hero-cta-group">
+      <a href="#" class="btn-jewel">Explore Our Community</a>
+      <a href="#" class="btn-ghost">View Events</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-jewel">
+  <div class="stats-jewel-inner">
+    <div class="stat-j"><div class="stat-j-num">120+</div><div class="stat-j-label">Students</div></div>
+    <div class="stat-j"><div class="stat-j-num">45</div><div class="stat-j-label">Annual Events</div></div>
+    <div class="stat-j"><div class="stat-j-num">12</div><div class="stat-j-label">Years</div></div>
+    <div class="stat-j"><div class="stat-j-num">300+</div><div class="stat-j-label">Volunteer Hours</div></div>
+  </div>
+</div>
+
+<!-- ORNATE DIVIDER -->
+<div class="ornate-divider">
+  <div class="ornate-inner"><span class="ornate-icon">⬥</span><span style="font-size:0.75rem; letter-spacing:0.2em; color:rgba(212,160,23,0.5); text-transform:uppercase;">Our Programs · எங்கள் திட்டங்கள்</span><span class="ornate-icon">⬥</span></div>
+</div>
+
+<!-- PROGRAMS -->
+<section class="programs-bg reveal">
+  <div class="max-content">
+    <p class="section-label">Programs of the Society</p>
+    <h2 class="section-title">Five Pillars of Culture</h2>
+    <div class="programs-jewel-grid">
+      <a href="#" class="prog-jewel">
+        <div class="prog-jewel-top"></div>
+        <div class="prog-jewel-num">01</div>
+        <div class="prog-jewel-icon">🏫</div>
+        <p class="prog-jewel-ta">தமிழ்ப் பள்ளி</p>
+        <p class="prog-jewel-en">Tamil School</p>
+        <p class="prog-jewel-desc">Classical language education from kindergarten through high school, every Sunday.</p>
+      </a>
+      <a href="#" class="prog-jewel">
+        <div class="prog-jewel-top"></div>
+        <div class="prog-jewel-num">02</div>
+        <div class="prog-jewel-icon">📚</div>
+        <p class="prog-jewel-ta">நூலகம்</p>
+        <p class="prog-jewel-en">Library</p>
+        <p class="prog-jewel-desc">Tamil books, classical texts, children's stories — borrow a piece of our homeland.</p>
+      </a>
+      <a href="#" class="prog-jewel">
+        <div class="prog-jewel-top"></div>
+        <div class="prog-jewel-num">03</div>
+        <div class="prog-jewel-icon">🎨</div>
+        <p class="prog-jewel-ta">பட்டறை</p>
+        <p class="prog-jewel-en">Pattarai Studio</p>
+        <p class="prog-jewel-desc">Kolam, Bharatanatyam, painting — where Tamil culture becomes creative expression.</p>
+      </a>
+      <a href="#" class="prog-jewel">
+        <div class="prog-jewel-top"></div>
+        <div class="prog-jewel-num">04</div>
+        <div class="prog-jewel-icon">🎵</div>
+        <p class="prog-jewel-ta">இசை மன்றம்</p>
+        <p class="prog-jewel-en">Music Club</p>
+        <p class="prog-jewel-desc">Carnatic tradition — mridangam, veena, vocal — practiced and performed in Wisconsin.</p>
+      </a>
+      <a href="#" class="prog-jewel">
+        <div class="prog-jewel-top"></div>
+        <div class="prog-jewel-num">05</div>
+        <div class="prog-jewel-icon">🤝</div>
+        <p class="prog-jewel-ta">தன்னார்வல</p>
+        <p class="prog-jewel-en">Volunteer</p>
+        <p class="prog-jewel-desc">Service to the broader community — the Tamil value of upliftment made visible.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ORNATE DIVIDER 2 -->
+<div class="ornate-divider">
+  <div class="ornate-inner"><span class="ornate-icon">⬥</span><span style="font-size:0.75rem; letter-spacing:0.2em; color:rgba(212,160,23,0.5); text-transform:uppercase;">Upcoming Events · வரவிருக்கும் நிகழ்வுகள்</span><span class="ornate-icon">⬥</span></div>
+</div>
+
+<!-- EVENTS -->
+<section class="events-section">
+  <div class="max-content reveal">
+    <p class="section-label">Sacred Celebrations · Marquee Events</p>
+    <h2 class="section-title" style="color: var(--crimson-dark);">Festivals of the Year</h2>
+    <p class="section-sub">Every gathering is a ceremony — an act of remembrance and renewal.</p>
+    <div class="events-ornate">
+      <div class="event-jewel">
+        <div class="event-jewel-top"></div>
+        <div class="event-jewel-body">
+          <div class="event-jewel-date"><span class="event-day-large">13</span><span class="event-month-year">April 2026</span></div>
+          <p class="event-jewel-title-ta">தமிழ் புத்தாண்டு</p>
+          <p class="event-jewel-title-en">Tamil New Year</p>
+          <p class="event-jewel-loc">📍 Sun Prairie Community Center</p>
+          <a href="#" class="event-jewel-rsvp">Reserve Your Place</a>
+        </div>
+      </div>
+      <div class="event-jewel">
+        <div class="event-jewel-top"></div>
+        <div class="event-jewel-body">
+          <div class="event-jewel-date"><span class="event-day-large">03</span><span class="event-month-year">May 2026</span></div>
+          <p class="event-jewel-title-ta">கலை விழா</p>
+          <p class="event-jewel-title-en">Annual Arts Festival</p>
+          <p class="event-jewel-loc">📍 Whitehorse Auditorium</p>
+          <a href="#" class="event-jewel-rsvp">Reserve Your Place</a>
+        </div>
+      </div>
+      <div class="event-jewel">
+        <div class="event-jewel-top"></div>
+        <div class="event-jewel-body">
+          <div class="event-jewel-date"><span class="event-day-large">01</span><span class="event-month-year">Nov 2026</span></div>
+          <p class="event-jewel-title-ta">கார்த்திகை விளக்கு</p>
+          <p class="event-jewel-title-en">Karthigai Deepam</p>
+          <p class="event-jewel-loc">📍 Venue Announcing Soon</p>
+          <a href="#" class="event-jewel-rsvp">Notify Me</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="ach-section reveal">
+  <div class="max-content">
+    <p class="section-label">Achievements · சாதனைகள்</p>
+    <h2 class="section-title">Glory of Our Community</h2>
+    <p class="section-sub">When our children shine, they carry the light of two thousand years with them.</p>
+    <div class="ach-ornate-grid">
+      <div class="ach-jewel">
+        <p class="ach-jewel-award">Gold</p>
+        <p class="ach-jewel-name">Priya Krishnaswamy</p>
+        <p class="ach-jewel-event">Wisconsin Tamil Oratory — Senior Division, 2025</p>
+      </div>
+      <div class="ach-jewel">
+        <p class="ach-jewel-award">Best Essay</p>
+        <p class="ach-jewel-name">Arjun Ramalingam</p>
+        <p class="ach-jewel-event">National Tamil Youth Conference, 2025</p>
+      </div>
+      <div class="ach-jewel">
+        <p class="ach-jewel-award">Gold Medal</p>
+        <p class="ach-jewel-name">Kavitha & Sundari Balaji</p>
+        <p class="ach-jewel-event">Midwest Carnatic Festival — Vocal Duet, 2025</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section reveal">
+  <div class="max-content">
+    <p class="section-label">Gallery · புகைப்பட தொகுப்பு</p>
+    <h2 class="section-title">Memories in Gold</h2>
+    <div class="gallery-frame">
+      <div class="gallery-frame-cell">🎊<div class="gallery-frame-label">Pongal Celebration 2025</div></div>
+      <div class="gallery-frame-cell">🎭<div class="gallery-frame-label">Cultural Night</div></div>
+      <div class="gallery-frame-cell">📚<div class="gallery-frame-label">Tamil School</div></div>
+      <div class="gallery-frame-cell">🎶<div class="gallery-frame-label">Carnatic Concert</div></div>
+      <div class="gallery-frame-cell">🏆<div class="gallery-frame-label">Awards Ceremony</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOARD -->
+<section class="board-section reveal">
+  <div class="max-content">
+    <p class="section-label">Our Board · நிர்வாக குழு</p>
+    <h2 class="section-title" style="color:var(--crimson-dark);">Guardians of the Community</h2>
+    <p class="section-sub" style="color:var(--crimson);">Entrusted with the heritage of our ancestors. Accountable to the future of our children.</p>
+    <div class="board-ornate">
+      <div class="board-portrait">
+        <div class="board-frame">👨</div>
+        <p class="board-title-ornate">President</p>
+        <p class="board-name-ornate">Suresh Arunachalam</p>
+        <p class="board-bio-ornate">12 years building community bridges between Wisconsin and Tamil Nadu.</p>
+      </div>
+      <div class="board-portrait">
+        <div class="board-frame">👩</div>
+        <p class="board-title-ornate">Vice President</p>
+        <p class="board-name-ornate">Kavitha Venkataraman</p>
+        <p class="board-bio-ornate">Bharatanatyam teacher, cultural festival director, mother of three SPTS students.</p>
+      </div>
+      <div class="board-portrait">
+        <div class="board-frame">👨</div>
+        <p class="board-title-ornate">Secretary</p>
+        <p class="board-name-ornate">Mohan Gopalaswamy</p>
+        <p class="board-bio-ornate">UW–Madison professor, volunteer Tamil school teacher since 2020.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="temple-border" style="transform:scaleX(-1)"></div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <p class="footer-brand-ta">சன் பிரேரி தமிழ் சமூகம்</p>
+        <p class="footer-brand-en">Sun Prairie Tamil Society</p>
+        <p class="footer-brand-desc">Preserving Tamil language, culture, and community in Wisconsin since 2012.</p>
+      </div>
+      <div>
+        <p class="footer-col-title">Programs</p>
+        <ul class="footer-links">
+          <li><a href="#">Tamil School</a></li>
+          <li><a href="#">Library</a></li>
+          <li><a href="#">Pattarai</a></li>
+          <li><a href="#">Music Club</a></li>
+          <li><a href="#">Volunteer</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Community</p>
+        <ul class="footer-links">
+          <li><a href="#">Activity Feed</a></li>
+          <li><a href="#">Achievement Wall</a></li>
+          <li><a href="#">Help Board</a></li>
+          <li><a href="#">Membership</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer-col-title">Connect</p>
+        <ul class="footer-links">
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">WhatsApp</a></li>
+          <li><a href="#">Newsletter</a></li>
+          <li><a href="#">Contact Board</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 Sun Prairie Tamil Society</p>
+      <p class="footer-kural">யாதும் ஊரே யாவரும் கேளிர்</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }});
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

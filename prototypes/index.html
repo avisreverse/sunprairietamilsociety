@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPTS — Design Concepts v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+Tamil:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #0A0A0A; color: white; min-height: 100vh; }
+
+  header { padding: 4rem 3rem 2.5rem; text-align: center; border-bottom: 1px solid #1F1F1F; }
+  .h-sub { font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; color: #555; margin-bottom: 0.75rem; }
+  .h-title { font-size: 2.2rem; font-weight: 700; color: white; margin-bottom: 0.5rem; }
+  .h-ta { font-family: 'Noto Serif Tamil', serif; font-size: 1rem; color: #777; }
+  .h-desc { font-size: 0.875rem; color: #444; margin-top: 1rem; max-width: 640px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+  .h-note { display: inline-block; margin-top: 1rem; font-size: 0.75rem; color: #333; background: #151515; border: 1px solid #222; padding: 0.5rem 1.25rem; border-radius: 999px; }
+
+  /* Category headers */
+  .category { max-width: 1400px; margin: 3rem auto 0; padding: 0 2rem; }
+  .category-label { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: #444; padding-bottom: 1rem; border-bottom: 1px solid #1F1F1F; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; }
+  .category-label::after { content: ''; flex: 1; height: 1px; background: #1F1F1F; }
+
+  main { max-width: 1400px; margin: 0 auto; padding: 1rem 2rem 4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 1.5rem; }
+
+  .design-card { background: #121212; border: 1px solid #1E1E1E; border-radius: 16px; overflow: hidden; transition: all 0.3s; }
+  .design-card:hover { transform: translateY(-5px); border-color: #2E2E2E; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+
+  .card-preview { height: 200px; position: relative; display: flex; align-items: center; justify-content: center; }
+  .card-preview-iframe-wrap { position: absolute; inset: 0; overflow: hidden; }
+  .card-preview-iframe-wrap iframe { width: 200%; height: 200%; transform: scale(0.5) translate(-50%, -50%); transform-origin: top left; pointer-events: none; border: none; }
+
+  .card-body { padding: 1.5rem; }
+  .card-meta { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .card-id { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+  .card-name { font-size: 1.2rem; font-weight: 700; color: white; margin-bottom: 0.25rem; }
+  .card-concept { font-size: 0.75rem; color: #555; margin-bottom: 0.75rem; font-style: italic; }
+  .card-desc { font-size: 0.82rem; color: #555; line-height: 1.6; margin-bottom: 1.25rem; }
+
+  .card-pillars { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 1.25rem; }
+  .pillar { font-size: 0.68rem; padding: 0.2rem 0.6rem; border-radius: 4px; background: #1A1A1A; color: #666; border: 1px solid #222; }
+  .pillar.layout { color: #4A9EFF; border-color: rgba(74,158,255,0.2); background: rgba(74,158,255,0.05); }
+  .pillar.color { color: #FF8A65; border-color: rgba(255,138,101,0.2); background: rgba(255,138,101,0.05); }
+  .pillar.nav { color: #A78BFA; border-color: rgba(167,139,250,0.2); background: rgba(167,139,250,0.05); }
+  .pillar.motif { color: #34D399; border-color: rgba(52,211,153,0.2); background: rgba(52,211,153,0.05); }
+
+  .card-cta { display: block; text-align: center; padding: 0.75rem; border-radius: 8px; font-weight: 600; font-size: 0.85rem; text-decoration: none; transition: all 0.2s; }
+  .card-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .rec-badge { display: inline-flex; align-items: center; gap: 0.25rem; background: linear-gradient(135deg, #7C3AED, #EC4899); color: white; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 999px; }
+
+  /* Design-specific colors */
+  .d { --c: #8B6914; }
+  .e { --c: #8B1A1A; }
+  .f { --c: #1A5E3A; }
+  .g { --c: #1A5C40; }
+  .h { --c: #CC5500; }
+  .i { --c: #7A5C1E; }
+
+  .d .card-id { color: #C6881A; }
+  .e .card-id { color: #D4A017; }
+  .f .card-id { color: #4ADE80; }
+  .g .card-id { color: #38BDF8; }
+  .h .card-id { color: #FF7A2A; }
+  .i .card-id { color: #F5A623; }
+
+  .d .card-cta { background: #8B6914; color: white; }
+  .e .card-cta { background: #8B1A1A; color: #F7E8B0; }
+  .f .card-cta { background: #1A5E3A; color: white; }
+  .g .card-cta { background: #0A3D28; color: white; }
+  .h .card-cta { background: #CC5500; color: white; }
+  .i .card-cta { background: #1C1A18; color: #F5A623; }
+
+  /* Preview backgrounds */
+  .prev-d { background: linear-gradient(135deg, #F5EFE0, #EDE5CF); }
+  .prev-e { background: radial-gradient(ellipse at center, #8B1A1A, #2A0A0A); }
+  .prev-f { background: linear-gradient(135deg, #FAFAF5, #E8E8E0); }
+  .prev-g { background: linear-gradient(160deg, #0B3D2E, #3D2A0A); }
+  .prev-h { background: #0A0A0A; }
+  .prev-i { background: linear-gradient(135deg, #1C1A18, #3A3530); }
+
+  .preview-icon { font-size: 4rem; }
+
+  .legend { max-width: 1400px; margin: 0 auto; padding: 1rem 2rem 1.5rem; display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .legend-chip { font-size: 0.72rem; padding: 0.3rem 0.75rem; border-radius: 999px; border: 1px solid #222; color: #444; }
+
+  @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="h-sub">SPTS Website · Design Concepts v2 · 2026</p>
+  <h1 class="h-title">Six Genuinely Different Design Directions</h1>
+  <p class="h-ta">சன் பிரேரி தமிழ் சமூகம்</p>
+  <p class="h-desc">Each design is built around a completely different philosophy: navigation model, layout architecture, visual metaphor, color system, and interaction pattern. These are not color variations — they are fundamentally different ways to experience the same community.</p>
+  <span class="h-note">✦ Each prototype has all sections: Nav · Hero · Programs · Events · Achievements · Gallery · Feed · Board · Footer</span>
+</header>
+
+<div class="category">
+  <p class="category-label">Six Design Directions — Click to open full prototype in browser</p>
+</div>
+
+<main>
+
+  <!-- DESIGN D -->
+  <div class="design-card d">
+    <div class="card-preview prev-d">
+      <span class="preview-icon">📖</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">Design D</span>
+        <span class="rec-badge">★ My Pick</span>
+      </div>
+      <h2 class="card-name">The Thiruvalluvar Library</h2>
+      <p class="card-concept">Classical authority meets editorial wisdom</p>
+      <p class="card-desc">Thirukkural couplets as structural anchors. Tamil script at display scale. Palm-leaf manuscript aesthetic modernized into a bilingual literary journal. Feels like a cultural institution — proud, deep, timeless.</p>
+      <div class="card-pillars">
+        <span class="pillar layout">Editorial long-scroll</span>
+        <span class="pillar nav">Top minimal nav</span>
+        <span class="pillar color">Parchment + Charcoal + Gold</span>
+        <span class="pillar motif">Thirukkural cards</span>
+      </div>
+      <a href="design-d.html" target="_blank" class="card-cta">Open Design D →</a>
+    </div>
+  </div>
+
+  <!-- DESIGN E -->
+  <div class="design-card e">
+    <div class="card-preview prev-e">
+      <span class="preview-icon">🪷</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">Design E</span>
+      </div>
+      <h2 class="card-name">The Tanjore Mandala</h2>
+      <p class="card-concept">Sacred geometry as interface architecture</p>
+      <p class="card-desc">Tanjore painting colors — deep crimson, gold leaf, jewel tones. Program gems arranged in a concentric mandala. Kanjivaram temple-border dividers. Feels like entering a cultural exhibition. Rich, ornate, deeply Tamil.</p>
+      <div class="card-pillars">
+        <span class="pillar layout">Centered mandala hero</span>
+        <span class="pillar nav">Centered split nav</span>
+        <span class="pillar color">Crimson + Gold + Indigo</span>
+        <span class="pillar motif">Temple border pattern</span>
+      </div>
+      <a href="design-e.html" target="_blank" class="card-cta">Open Design E →</a>
+    </div>
+  </div>
+
+  <!-- DESIGN F -->
+  <div class="design-card f">
+    <div class="card-preview prev-f">
+      <span class="preview-icon">🏘️</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">Design F</span>
+      </div>
+      <h2 class="card-name">The Bento Village</h2>
+      <p class="card-concept">A living community map as dashboard</p>
+      <p class="card-desc">The entire homepage IS a bento grid — no traditional hero section. Each program is a distinct colored tile with its own identity. Sticky sidebar navigation (collapses to bottom tabs on mobile). Feels like a community town map — you see everything at once.</p>
+      <div class="card-pillars">
+        <span class="pillar layout">Asymmetric bento grid</span>
+        <span class="pillar nav">Sidebar + bottom tabs</span>
+        <span class="pillar color">Per-program colors</span>
+        <span class="pillar motif">Tile "breathing" hovers</span>
+      </div>
+      <a href="design-f.html" target="_blank" class="card-cta">Open Design F →</a>
+    </div>
+  </div>
+
+  <!-- DESIGN G -->
+  <div class="design-card g">
+    <div class="card-preview prev-g">
+      <span class="preview-icon">🌿</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">Design G</span>
+      </div>
+      <h2 class="card-name">The Sangam Scroll</h2>
+      <p class="card-concept">Landscape poetry as navigational journey</p>
+      <p class="card-desc">The ancient Tamil Sangam tinai system — 5 emotional landscapes — as full-page scroll sections. Each section has a completely different color palette. Thiruvalluvar couplets appear as full-bleed typographic moments between sections. Dot navigation on the right. Uniquely, irreducibly Tamil.</p>
+      <div class="card-pillars">
+        <span class="pillar layout">5-section full-page scroll</span>
+        <span class="pillar nav">Dot nav (right side)</span>
+        <span class="pillar color">5 distinct palettes</span>
+        <span class="pillar motif">Tinai poem moments</span>
+      </div>
+      <a href="design-g.html" target="_blank" class="card-cta">Open Design G →</a>
+    </div>
+  </div>
+
+  <!-- DESIGN H -->
+  <div class="design-card h">
+    <div class="card-preview prev-h">
+      <span class="preview-icon" style="font-family:'Noto Serif Tamil',serif; font-size:3rem; letter-spacing:0.1em; color:rgba(255,255,255,0.2);">அ இ உ</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">Design H</span>
+      </div>
+      <h2 class="card-name">The Pattarai Studio</h2>
+      <p class="card-concept">Bold creative studio — Tamil culture made visible</p>
+      <p class="card-desc">Dark near-black background. Tamil letterforms (அ இ உ க ச...) as a vast typographic background pattern. Bold grotesque typography over them. Programs as horizontal-scroll cards. Sidebar icon nav. Feels like a creative agency or art collective — speaks directly to the younger generation.</p>
+      <div class="card-pillars">
+        <span class="pillar layout">Editorial + horiz scroll</span>
+        <span class="pillar nav">Icon sidebar</span>
+        <span class="pillar color">Black + Marigold accent</span>
+        <span class="pillar motif">Tamil letter wallpaper</span>
+      </div>
+      <a href="design-h.html" target="_blank" class="card-cta">Open Design H →</a>
+    </div>
+  </div>
+
+  <!-- DESIGN I -->
+  <div class="design-card i">
+    <div class="card-preview prev-i">
+      <span class="preview-icon">⛩️</span>
+    </div>
+    <div class="card-body">
+      <div class="card-meta">
+        <span class="card-id">Design I</span>
+      </div>
+      <h2 class="card-name">The Living Temple</h2>
+      <p class="card-concept">Gopuram as navigational architecture</p>
+      <p class="card-desc">A CSS/HTML gopuram tower built from program content. Left pillar navigation (vertical nav labels, temple column aesthetic). Mandapa colonnade layout for programs (5 pillars side by side). Stone palette with saffron + kumkum festival accents. Inscription-style achievement display. The most architecturally Tamil of all six.</p>
+      <div class="card-pillars">
+        <span class="pillar layout">Gopuram hero + colonnade</span>
+        <span class="pillar nav">Left pillar nav</span>
+        <span class="pillar color">Stone + Saffron + Kumkum</span>
+        <span class="pillar motif">Gopuram tiers</span>
+      </div>
+      <a href="design-i.html" target="_blank" class="card-cta">Open Design I →</a>
+    </div>
+  </div>
+
+</main>
+
+<div class="legend">
+  <span class="legend-chip" style="color:#666; border-color:#333;">🏷️ Legend:</span>
+  <span class="legend-chip layout" style="color:#4A9EFF; border-color:rgba(74,158,255,0.25);">Blue = Layout model</span>
+  <span class="legend-chip" style="color:#FF8A65; border-color:rgba(255,138,101,0.25);">Orange = Color philosophy</span>
+  <span class="legend-chip" style="color:#A78BFA; border-color:rgba(167,139,250,0.25);">Purple = Navigation pattern</span>
+  <span class="legend-chip" style="color:#34D399; border-color:rgba(52,211,153,0.25);">Green = Signature motif</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sangam Scroll — G1: Literary Ancestral</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&family=Cormorant+SC:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,400;1,8..60,600&family=Tiro+Tamil:ital@0;1&family=Mukta+Malar:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* ─── DESIGN TOKENS ─── */
+  :root {
+    --display: 'Cormorant Garamond', Georgia, serif;
+    --display-sc: 'Cormorant SC', Georgia, serif;
+    --body-en: 'Source Serif 4', Georgia, serif;
+    --body-ta: 'Mukta Malar', sans-serif;
+    --display-ta: 'Tiro Tamil', serif;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: #0B3D2E; color: white; font-family: var(--body-en); }
+
+  /* ─── FLOATING NAV ─── */
+  .top-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 150;
+    padding: 1.5rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent);
+    pointer-events: none;
+  }
+  .top-nav > * { pointer-events: all; }
+  .nav-brand-sc {
+    display: flex; flex-direction: column;
+  }
+  .nav-en {
+    font-family: var(--display-sc); font-size: 0.85rem; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.7);
+  }
+  .nav-ta {
+    font-family: var(--display-ta); font-size: 0.75rem; color: rgba(255,255,255,0.4);
+    margin-top: 2px; letter-spacing: 0;
+  }
+  .nav-links-sc { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links-sc a {
+    font-family: var(--display-sc); font-size: 0.72rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: rgba(255,255,255,0.5); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links-sc a:hover { color: rgba(255,255,255,0.9); }
+  .nav-join-sc {
+    font-family: var(--display-sc); font-size: 0.72rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: white; text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.4); padding-bottom: 1px;
+    transition: border-color 0.2s;
+  }
+  .nav-join-sc:hover { border-color: white; }
+
+  /* ─── DOT NAV ─── */
+  .dot-nav {
+    position: fixed; right: 2.5rem; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 1rem; z-index: 200;
+  }
+  .dot-nav a {
+    width: 7px; height: 7px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.35);
+    display: block; transition: all 0.3s; background: transparent;
+  }
+  .dot-nav a.active { background: white; border-color: white; }
+  .dot-nav a:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.4); }
+
+  /* ─── SECTION ANATOMY ─── */
+  .tinai {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 9rem 8rem 9rem 8rem; position: relative; overflow: hidden;
+  }
+
+  /* SC label row */
+  .tinai-header { margin-bottom: 2.5rem; }
+  .tinai-sc-label {
+    font-family: var(--display-sc); font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    opacity: 0.45; display: flex; align-items: center; gap: 1.25rem;
+  }
+  .tinai-sc-label::after {
+    content: ''; display: block; width: 48px; height: 1px;
+    background: currentColor; opacity: 0.5;
+  }
+  .tinai-ta-sub {
+    font-family: var(--display-ta); font-size: 1rem; opacity: 0.45;
+    margin-top: 0.75rem; letter-spacing: 0;
+  }
+
+  /* Hero heading */
+  .tinai-h {
+    font-family: var(--display); font-size: clamp(4.5rem, 9vw, 8.5rem);
+    font-weight: 700; font-style: italic; line-height: 1.0;
+    letter-spacing: -0.02em; max-width: 700px; margin-bottom: 2rem;
+    color: white;
+  }
+
+  .tinai-body {
+    font-family: var(--body-en); font-size: 1.05rem; font-weight: 300;
+    line-height: 1.85; max-width: 500px; opacity: 0.7;
+    margin-bottom: 2.5rem; font-style: italic;
+  }
+
+  .tinai-cta {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-family: var(--display-sc); font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    text-decoration: none; color: white;
+    border-bottom: 1px solid rgba(255,255,255,0.35); padding-bottom: 2px;
+    transition: border-color 0.2s; width: fit-content;
+  }
+  .tinai-cta:hover { border-color: white; }
+
+  /* Right-side poem ghost text */
+  .poem-ghost {
+    position: absolute; right: 4rem; top: 50%; transform: translateY(-50%);
+    text-align: right; pointer-events: none; max-width: 320px;
+  }
+  .poem-ghost-ta {
+    font-family: var(--display-ta); font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+    line-height: 1.9; opacity: 0.12; letter-spacing: 0;
+  }
+
+  /* Content blocks within tinais */
+  .content-block { max-width: 580px; }
+
+  /* Program list (tinai 2) */
+  .prog-list { list-style: none; display: flex; flex-direction: column; margin-top: 1.5rem; }
+  .prog-item {
+    display: flex; align-items: baseline; gap: 2rem;
+    padding: 1.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-decoration: none; color: inherit; transition: all 0.2s;
+    cursor: pointer;
+  }
+  .prog-item:hover { padding-left: 0.5rem; }
+  .prog-num {
+    font-family: var(--display-sc); font-size: 0.7rem; letter-spacing: 0.15em;
+    opacity: 0.4; min-width: 24px; flex-shrink: 0;
+  }
+  .prog-ta { font-family: var(--display-ta); font-size: 0.85rem; opacity: 0.55; min-width: 110px; flex-shrink: 0; }
+  .prog-en { font-family: var(--display); font-size: 1.2rem; font-style: italic; font-weight: 600; flex: 1; }
+  .prog-arrow { opacity: 0.3; font-size: 0.8rem; transition: opacity 0.2s; flex-shrink: 0; }
+  .prog-item:hover .prog-arrow { opacity: 0.8; }
+
+  /* Event rows (tinai 3) */
+  .event-list { display: flex; flex-direction: column; }
+  .event-row {
+    display: grid; grid-template-columns: 80px 1fr auto;
+    align-items: center; gap: 2.5rem;
+    padding: 1.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .event-date-col { text-align: right; }
+  .event-day { font-family: var(--display); font-size: 2.5rem; font-weight: 700; line-height: 1; }
+  .event-month { font-family: var(--display-sc); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.5; margin-top: 0.1rem; }
+  .event-content { }
+  .event-ta-row { font-family: var(--display-ta); font-size: 0.82rem; opacity: 0.5; margin-bottom: 0.2rem; }
+  .event-en-row { font-family: var(--display); font-size: 1.15rem; font-style: italic; font-weight: 600; }
+  .event-loc-row { font-family: var(--body-en); font-size: 0.8rem; opacity: 0.4; font-style: italic; margin-top: 0.25rem; }
+  .event-link-row {
+    font-family: var(--display-sc); font-size: 0.65rem; font-weight: 600; letter-spacing: 0.15em;
+    text-transform: uppercase; color: white; text-decoration: none; opacity: 0.6;
+    border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 1px; white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  .event-link-row:hover { opacity: 1; }
+
+  /* Achievement rows (tinai 4) */
+  .ach-list { display: flex; flex-direction: column; }
+  .ach-row {
+    display: grid; grid-template-columns: 200px 1fr 80px;
+    align-items: baseline; gap: 2.5rem;
+    padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .ach-award-sc { font-family: var(--display); font-size: 1.3rem; font-style: italic; font-weight: 700; }
+  .ach-name-row { font-family: var(--body-en); font-size: 1rem; font-weight: 600; }
+  .ach-detail-row { font-family: var(--body-en); font-size: 0.8rem; font-style: italic; opacity: 0.55; margin-top: 0.2rem; }
+  .ach-year-row { font-family: var(--display-sc); font-size: 0.7rem; letter-spacing: 0.1em; opacity: 0.4; text-align: right; }
+
+  /* Board (tinai 5) */
+  .board-list { display: flex; flex-direction: column; gap: 1.5rem; max-width: 520px; }
+  .board-member {
+    display: grid; grid-template-columns: 1fr 1fr 2fr; align-items: baseline; gap: 2rem;
+    padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .board-role-sc { font-family: var(--display-sc); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.45; padding-top: 0.2rem; }
+  .board-name-sc { font-family: var(--display); font-size: 1rem; font-style: italic; font-weight: 600; }
+  .board-bio-sc { font-family: var(--body-en); font-size: 0.82rem; font-style: italic; opacity: 0.55; line-height: 1.65; }
+
+  /* ─── TINAI COLOR PALETTES ─── */
+  #k1 { background: linear-gradient(160deg, #0B3D2E 0%, #1A6B4A 50%, #082A1E 100%); }
+  #k2 { background: linear-gradient(160deg, #2C1A08 0%, #6B3A0A 55%, #4A2808 100%); }
+  #k3 { background: linear-gradient(160deg, #3A2000 0%, #8A5000 55%, #5A3000 100%); }
+  #k4 { background: linear-gradient(160deg, #071828 0%, #0C3B5C 55%, #041020 100%); }
+  #k5 { background: linear-gradient(160deg, #1E0E04 0%, #5C2E10 55%, #3A1C08 100%); }
+
+  /* ─── POEM SCREEN TRANSITIONS ─── */
+  .kural-screen {
+    min-height: 60vh; display: flex; align-items: center; justify-content: center;
+    padding: 5rem 8rem; text-align: center; flex-direction: column; gap: 1.5rem;
+    position: relative;
+  }
+  .kural-line-ta {
+    font-family: var(--display-ta); font-size: clamp(1.4rem, 3vw, 2.2rem);
+    line-height: 1.8; letter-spacing: 0; opacity: 0.85;
+    max-width: 680px;
+  }
+  .kural-line-en {
+    font-family: var(--display); font-size: clamp(1rem, 2vw, 1.4rem);
+    font-style: italic; font-weight: 400; opacity: 0.55;
+    max-width: 540px; line-height: 1.8;
+  }
+  .kural-source {
+    font-family: var(--display-sc); font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; margin-top: 0.5rem;
+  }
+  /* Kural screen backgrounds (transitions between tinais) */
+  .ks-1 { background: linear-gradient(to bottom, #1A6B4A, #6B3A0A); }
+  .ks-2 { background: linear-gradient(to bottom, #6B3A0A, #8A5000); }
+  .ks-3 { background: linear-gradient(to bottom, #8A5000, #0C3B5C); }
+  .ks-4 { background: linear-gradient(to bottom, #0C3B5C, #5C2E10); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #060606; padding: 5rem 8rem 3rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem;
+    padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-brand-ta { font-family: var(--display-ta); font-size: 1.4rem; opacity: 0.7; margin-bottom: 0.5rem; }
+  .footer-brand-en { font-family: var(--display-sc); font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4; margin-bottom: 1rem; }
+  .footer-about { font-family: var(--body-en); font-size: 0.82rem; font-style: italic; opacity: 0.3; line-height: 1.7; }
+  .footer-col-h { font-family: var(--display-sc); font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.35; margin-bottom: 1rem; }
+  .footer-links-sc { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-links-sc a { font-family: var(--body-en); font-size: 0.85rem; font-style: italic; opacity: 0.4; text-decoration: none; transition: opacity 0.2s; }
+  .footer-links-sc a:hover { opacity: 0.85; }
+  .footer-bottom { padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-family: var(--display-sc); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.2; }
+  .footer-kural { font-family: var(--display-ta); font-size: 0.82rem; opacity: 0.2; }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .tinai { padding: 7rem 2.5rem 7rem; }
+    .poem-ghost { display: none; }
+    .top-nav { padding: 1.25rem 2rem; }
+    .nav-links-sc { display: none; }
+    .dot-nav { right: 1rem; }
+    .kural-screen { padding: 4rem 2.5rem; }
+    .event-row { grid-template-columns: 60px 1fr; }
+    .event-link-row { display: none; }
+    .ach-row { grid-template-columns: 1fr; gap: 0.25rem; }
+    .board-member { grid-template-columns: 1fr; gap: 0.25rem; }
+    footer { padding: 4rem 2.5rem 2.5rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DOT NAV -->
+<nav class="dot-nav" aria-label="Section navigation">
+  <a href="#k1" class="active" title="Kurinci"></a>
+  <a href="#k2" title="Mullai"></a>
+  <a href="#k3" title="Marutam"></a>
+  <a href="#k4" title="Neytal"></a>
+  <a href="#k5" title="Palai"></a>
+</nav>
+
+<!-- TOP NAV -->
+<header class="top-nav">
+  <div class="nav-brand-sc">
+    <span class="nav-en">Sun Prairie Tamil Society</span>
+    <span class="nav-ta">சன் பிரேரி தமிழ் சமூகம்</span>
+  </div>
+  <ul class="nav-links-sc">
+    <li><a href="#k2">Programs</a></li>
+    <li><a href="#k3">Events</a></li>
+    <li><a href="#k4">Achievements</a></li>
+    <li><a href="#k5">Community</a></li>
+  </ul>
+  <a href="#" class="nav-join-sc">Join the Society</a>
+</header>
+
+<!-- ══════════════════════════════════
+  KURINCI — Mountain — Union / Who We Are
+══════════════════════════════════ -->
+<section class="tinai" id="k1">
+  <div class="poem-ghost">
+    <p class="poem-ghost-ta">யாதும் ஊரே யாவரும் கேளிர்<br>தீதும் நன்றும் பிறர்தர வாரா.</p>
+  </div>
+  <div class="tinai-header reveal">
+    <p class="tinai-sc-label">குறிஞ்சி Tinai &nbsp;·&nbsp; Mountain &nbsp;·&nbsp; Union</p>
+    <p class="tinai-ta-sub">யாதும் ஊரே &nbsp;·&nbsp; All lands are home</p>
+  </div>
+  <h1 class="tinai-h reveal">A Tamil<br>community<br>took root.</h1>
+  <p class="tinai-body reveal">In 2012, Tamil families in Sun Prairie, Wisconsin gathered around one question: how do we give our children the language and the culture we carry in our hearts? The answer was this — five programs, one community, twelve years of roots.</p>
+  <div class="reveal" style="display:flex; gap:3rem; margin-bottom:2.5rem; flex-wrap:wrap;">
+    <div>
+      <p style="font-family:var(--display); font-size:2.8rem; font-weight:700; font-style:italic; line-height:1;">120+</p>
+      <p style="font-family:var(--display-sc); font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; opacity:0.45; margin-top:0.2rem;">Students</p>
+    </div>
+    <div>
+      <p style="font-family:var(--display); font-size:2.8rem; font-weight:700; font-style:italic; line-height:1;">12</p>
+      <p style="font-family:var(--display-sc); font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; opacity:0.45; margin-top:0.2rem;">Years</p>
+    </div>
+    <div>
+      <p style="font-family:var(--display); font-size:2.8rem; font-weight:700; font-style:italic; line-height:1;">5</p>
+      <p style="font-family:var(--display-sc); font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; opacity:0.45; margin-top:0.2rem;">Programs</p>
+    </div>
+  </div>
+  <a href="#k2" class="tinai-cta reveal">Discover our programs &nbsp;↓</a>
+</section>
+
+<!-- KURAL SCREEN 1→2 -->
+<div class="kural-screen ks-1 reveal">
+  <p class="kural-line-ta">கற்றதனால் ஆய பயனென்கொல் வாலறிவன்<br>நற்றாள் தொழாமனை என்னின்.</p>
+  <p class="kural-line-en">"What is the worth of all that is learned, if the learned does not worship the feet of the Pure-Knowledged One?"</p>
+  <p class="kural-source">Thirukkural · 2 &nbsp;·&nbsp; On Learning</p>
+</div>
+
+<!-- ══════════════════════════════════
+  MULLAI — Forest — Learning / Programs
+══════════════════════════════════ -->
+<section class="tinai" id="k2">
+  <div class="poem-ghost">
+    <p class="poem-ghost-ta">கற்றதனால் ஆய பயனென்கொல்<br>நற்றாள் தொழாமனை என்னின்.</p>
+  </div>
+  <div class="tinai-header reveal">
+    <p class="tinai-sc-label">முல்லை Tinai &nbsp;·&nbsp; Forest &nbsp;·&nbsp; Learning &amp; Patience</p>
+    <p class="tinai-ta-sub">கற்றல் &nbsp;·&nbsp; Knowledge grows here</p>
+  </div>
+  <h2 class="tinai-h reveal">Five roots.<br>One tree.</h2>
+  <div class="content-block reveal">
+    <ul class="prog-list">
+      <li class="prog-item"><span class="prog-num">I</span><span class="prog-ta">தமிழ்ப் பள்ளி</span><span class="prog-en">Tamil Language School</span><span class="prog-arrow">→</span></li>
+      <li class="prog-item"><span class="prog-num">II</span><span class="prog-ta">நூலகம்</span><span class="prog-en">Community Library</span><span class="prog-arrow">→</span></li>
+      <li class="prog-item"><span class="prog-num">III</span><span class="prog-ta">பட்டறை</span><span class="prog-en">Pattarai Creative Studio</span><span class="prog-arrow">→</span></li>
+      <li class="prog-item"><span class="prog-num">IV</span><span class="prog-ta">இசை மன்றம்</span><span class="prog-en">Carnatic Music Club</span><span class="prog-arrow">→</span></li>
+      <li class="prog-item"><span class="prog-num">V</span><span class="prog-ta">தன்னார்வல</span><span class="prog-en">Volunteer Program</span><span class="prog-arrow">→</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- KURAL SCREEN 2→3 -->
+<div class="kural-screen ks-2 reveal">
+  <p class="kural-line-ta">தென்புலத்தார் தெய்வம் விருந்தொக்கல் தானென்று<br>ஐம்புலத்தாறு ஓம்பல் தலை.</p>
+  <p class="kural-line-en">"To honour the five — ancestors, the divine, guests, kin, and oneself — this is the highest obligation."</p>
+  <p class="kural-source">Thirukkural · 43 &nbsp;·&nbsp; On Hospitality</p>
+</div>
+
+<!-- ══════════════════════════════════
+  MARUTAM — Field — Celebration / Events
+══════════════════════════════════ -->
+<section class="tinai" id="k3">
+  <div class="poem-ghost">
+    <p class="poem-ghost-ta">மாரி மழை பொழியும் மலைமிசை<br>சீரிய கொண்டல் சேர்ந்தன போல.</p>
+  </div>
+  <div class="tinai-header reveal">
+    <p class="tinai-sc-label">மருதம் Tinai &nbsp;·&nbsp; Field &nbsp;·&nbsp; Celebration &amp; Harvest</p>
+    <p class="tinai-ta-sub">நிகழ்வுகள் &nbsp;·&nbsp; Our festivals</p>
+  </div>
+  <h2 class="tinai-h reveal">Every gathering<br>is a ceremony.</h2>
+  <div class="content-block reveal">
+    <div class="event-list">
+      <div class="event-row">
+        <div class="event-date-col"><p class="event-day">13</p><p class="event-month">April</p></div>
+        <div class="event-content">
+          <p class="event-ta-row">தமிழ் புத்தாண்டு</p>
+          <p class="event-en-row">Tamil New Year Celebration</p>
+          <p class="event-loc-row">Sun Prairie Community Center</p>
+        </div>
+        <a href="#" class="event-link-row">RSVP</a>
+      </div>
+      <div class="event-row">
+        <div class="event-date-col"><p class="event-day">03</p><p class="event-month">May</p></div>
+        <div class="event-content">
+          <p class="event-ta-row">கலை விழா</p>
+          <p class="event-en-row">Annual Arts &amp; Culture Festival</p>
+          <p class="event-loc-row">Whitehorse Middle School Auditorium</p>
+        </div>
+        <a href="#" class="event-link-row">RSVP</a>
+      </div>
+      <div class="event-row">
+        <div class="event-date-col"><p class="event-day">01</p><p class="event-month">Nov</p></div>
+        <div class="event-content">
+          <p class="event-ta-row">கார்த்திகை விளக்கு</p>
+          <p class="event-en-row">Karthigai Deepam — Festival of Lights</p>
+          <p class="event-loc-row">Venue announcing soon</p>
+        </div>
+        <a href="#" class="event-link-row">Notify me</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KURAL SCREEN 3→4 -->
+<div class="kural-screen ks-3 reveal">
+  <p class="kural-line-ta">யாதும் ஊரே யாவரும் கேளிர்<br>தீதும் நன்றும் பிறர்தர வாரா.</p>
+  <p class="kural-line-en">"All lands are our home — all people our kin. Neither good nor ill comes from elsewhere. It comes from within."</p>
+  <p class="kural-source">Purananuru · 192 &nbsp;·&nbsp; Kaniyan Pungundranar</p>
+</div>
+
+<!-- ══════════════════════════════════
+  NEYTAL — Sea — Longing / Achievements
+══════════════════════════════════ -->
+<section class="tinai" id="k4">
+  <div class="poem-ghost">
+    <p class="poem-ghost-ta">கடல் அலை நுரைப் பொருப்பு<br>ஆரவாரம் கேட்டால்.</p>
+  </div>
+  <div class="tinai-header reveal">
+    <p class="tinai-sc-label">நெய்தல் Tinai &nbsp;·&nbsp; Sea &nbsp;·&nbsp; Longing &amp; Achievement</p>
+    <p class="tinai-ta-sub">சாதனைகள் &nbsp;·&nbsp; Our community's glory</p>
+  </div>
+  <h2 class="tinai-h reveal">Our children<br>carry the<br>light forward.</h2>
+  <div class="content-block" style="max-width:680px;" class="reveal">
+    <div class="ach-list reveal">
+      <div class="ach-row">
+        <p class="ach-award-sc">First Place</p>
+        <div><p class="ach-name-row">Priya Krishnaswamy</p><p class="ach-detail-row">Wisconsin Tamil Oratory · Senior Division</p></div>
+        <p class="ach-year-row">2025</p>
+      </div>
+      <div class="ach-row">
+        <p class="ach-award-sc">Best Essay</p>
+        <div><p class="ach-name-row">Arjun Ramalingam</p><p class="ach-detail-row">National Tamil Youth Conference</p></div>
+        <p class="ach-year-row">2025</p>
+      </div>
+      <div class="ach-row">
+        <p class="ach-award-sc">Gold Medal</p>
+        <div><p class="ach-name-row">Kavitha &amp; Sundari Balaji</p><p class="ach-detail-row">Midwest Carnatic Festival · Vocal Duet</p></div>
+        <p class="ach-year-row">2025</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KURAL SCREEN 4→5 -->
+<div class="kural-screen ks-4 reveal">
+  <p class="kural-line-ta">இனிய உளவாக இன்னாத கூறல்<br>கனியிருப்பக் காய்கவர்ந்தற்று.</p>
+  <p class="kural-line-en">"Saying harsh words when kind ones are available is like choosing unripe fruit when the ripe one is at hand."</p>
+  <p class="kural-source">Thirukkural · 100 &nbsp;·&nbsp; On Kind Words</p>
+</div>
+
+<!-- ══════════════════════════════════
+  PALAI — Desert — Courage / Community
+══════════════════════════════════ -->
+<section class="tinai" id="k5">
+  <div class="poem-ghost">
+    <p class="poem-ghost-ta">சென்றவர் மீளார் என்று அஞ்சி<br>வாழ்வது வாழ்க்கை அன்று.</p>
+  </div>
+  <div class="tinai-header reveal">
+    <p class="tinai-sc-label">பாலை Tinai &nbsp;·&nbsp; Desert &nbsp;·&nbsp; Courage &amp; Welcome</p>
+    <p class="tinai-ta-sub">சமூகம் &nbsp;·&nbsp; You are home here</p>
+  </div>
+  <h2 class="tinai-h reveal">New to Wisconsin?<br>You are home.</h2>
+  <p class="tinai-body reveal">Whether you arrived last month or fifteen years ago, SPTS is your community. Our board volunteers their time so no Tamil family faces the desert crossing alone.</p>
+  <div class="content-block reveal">
+    <div class="board-list">
+      <div class="board-member">
+        <p class="board-role-sc">President</p>
+        <p class="board-name-sc">Suresh Arunachalam</p>
+        <p class="board-bio-sc">Software engineer, 8 years with SPTS. Father of two Tamil school students.</p>
+      </div>
+      <div class="board-member">
+        <p class="board-role-sc">Vice President</p>
+        <p class="board-name-sc">Kavitha Venkataraman</p>
+        <p class="board-bio-sc">Bharatanatyam teacher, cultural festival director, Pattarai studio lead.</p>
+      </div>
+      <div class="board-member">
+        <p class="board-role-sc">Secretary</p>
+        <p class="board-name-sc">Mohan Gopalaswamy</p>
+        <p class="board-bio-sc">UW–Madison professor. Volunteer Tamil school teacher since 2020.</p>
+      </div>
+    </div>
+  </div>
+  <a href="#" class="tinai-cta reveal" style="margin-top:2rem;">Join the community &nbsp;→</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand-ta">சன் பிரேரி தமிழ் சமூகம்</p>
+      <p class="footer-brand-en">Sun Prairie Tamil Society</p>
+      <p class="footer-about">Tamil culture, alive in Wisconsin since 2012. A volunteer-run community of families preserving language and belonging.</p>
+    </div>
+    <div>
+      <p class="footer-col-h">Programs</p>
+      <ul class="footer-links-sc">
+        <li><a href="#">Tamil School</a></li>
+        <li><a href="#">Library</a></li>
+        <li><a href="#">Pattarai</a></li>
+        <li><a href="#">Music Club</a></li>
+        <li><a href="#">Volunteer</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-h">Community</p>
+      <ul class="footer-links-sc">
+        <li><a href="#">Activity Feed</a></li>
+        <li><a href="#">Achievement Wall</a></li>
+        <li><a href="#">Help Board</a></li>
+        <li><a href="#">Membership</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-h">Connect</p>
+      <ul class="footer-links-sc">
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Newsletter</a></li>
+        <li><a href="#">Contact Board</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Sun Prairie Tamil Society</p>
+    <p class="footer-kural">யாதும் ஊரே யாவரும் கேளிர்</p>
+  </div>
+</footer>
+
+<script>
+  // Dot nav active state
+  const sections = document.querySelectorAll('section[id]');
+  const dots = document.querySelectorAll('.dot-nav a');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        dots.forEach(d => d.classList.remove('active'));
+        const d = document.querySelector(`.dot-nav a[href="#${e.target.id}"]`);
+        if (d) d.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => io.observe(s));
+
+  // Scroll reveal
+  const ro = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ro.unobserve(e.target); }});
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => ro.observe(el));
+</script>
+</body>
+</html>

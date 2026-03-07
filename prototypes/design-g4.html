@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sangam Scroll — G4: Modernist Institution</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Catamaran:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --display-en: 'DM Serif Display', Georgia, serif;
+    --display-ta: 'Catamaran', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: #0B3D2E; color: white; font-family: var(--body); }
+
+  /* ─── TOP NAV ─── */
+  .top-nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 150;
+    padding: 1.5rem 4rem;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+    pointer-events: none;
+  }
+  .top-nav > * { pointer-events: all; }
+  .nav-brand-mi { display: flex; flex-direction: column; gap: 3px; }
+  .nav-ta-mi {
+    font-family: var(--display-ta); font-weight: 800;
+    font-size: 0.9rem; color: rgba(255,255,255,0.82); letter-spacing: 0;
+  }
+  .nav-en-mi {
+    font-family: var(--body); font-size: 0.6rem; font-weight: 400;
+    letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.3);
+  }
+  .nav-list-mi { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-list-mi a {
+    font-family: var(--body); font-size: 0.72rem; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(255,255,255,0.42); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-list-mi a:hover { color: rgba(255,255,255,0.9); }
+  .nav-join-mi {
+    font-family: var(--body); font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase; color: white;
+    text-decoration: none; opacity: 0.7; transition: opacity 0.2s;
+    border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 1px;
+  }
+  .nav-join-mi:hover { opacity: 1; border-color: white; }
+
+  /* ─── DOT NAV ─── */
+  .dot-nav {
+    position: fixed; right: 2.5rem; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 1rem; z-index: 200;
+  }
+  .dot-nav a {
+    width: 6px; height: 6px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.3);
+    display: block; transition: all 0.3s;
+  }
+  .dot-nav a.active { background: white; border-color: white; }
+  .dot-nav a:hover { border-color: rgba(255,255,255,0.7); }
+
+  /* ─── TINAI BASE ─── */
+  .tinai {
+    min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+    padding: 9rem 8rem; position: relative; overflow: hidden;
+  }
+
+  /* Label — Inter with thin overline above, institutional document feel */
+  .tinai-label-mi {
+    font-family: var(--body); font-size: 0.68rem; font-weight: 400;
+    letter-spacing: 0.28em; text-transform: uppercase; opacity: 0.38;
+    margin-bottom: 2rem;
+    padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.18);
+    width: fit-content;
+  }
+
+  /* Compound bilingual heading block — English + Tamil shown together */
+  .tinai-heading-block-mi { margin-bottom: 2.5rem; max-width: 750px; }
+
+  /* English — DM Serif Display italic */
+  .tinai-h-mi {
+    font-family: var(--display-en); font-style: italic;
+    font-size: clamp(4.5rem, 9vw, 8.5rem);
+    line-height: 1.0; letter-spacing: -0.015em; color: white;
+    margin-bottom: 0.875rem;
+  }
+
+  /* Tamil — Catamaran 800 at ~85% of English size, muted partner */
+  .tinai-h-ta-mi {
+    font-family: var(--display-ta); font-weight: 800;
+    font-size: clamp(2.2rem, 4.2vw, 3.8rem);
+    line-height: 1.2; letter-spacing: 0; opacity: 0.52; color: white;
+  }
+
+  .tinai-body-mi {
+    font-family: var(--body); font-size: 0.95rem; font-weight: 300;
+    line-height: 1.85; max-width: 480px; opacity: 0.55; margin-bottom: 2.5rem;
+  }
+
+  .tinai-cta-mi {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-family: var(--body); font-size: 0.7rem; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: white; text-decoration: none; opacity: 0.7;
+    border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 2px;
+    width: fit-content; transition: all 0.2s;
+  }
+  .tinai-cta-mi:hover { opacity: 1; border-color: white; }
+
+  /* Ghost Tamil letter — Catamaran 900 */
+  .ghost-ta-mi {
+    position: absolute; right: -1rem; top: 50%; transform: translateY(-50%);
+    font-family: var(--display-ta); font-weight: 900;
+    font-size: clamp(15rem, 30vw, 28rem); line-height: 1;
+    color: rgba(255,255,255,0.038); pointer-events: none; user-select: none;
+    letter-spacing: 0;
+  }
+
+  /* Stats — DM Serif Display italic numerals */
+  .stats-mi { display: flex; gap: 3rem; margin-bottom: 2.5rem; }
+  .stat-mi-num {
+    font-family: var(--display-en); font-style: italic;
+    font-size: 2.8rem; line-height: 1;
+  }
+  .stat-mi-label {
+    font-family: var(--body); font-size: 0.62rem; font-weight: 400;
+    letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.35; margin-top: 0.25rem;
+  }
+
+  /* Programs — clean Catamaran Tamil + Inter English */
+  .prog-list-mi { display: flex; flex-direction: column; max-width: 580px; margin-top: 1.5rem; }
+  .prog-mi {
+    display: grid; grid-template-columns: 2.5rem 1fr 1.5fr auto;
+    align-items: center; gap: 1.5rem;
+    padding: 1.25rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+    text-decoration: none; color: inherit; transition: all 0.2s;
+  }
+  .prog-mi:hover { opacity: 0.75; }
+  .prog-idx-mi { font-family: var(--body); font-size: 0.62rem; font-weight: 300; letter-spacing: 0.1em; opacity: 0.28; }
+  .prog-ta-mi { font-family: var(--display-ta); font-weight: 700; font-size: 1rem; }
+  .prog-en-mi { font-family: var(--body); font-size: 0.85rem; font-weight: 300; opacity: 0.48; }
+  .prog-arr-mi { font-size: 0.75rem; opacity: 0.28; }
+
+  /* Events */
+  .event-list-mi { display: flex; flex-direction: column; max-width: 580px; }
+  .event-mi {
+    display: grid; grid-template-columns: 5rem 1fr auto;
+    align-items: center; gap: 2rem;
+    padding: 1.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .event-day-mi { font-family: var(--display-en); font-style: italic; font-size: 2.6rem; line-height: 1; }
+  .event-mon-mi { font-family: var(--body); font-size: 0.6rem; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.35; margin-top: 0.1rem; }
+  .event-ta-mi { font-family: var(--display-ta); font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+  .event-en-mi { font-family: var(--body); font-size: 0.85rem; font-weight: 300; opacity: 0.5; }
+  .event-rsvp-mi {
+    font-family: var(--body); font-size: 0.62rem; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: white; text-decoration: none; opacity: 0.5;
+    border-bottom: 1px solid rgba(255,255,255,0.25); padding-bottom: 1px;
+    white-space: nowrap; transition: opacity 0.2s;
+  }
+  .event-rsvp-mi:hover { opacity: 0.9; border-color: rgba(255,255,255,0.6); }
+
+  /* Achievements — DM Serif Display italic for award names */
+  .ach-mi { display: flex; flex-direction: column; max-width: 580px; }
+  .ach-row-mi {
+    display: grid; grid-template-columns: 1fr 2fr 3rem;
+    align-items: baseline; gap: 2rem;
+    padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .ach-award-mi { font-family: var(--display-en); font-style: italic; font-size: 1.3rem; }
+  .ach-name-mi { font-family: var(--body); font-size: 0.9rem; font-weight: 500; }
+  .ach-detail-mi { font-family: var(--body); font-size: 0.78rem; font-weight: 300; opacity: 0.5; margin-top: 0.2rem; }
+  .ach-year-mi { font-family: var(--body); font-size: 0.62rem; font-weight: 400; letter-spacing: 0.1em; opacity: 0.35; text-align: right; }
+
+  /* Board */
+  .board-mi { display: flex; flex-direction: column; max-width: 560px; }
+  .board-member-mi {
+    display: grid; grid-template-columns: 1fr 1fr 1.5fr; align-items: baseline; gap: 2rem;
+    padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .board-role-mi { font-family: var(--body); font-size: 0.62rem; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.38; padding-top: 0.2rem; }
+  .board-name-mi { font-family: var(--display-ta); font-weight: 700; font-size: 1rem; }
+  .board-bio-mi { font-family: var(--body); font-size: 0.82rem; font-weight: 300; opacity: 0.5; line-height: 1.65; }
+
+  /* ─── TINAI COLORS ─── */
+  #k1 { background: linear-gradient(155deg, #0B3D2E 0%, #186044 50%, #082A1E 100%); }
+  #k2 { background: linear-gradient(155deg, #301808 0%, #783810 55%, #4A2408 100%); }
+  #k3 { background: linear-gradient(155deg, #3A1E00 0%, #9A5000 55%, #5A3200 100%); }
+  #k4 { background: linear-gradient(155deg, #060C1C 0%, #0A2845 55%, #030810 100%); }
+  #k5 { background: linear-gradient(155deg, #180800 0%, #5C2410 55%, #3A1808 100%); }
+
+  /* ─── KURAL SCREENS — Catamaran Tamil + DM Serif Display italic English ─── */
+  .kural-screen {
+    min-height: 55vh; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; padding: 5rem 8rem; gap: 1.5rem;
+  }
+  .ks-ta-mi { font-family: var(--display-ta); font-weight: 700; font-size: clamp(1.5rem, 3vw, 2.4rem); line-height: 1.8; max-width: 640px; }
+  .ks-en-mi { font-family: var(--display-en); font-style: italic; font-size: clamp(0.95rem, 1.8vw, 1.25rem); opacity: 0.5; max-width: 520px; line-height: 1.85; }
+  .ks-src-mi { font-family: var(--body); font-size: 0.62rem; font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.28; margin-top: 0.5rem; }
+  .ks1 { background: linear-gradient(to bottom, #186044, #783810); }
+  .ks2 { background: linear-gradient(to bottom, #783810, #9A5000); }
+  .ks3 { background: linear-gradient(to bottom, #9A5000, #0A2845); }
+  .ks4 { background: linear-gradient(to bottom, #0A2845, #5C2410); }
+
+  /* ─── FOOTER ─── */
+  footer { background: #040404; padding: 5rem 8rem 3rem; border-top: 1px solid rgba(255,255,255,0.05); }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 4rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .footer-ta-big { font-family: var(--display-ta); font-weight: 700; font-size: 1.4rem; opacity: 0.7; margin-bottom: 0.4rem; }
+  .footer-en-small { font-family: var(--body); font-size: 0.62rem; font-weight: 400; letter-spacing: 0.18em; text-transform: uppercase; opacity: 0.28; margin-bottom: 0.875rem; }
+  .footer-desc { font-family: var(--body); font-size: 0.82rem; font-weight: 300; opacity: 0.28; line-height: 1.7; }
+  .footer-col-h { font-family: var(--body); font-size: 0.6rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.3; margin-bottom: 0.875rem; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-links a { font-family: var(--body); font-size: 0.85rem; font-weight: 300; opacity: 0.38; text-decoration: none; transition: opacity 0.2s; }
+  .footer-links a:hover { opacity: 0.8; }
+  .footer-bottom { padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-family: var(--body); font-size: 0.62rem; font-weight: 400; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.18; }
+  .footer-kural { font-family: var(--display-ta); font-size: 0.82rem; opacity: 0.18; }
+
+  .reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.75s, transform 0.75s; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .tinai { padding: 7rem 2.5rem; }
+    .top-nav { padding: 1.25rem 2rem; }
+    .nav-list-mi { display: none; }
+    .dot-nav { right: 1rem; }
+    .kural-screen { padding: 4rem 2.5rem; }
+    .prog-mi { grid-template-columns: 2.5rem 1fr; }
+    .prog-en-mi, .prog-arr-mi { display: none; }
+    .event-mi { grid-template-columns: 4.5rem 1fr; }
+    .event-rsvp-mi { display: none; }
+    .ach-row-mi { grid-template-columns: 1fr; gap: 0.2rem; }
+    .board-member-mi { grid-template-columns: 1fr; gap: 0.2rem; }
+    footer { padding: 4rem 2.5rem 2.5rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="dot-nav">
+  <a href="#k1" class="active"></a>
+  <a href="#k2"></a>
+  <a href="#k3"></a>
+  <a href="#k4"></a>
+  <a href="#k5"></a>
+</nav>
+
+<header class="top-nav">
+  <div class="nav-brand-mi">
+    <span class="nav-ta-mi">சன் பிரேரி தமிழ் சமூகம்</span>
+    <span class="nav-en-mi">Sun Prairie Tamil Society</span>
+  </div>
+  <ul class="nav-list-mi">
+    <li><a href="#k2">Programs</a></li>
+    <li><a href="#k3">Events</a></li>
+    <li><a href="#k4">Achievements</a></li>
+    <li><a href="#k5">Community</a></li>
+  </ul>
+  <a href="#" class="nav-join-mi">Join →</a>
+</header>
+
+<!-- ══ KURINCI — Mountain — Union ══ -->
+<section class="tinai" id="k1">
+  <span class="ghost-ta-mi" aria-hidden="true">ஊர்</span>
+  <p class="tinai-label-mi reveal">குறிஞ்சி · Mountain · Union</p>
+  <div class="tinai-heading-block-mi">
+    <h1 class="tinai-h-mi reveal">A Tamil community<br>taking root.</h1>
+    <p class="tinai-h-ta-mi reveal">ஒரு சமூகம் வேரூன்றியது.</p>
+  </div>
+  <p class="tinai-body-mi reveal">In 2012, Tamil families in Sun Prairie gathered around one question: how do we give our children the language and culture we carry in our hearts? The answer was SPTS.</p>
+  <div class="stats-mi reveal">
+    <div><p class="stat-mi-num">120+</p><p class="stat-mi-label">Students</p></div>
+    <div><p class="stat-mi-num">12</p><p class="stat-mi-label">Years</p></div>
+    <div><p class="stat-mi-num">5</p><p class="stat-mi-label">Programs</p></div>
+    <div><p class="stat-mi-num">300+</p><p class="stat-mi-label">Volunteer hrs</p></div>
+  </div>
+  <a href="#k2" class="tinai-cta-mi reveal">Our Programs &nbsp;↓</a>
+</section>
+
+<div class="kural-screen ks1 reveal">
+  <p class="ks-ta-mi">கற்றதனால் ஆய பயனென்கொல் வாலறிவன்<br>நற்றாள் தொழாமனை என்னின்.</p>
+  <p class="ks-en-mi">"What worth has all learning if the learned does not bow to the feet of the Pure-Knowledged One?"</p>
+  <p class="ks-src-mi">Thirukkural · 2 · On Learning</p>
+</div>
+
+<!-- ══ MULLAI — Forest — Learning ══ -->
+<section class="tinai" id="k2">
+  <span class="ghost-ta-mi" aria-hidden="true">கற்</span>
+  <p class="tinai-label-mi reveal">முல்லை · Forest · Learning</p>
+  <div class="tinai-heading-block-mi">
+    <h2 class="tinai-h-mi reveal">Five roots.<br>One tree.</h2>
+    <p class="tinai-h-ta-mi reveal">ஐந்து வேர்கள். ஒரு மரம்.</p>
+  </div>
+  <div class="prog-list-mi reveal">
+    <a href="#" class="prog-mi"><span class="prog-idx-mi">01</span><span class="prog-ta-mi">தமிழ்ப் பள்ளி</span><span class="prog-en-mi">Tamil Language School</span><span class="prog-arr-mi">→</span></a>
+    <a href="#" class="prog-mi"><span class="prog-idx-mi">02</span><span class="prog-ta-mi">நூலகம்</span><span class="prog-en-mi">Community Library</span><span class="prog-arr-mi">→</span></a>
+    <a href="#" class="prog-mi"><span class="prog-idx-mi">03</span><span class="prog-ta-mi">பட்டறை</span><span class="prog-en-mi">Pattarai Creative Studio</span><span class="prog-arr-mi">→</span></a>
+    <a href="#" class="prog-mi"><span class="prog-idx-mi">04</span><span class="prog-ta-mi">இசை மன்றம்</span><span class="prog-en-mi">Carnatic Music Club</span><span class="prog-arr-mi">→</span></a>
+    <a href="#" class="prog-mi"><span class="prog-idx-mi">05</span><span class="prog-ta-mi">தன்னார்வல</span><span class="prog-en-mi">Volunteer Program</span><span class="prog-arr-mi">→</span></a>
+  </div>
+</section>
+
+<div class="kural-screen ks2 reveal">
+  <p class="ks-ta-mi">தென்புலத்தார் தெய்வம் விருந்தொக்கல் தானென்று<br>ஐம்புலத்தாறு ஓம்பல் தலை.</p>
+  <p class="ks-en-mi">"To honour the five — ancestors, the divine, guests, kin, and oneself — this is the highest of all duties."</p>
+  <p class="ks-src-mi">Thirukkural · 43 · On Hospitality</p>
+</div>
+
+<!-- ══ MARUTAM — Field — Celebration ══ -->
+<section class="tinai" id="k3">
+  <span class="ghost-ta-mi" aria-hidden="true">விழா</span>
+  <p class="tinai-label-mi reveal">மருதம் · Field · Celebration</p>
+  <div class="tinai-heading-block-mi">
+    <h2 class="tinai-h-mi reveal">Every gathering<br>is a ceremony.</h2>
+    <p class="tinai-h-ta-mi reveal">ஒவ்வொரு கூட்டமும் ஒரு நிகழ்வு.</p>
+  </div>
+  <div class="event-list-mi reveal">
+    <div class="event-mi">
+      <div><p class="event-day-mi">13</p><p class="event-mon-mi">Apr</p></div>
+      <div><p class="event-ta-mi">தமிழ் புத்தாண்டு</p><p class="event-en-mi">Tamil New Year · Sun Prairie Community Center</p></div>
+      <a href="#" class="event-rsvp-mi">RSVP</a>
+    </div>
+    <div class="event-mi">
+      <div><p class="event-day-mi">03</p><p class="event-mon-mi">May</p></div>
+      <div><p class="event-ta-mi">கலை விழா</p><p class="event-en-mi">Annual Arts & Culture Festival · Whitehorse Auditorium</p></div>
+      <a href="#" class="event-rsvp-mi">RSVP</a>
+    </div>
+    <div class="event-mi">
+      <div><p class="event-day-mi">01</p><p class="event-mon-mi">Nov</p></div>
+      <div><p class="event-ta-mi">கார்த்திகை விளக்கு</p><p class="event-en-mi">Karthigai Deepam · Festival of Lights</p></div>
+      <a href="#" class="event-rsvp-mi">Notify</a>
+    </div>
+  </div>
+</section>
+
+<div class="kural-screen ks3 reveal">
+  <p class="ks-ta-mi">யாதும் ஊரே யாவரும் கேளிர்<br>தீதும் நன்றும் பிறர்தர வாரா.</p>
+  <p class="ks-en-mi">"All lands are our home — all people our kin. Neither good nor ill comes from elsewhere. It comes from within."</p>
+  <p class="ks-src-mi">Purananuru · 192 · Kaniyan Pungundranar</p>
+</div>
+
+<!-- ══ NEYTAL — Sea — Achievement ══ -->
+<section class="tinai" id="k4">
+  <span class="ghost-ta-mi" aria-hidden="true">கடல்</span>
+  <p class="tinai-label-mi reveal">நெய்தல் · Sea · Achievement</p>
+  <div class="tinai-heading-block-mi">
+    <h2 class="tinai-h-mi reveal">Our children carry<br>the light forward.</h2>
+    <p class="tinai-h-ta-mi reveal">நம் பிள்ளைகள் வெளிச்சம் கொண்டு செல்கின்றனர்.</p>
+  </div>
+  <div class="ach-mi reveal">
+    <div class="ach-row-mi">
+      <p class="ach-award-mi">First Place</p>
+      <div><p class="ach-name-mi">Priya Krishnaswamy</p><p class="ach-detail-mi">Wisconsin Tamil Oratory · Senior Division</p></div>
+      <p class="ach-year-mi">2025</p>
+    </div>
+    <div class="ach-row-mi">
+      <p class="ach-award-mi">Best Essay</p>
+      <div><p class="ach-name-mi">Arjun Ramalingam</p><p class="ach-detail-mi">National Tamil Youth Conference</p></div>
+      <p class="ach-year-mi">2025</p>
+    </div>
+    <div class="ach-row-mi">
+      <p class="ach-award-mi">Gold Medal</p>
+      <div><p class="ach-name-mi">Kavitha & Sundari Balaji</p><p class="ach-detail-mi">Midwest Carnatic Festival · Vocal Duet</p></div>
+      <p class="ach-year-mi">2025</p>
+    </div>
+  </div>
+</section>
+
+<div class="kural-screen ks4 reveal">
+  <p class="ks-ta-mi">இனிய உளவாக இன்னாத கூறல்<br>கனியிருப்பக் காய்கவர்ந்தற்று.</p>
+  <p class="ks-en-mi">"Speaking harshly when kind words are available is like choosing unripe fruit when the ripe one is there."</p>
+  <p class="ks-src-mi">Thirukkural · 100 · On Kind Words</p>
+</div>
+
+<!-- ══ PALAI — Desert — Welcome ══ -->
+<section class="tinai" id="k5">
+  <span class="ghost-ta-mi" aria-hidden="true">வீடு</span>
+  <p class="tinai-label-mi reveal">பாலை · Desert · Welcome</p>
+  <div class="tinai-heading-block-mi">
+    <h2 class="tinai-h-mi reveal">New to Wisconsin?<br>You are home.</h2>
+    <p class="tinai-h-ta-mi reveal">வந்தீர்களா? இங்கே உங்கள் வீடு.</p>
+  </div>
+  <p class="tinai-body-mi reveal">Whether you arrived last month or fifteen years ago, SPTS is your community. Our board volunteers their time so no Tamil family navigates Wisconsin alone.</p>
+  <div class="board-mi reveal">
+    <div class="board-member-mi">
+      <p class="board-role-mi">President</p>
+      <p class="board-name-mi">Suresh Arunachalam</p>
+      <p class="board-bio-mi">Software engineer, 8 years with SPTS, father of two Tamil school students.</p>
+    </div>
+    <div class="board-member-mi">
+      <p class="board-role-mi">Vice President</p>
+      <p class="board-name-mi">Kavitha Venkataraman</p>
+      <p class="board-bio-mi">Bharatanatyam teacher, Pattarai studio lead, cultural festival director.</p>
+    </div>
+    <div class="board-member-mi">
+      <p class="board-role-mi">Secretary</p>
+      <p class="board-name-mi">Mohan Gopalaswamy</p>
+      <p class="board-bio-mi">UW–Madison professor, volunteer Tamil school teacher since 2020.</p>
+    </div>
+  </div>
+  <a href="#" class="tinai-cta-mi reveal" style="margin-top:2rem;">Join the Society &nbsp;→</a>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <p class="footer-ta-big">சன் பிரேரி தமிழ் சமூகம்</p>
+      <p class="footer-en-small">Sun Prairie Tamil Society</p>
+      <p class="footer-desc">Tamil culture, alive in Wisconsin since 2012. A volunteer-run community preserving language and belonging.</p>
+    </div>
+    <div>
+      <p class="footer-col-h">Programs</p>
+      <ul class="footer-links">
+        <li><a href="#">Tamil School</a></li>
+        <li><a href="#">Library</a></li>
+        <li><a href="#">Pattarai</a></li>
+        <li><a href="#">Music Club</a></li>
+        <li><a href="#">Volunteer</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-h">Community</p>
+      <ul class="footer-links">
+        <li><a href="#">Activity Feed</a></li>
+        <li><a href="#">Achievements</a></li>
+        <li><a href="#">Help Board</a></li>
+        <li><a href="#">Membership</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-h">Connect</p>
+      <ul class="footer-links">
+        <li><a href="#">Facebook</a></li>
+        <li><a href="#">WhatsApp</a></li>
+        <li><a href="#">Newsletter</a></li>
+        <li><a href="#">Contact Board</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Sun Prairie Tamil Society</p>
+    <p class="footer-kural">யாதும் ஊரே யாவரும் கேளிர்</p>
+  </div>
+</footer>
+
+<script>
+  const secs = document.querySelectorAll('section[id]');
+  const dots = document.querySelectorAll('.dot-nav a');
+  const io1 = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        dots.forEach(d => d.classList.remove('active'));
+        const d = document.querySelector(`.dot-nav a[href="#${e.target.id}"]`);
+        if (d) d.classList.add('active');
+      }
+    });
+  }, { threshold: 0.4 });
+  secs.forEach(s => io1.observe(s));
+
+  const io2 = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io2.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => io2.observe(el));
+</script>
+</body>
+</html>

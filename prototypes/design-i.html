@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design I — The Living Temple</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@300;400;600&family=Noto+Serif+Tamil:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --stone: #8B8680;
+    --stone-dark: #3A3530;
+    --stone-light: #C8C4BC;
+    --stone-pale: #E8E0D0;
+    --stone-cream: #F5F0E8;
+    --black-stone: #1C1A18;
+    --saffron: #F5A623;
+    --kumkum: #CC3300;
+    --sacred-white: #FAFAF8;
+    --marigold: #E8891A;
+    --peacock: #1A6B6B;
+    --serif: 'Libre Baskerville', Georgia, serif;
+    --sans: 'Source Sans 3', sans-serif;
+    --tamil: 'Noto Serif Tamil', serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--stone-cream); color: var(--black-stone); }
+
+  /* ── LEFT PILLAR NAV ── */
+  .pillar-nav {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 200px;
+    background: var(--black-stone);
+    display: flex; flex-direction: column;
+    border-right: 3px solid var(--saffron);
+    z-index: 200;
+  }
+  .pillar-brand { padding: 2rem 1.5rem; border-bottom: 1px solid rgba(245,166,35,0.2); }
+  .pillar-brand-ta { font-family: var(--tamil); font-size: 0.9rem; color: var(--saffron); margin-bottom: 0.3rem; }
+  .pillar-brand-en { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(245,166,35,0.6); }
+  .pillar-links { flex: 1; padding: 1.5rem 0; display: flex; flex-direction: column; }
+  .pillar-link { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1.5rem; color: rgba(245,240,232,0.55); font-size: 0.85rem; text-decoration: none; transition: all 0.2s; border-left: 3px solid transparent; }
+  .pillar-link:hover { color: var(--stone-pale); background: rgba(245,166,35,0.07); border-left-color: rgba(245,166,35,0.3); }
+  .pillar-link.active { color: var(--saffron); background: rgba(245,166,35,0.1); border-left-color: var(--saffron); }
+  .pillar-link-icon { font-size: 1rem; }
+  .pillar-programs { padding: 1rem 1.5rem; border-top: 1px solid rgba(245,166,35,0.1); }
+  .pillar-prog-label { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,166,35,0.4); margin-bottom: 0.75rem; }
+  .pillar-prog-links { display: flex; flex-direction: column; gap: 0.25rem; }
+  .pillar-prog-link { font-size: 0.78rem; color: rgba(245,240,232,0.4); text-decoration: none; padding: 0.25rem 0; transition: color 0.2s; display: flex; align-items: center; gap: 0.4rem; }
+  .pillar-prog-link:hover { color: rgba(245,240,232,0.8); }
+  .pillar-cta { padding: 1.5rem; }
+  .pillar-cta-btn { display: block; text-align: center; background: var(--saffron); color: var(--black-stone); font-size: 0.82rem; font-weight: 600; padding: 0.75rem; text-decoration: none; transition: all 0.2s; border-radius: 4px; }
+  .pillar-cta-btn:hover { background: var(--marigold); }
+
+  /* ── MAIN ── */
+  .main { margin-left: 200px; min-height: 100vh; }
+
+  /* ── GOPURAM HERO ── */
+  .gopuram-hero {
+    min-height: 100vh; background: var(--black-stone); position: relative; overflow: hidden;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 4rem;
+  }
+  /* Tiered gopuram layers (CSS layers) */
+  .gopuram-tier { position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; background: var(--stone-dark); border-top: 2px solid rgba(245,166,35,0.3); }
+  .gopuram-tier-1 { width: 300px; height: 60px; z-index: 5; border-top-color: var(--saffron); }
+  .gopuram-tier-2 { width: 360px; height: 100px; z-index: 4; bottom: 58px; }
+  .gopuram-tier-3 { width: 430px; height: 130px; z-index: 3; bottom: 155px; }
+  .gopuram-tier-4 { width: 510px; height: 150px; z-index: 2; bottom: 282px; }
+  .gopuram-tier-5 { width: 600px; height: 160px; z-index: 1; bottom: 428px; }
+  /* Tier decorations */
+  .gopuram-tier-content { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 0.15rem; }
+  .gopuram-tier-text { font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(245,166,35,0.5); text-align: center; }
+  .gopuram-tier-ta { font-family: var(--tamil); font-size: 0.75rem; color: rgba(245,166,35,0.4); }
+  /* Finial / kalasam at the very top */
+  .gopuram-finial { position: absolute; left: 50%; transform: translateX(-50%); bottom: 590px; z-index: 10; text-align: center; }
+  .gopuram-finial-shape { width: 30px; height: 50px; background: var(--saffron); border-radius: 50% 50% 0 0; margin: 0 auto; }
+  /* Background stars/sky */
+  .gopuram-sky { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 20%, rgba(245,166,35,0.06) 0%, transparent 60%), radial-gradient(ellipse at 70% 40%, rgba(204,51,0,0.04) 0%, transparent 60%); }
+  /* Hero text overlay */
+  .gopuram-text { position: relative; z-index: 20; text-align: center; padding-bottom: 1rem; }
+  .gopuram-eyebrow { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(245,166,35,0.6); margin-bottom: 1rem; }
+  .gopuram-h1 { font-family: var(--serif); font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 700; color: var(--stone-pale); line-height: 1.1; margin-bottom: 1rem; }
+  .gopuram-ta { font-family: var(--tamil); font-size: 1.2rem; color: var(--saffron); margin-bottom: 0.5rem; }
+  .gopuram-sub { font-size: 0.9rem; color: rgba(232,224,208,0.6); max-width: 400px; text-align: center; line-height: 1.7; margin: 0 auto 2rem; }
+  .gopuram-cta { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--saffron); color: var(--black-stone); font-size: 0.9rem; font-weight: 700; padding: 0.875rem 2rem; text-decoration: none; transition: all 0.3s; border-radius: 2px; font-family: var(--serif); }
+  .gopuram-cta:hover { background: var(--marigold); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,166,35,0.3); }
+
+  /* ── STONE SECTION DIVIDER ── */
+  .stone-divider { padding: 2.5rem 3rem; background: var(--stone-dark); display: flex; align-items: center; justify-content: center; gap: 2rem; }
+  .stone-div-text { font-family: var(--tamil); font-size: 1rem; color: rgba(245,166,35,0.7); }
+  .stone-div-rule { flex: 1; max-width: 120px; height: 1px; background: rgba(245,166,35,0.2); }
+
+  /* ── SECTION STANDARD ── */
+  section { padding: 5rem 3rem; }
+  .section-label { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--saffron); font-weight: 600; margin-bottom: 1rem; }
+  .section-title { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 700; color: var(--black-stone); line-height: 1.2; margin-bottom: 1rem; }
+  .section-sub { font-size: 0.9rem; color: var(--stone); max-width: 520px; line-height: 1.8; margin-bottom: 3rem; }
+  .max-c { max-width: 1000px; margin: 0 auto; }
+
+  /* ── MANDAPA PROGRAMS (colonnade layout) ── */
+  .programs-bg { background: var(--stone-pale); }
+  .mandapa { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0; border: 1px solid var(--stone-light); }
+  .pillar-card { border-right: 1px solid var(--stone-light); padding: 2.5rem 1.5rem; text-align: center; cursor: pointer; transition: background 0.25s; text-decoration: none; display: block; color: inherit; }
+  .pillar-card:last-child { border-right: none; }
+  .pillar-card:hover { background: var(--stone-cream); }
+  /* Pillar cap decoration */
+  .pillar-cap { width: 100%; height: 8px; background: linear-gradient(90deg, transparent, var(--saffron), transparent); margin-bottom: 1.5rem; opacity: 0.5; }
+  .pillar-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .pillar-ta { font-family: var(--tamil); font-size: 0.82rem; color: var(--stone); margin-bottom: 0.3rem; }
+  .pillar-en { font-family: var(--serif); font-size: 0.95rem; font-weight: 700; color: var(--black-stone); margin-bottom: 0.75rem; }
+  .pillar-desc { font-size: 0.78rem; color: var(--stone); line-height: 1.6; }
+  .pillar-base { width: 100%; height: 6px; background: linear-gradient(90deg, transparent, rgba(245,166,35,0.3), transparent); margin-top: 1.5rem; }
+
+  /* ── EVENTS — Festival Calendar ── */
+  .events-bg { background: var(--black-stone); }
+  .events-bg .section-title { color: var(--stone-pale); }
+  .events-bg .section-sub { color: rgba(200,196,188,0.5); }
+  .festival-list { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+  .festival-card { border: 1px solid rgba(245,166,35,0.2); padding: 2rem; position: relative; overflow: hidden; }
+  .festival-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--kumkum), var(--saffron)); }
+  .festival-month { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,166,35,0.5); margin-bottom: 0.5rem; }
+  .festival-day { font-family: var(--serif); font-size: 2.5rem; font-weight: 700; color: var(--saffron); line-height: 1; margin-bottom: 1rem; }
+  .festival-ta { font-family: var(--tamil); font-size: 0.9rem; color: rgba(245,166,35,0.6); margin-bottom: 0.25rem; }
+  .festival-en { font-family: var(--serif); font-size: 1rem; color: var(--stone-pale); margin-bottom: 0.5rem; }
+  .festival-loc { font-size: 0.75rem; color: rgba(200,196,188,0.4); margin-bottom: 1.25rem; }
+  .festival-rsvp { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--saffron); text-decoration: none; border: 1px solid rgba(245,166,35,0.3); padding: 0.4rem 1rem; transition: all 0.2s; }
+  .festival-rsvp:hover { background: var(--saffron); color: var(--black-stone); }
+
+  /* ── STATS BAR (stone inscription style) ── */
+  .stats-stone { background: var(--stone-dark); padding: 3rem; }
+  .stats-stone-inner { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); text-align: center; }
+  .stat-stone { padding: 1.5rem 1rem; border-right: 1px solid rgba(245,166,35,0.15); }
+  .stat-stone:last-child { border-right: none; }
+  .stat-stone-num { font-family: var(--serif); font-size: 2.5rem; font-weight: 700; color: var(--saffron); letter-spacing: -0.02em; }
+  .stat-stone-label { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(200,196,188,0.5); margin-top: 0.4rem; }
+
+  /* ── ACHIEVEMENT — Inscription style ── */
+  .ach-bg { background: var(--stone-pale); border-top: 3px solid var(--saffron); }
+  .inscription-list { display: flex; flex-direction: column; gap: 0; }
+  .inscription-item { display: grid; grid-template-columns: 200px 1fr 200px; align-items: center; gap: 2rem; padding: 1.75rem 0; border-bottom: 1px solid var(--stone-light); }
+  .inscription-award { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; color: var(--kumkum); }
+  .inscription-name { font-family: var(--serif); font-size: 1rem; color: var(--black-stone); }
+  .inscription-event { font-size: 0.82rem; color: var(--stone); font-style: italic; margin-top: 0.2rem; }
+  .inscription-year { font-family: var(--serif); font-size: 0.85rem; color: var(--stone); text-align: right; }
+
+  /* ── GALLERY — Mandapa grid ── */
+  .gallery-bg { background: var(--black-stone); }
+  .gallery-bg .section-title { color: var(--stone-pale); }
+  .gallery-mandapa { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: 200px 150px; gap: 2px; }
+  .gallery-cell-i { background: var(--stone-dark); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; position: relative; overflow: hidden; }
+  .gallery-cell-i:first-child { grid-row: span 2; grid-column: span 2; font-size: 5rem; }
+  .gallery-cell-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.75rem; font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,166,35,0.7); background: linear-gradient(transparent, rgba(0,0,0,0.7)); }
+
+  /* ── FEED ── */
+  .feed-bg { background: var(--stone-cream); }
+  .feed-grid-i { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .feed-post-i { padding: 1.5rem 0; border-bottom: 1px solid var(--stone-light); display: flex; gap: 1rem; }
+  .feed-avatar-i { width: 44px; height: 44px; border-radius: 50%; background: var(--stone-pale); border: 2px solid var(--stone-light); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+  .feed-type-i { display: inline-block; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; background: var(--stone-pale); color: var(--stone); padding: 0.15rem 0.5rem; margin-bottom: 0.35rem; border-radius: 2px; }
+  .feed-text-i { font-family: var(--serif); font-size: 0.9rem; color: var(--black-stone); line-height: 1.7; }
+  .feed-meta-i { font-size: 0.72rem; color: var(--stone); margin-top: 0.35rem; }
+  .help-panel-i { }
+  .help-panel-title { font-family: var(--serif); font-size: 1rem; font-weight: 700; color: var(--black-stone); padding-bottom: 0.75rem; border-bottom: 2px solid var(--saffron); margin-bottom: 1.25rem; }
+  .help-item-i { padding: 0.875rem 0; border-bottom: 1px solid var(--stone-light); }
+  .help-title-i { font-size: 0.85rem; font-weight: 600; color: var(--black-stone); margin-bottom: 0.25rem; }
+  .help-tag-i { font-size: 0.7rem; color: var(--stone); }
+
+  /* ── BOARD ── */
+  .board-bg { background: var(--stone-pale); border-top: 3px solid var(--saffron); }
+  .board-colonnade { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--stone-light); }
+  .board-pillar { padding: 3rem 2rem; text-align: center; border-right: 1px solid var(--stone-light); }
+  .board-pillar:last-child { border-right: none; }
+  .board-pillar-cap { width: 80px; height: 4px; background: linear-gradient(90deg, transparent, var(--saffron), transparent); margin: 0 auto 1.5rem; }
+  .board-portrait-i { width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 1.25rem; background: var(--stone-light); border: 2px solid var(--stone); display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+  .board-role-i { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--saffron); margin-bottom: 0.4rem; }
+  .board-name-i { font-family: var(--serif); font-size: 1.1rem; font-weight: 700; color: var(--black-stone); margin-bottom: 0.75rem; }
+  .board-bio-i { font-size: 0.82rem; color: var(--stone); line-height: 1.7; font-style: italic; }
+  .board-pillar-base { width: 80px; height: 4px; background: linear-gradient(90deg, transparent, rgba(245,166,35,0.3), transparent); margin: 1.5rem auto 0; }
+
+  /* ── CTA STRIP ── */
+  .cta-strip { background: var(--kumkum); padding: 3.5rem 3rem; text-align: center; }
+  .cta-strip-ta { font-family: var(--tamil); font-size: 1.3rem; color: rgba(255,255,255,0.7); margin-bottom: 0.5rem; }
+  .cta-strip-en { font-family: var(--serif); font-size: 1.8rem; font-weight: 700; color: white; margin-bottom: 1.5rem; }
+  .cta-strip-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: white; color: var(--kumkum); font-family: var(--serif); font-size: 0.95rem; font-weight: 700; padding: 0.875rem 2.5rem; text-decoration: none; transition: all 0.2s; }
+  .cta-strip-btn:hover { background: var(--stone-pale); transform: translateY(-2px); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--black-stone); border-top: 3px solid var(--saffron); padding: 4rem 3rem 2rem; }
+  .footer-inner-i { max-width: 1000px; margin: 0 auto; }
+  .footer-top-i { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 3rem; border-bottom: 1px solid rgba(245,166,35,0.15); }
+  .footer-ta-i { font-family: var(--tamil); font-size: 1.3rem; color: var(--saffron); margin-bottom: 0.5rem; }
+  .footer-en-i { font-family: var(--serif); font-size: 0.9rem; color: rgba(232,224,208,0.7); margin-bottom: 0.75rem; }
+  .footer-desc-i { font-size: 0.8rem; color: rgba(200,196,188,0.35); line-height: 1.7; }
+  .footer-col-title-i { font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(245,166,35,0.5); margin-bottom: 0.875rem; }
+  .footer-links-i { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-links-i a { font-size: 0.82rem; color: rgba(200,196,188,0.4); text-decoration: none; transition: color 0.2s; }
+  .footer-links-i a:hover { color: var(--stone-pale); }
+  .footer-bottom-i { padding-top: 2rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy-i { font-size: 0.75rem; color: rgba(200,196,188,0.2); }
+  .footer-kural-i { font-family: var(--tamil); font-size: 0.78rem; color: rgba(245,166,35,0.25); }
+
+  /* REVEAL */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s, transform 0.7s; }
+  .reveal.in-view { opacity: 1; transform: none; }
+
+  @media (max-width: 900px) {
+    .pillar-nav { display: none; }
+    .main { margin-left: 0; }
+    section { padding: 3.5rem 1.5rem; }
+    .mandapa { grid-template-columns: 1fr 1fr; }
+    .festival-list, .board-colonnade { grid-template-columns: 1fr; }
+    .board-pillar { border-right: none; border-bottom: 1px solid var(--stone-light); }
+    .inscription-item { grid-template-columns: 1fr; gap: 0.25rem; }
+    .inscription-year { text-align: left; }
+    .feed-grid-i { grid-template-columns: 1fr; }
+    .gallery-mandapa { grid-template-columns: 1fr 1fr; }
+    .gallery-cell-i:first-child { grid-column: span 2; grid-row: span 1; }
+    .footer-top-i { grid-template-columns: 1fr; }
+    .stats-stone-inner { grid-template-columns: 1fr 1fr; }
+    .gopuram-tier-1 { width: 200px; }
+    .gopuram-tier-2 { width: 250px; }
+    .gopuram-tier-3 { width: 300px; }
+    .gopuram-tier-4 { width: 350px; }
+    .gopuram-tier-5 { width: 400px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PILLAR NAV -->
+<nav class="pillar-nav">
+  <div class="pillar-brand">
+    <p class="pillar-brand-ta">சன் பிரேரி தமிழ் சமூகம்</p>
+    <p class="pillar-brand-en">Sun Prairie Tamil Society</p>
+  </div>
+  <div class="pillar-links">
+    <a href="#" class="pillar-link active"><span class="pillar-link-icon">⛩️</span>Home</a>
+    <a href="#programs" class="pillar-link"><span class="pillar-link-icon">🏛️</span>Programs</a>
+    <a href="#events" class="pillar-link"><span class="pillar-link-icon">🪔</span>Events</a>
+    <a href="#achievements" class="pillar-link"><span class="pillar-link-icon">🏆</span>Achievements</a>
+    <a href="#gallery" class="pillar-link"><span class="pillar-link-icon">🖼️</span>Gallery</a>
+    <a href="#community" class="pillar-link"><span class="pillar-link-icon">🤝</span>Community</a>
+    <a href="#board" class="pillar-link"><span class="pillar-link-icon">👥</span>Board</a>
+  </div>
+  <div class="pillar-programs">
+    <p class="pillar-prog-label">Programs</p>
+    <div class="pillar-prog-links">
+      <a href="#" class="pillar-prog-link"><span>🏫</span> Tamil School</a>
+      <a href="#" class="pillar-prog-link"><span>📚</span> Library</a>
+      <a href="#" class="pillar-prog-link"><span>🎨</span> Pattarai</a>
+      <a href="#" class="pillar-prog-link"><span>🎵</span> Music Club</a>
+      <a href="#" class="pillar-prog-link"><span>🤝</span> Volunteer</a>
+    </div>
+  </div>
+  <div class="pillar-cta">
+    <a href="#" class="pillar-cta-btn">Join SPTS</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- GOPURAM HERO -->
+  <section class="gopuram-hero">
+    <div class="gopuram-sky"></div>
+    <!-- Gopuram tiers (decorative) -->
+    <div class="gopuram-finial"><div class="gopuram-finial-shape"></div></div>
+    <div class="gopuram-tier gopuram-tier-5">
+      <div class="gopuram-tier-content"><p class="gopuram-tier-text">12 Years · 5 Programs</p></div>
+    </div>
+    <div class="gopuram-tier gopuram-tier-4">
+      <div class="gopuram-tier-content"><p class="gopuram-tier-ta">Tamil School · Library · Pattarai</p></div>
+    </div>
+    <div class="gopuram-tier gopuram-tier-3">
+      <div class="gopuram-tier-content"><p class="gopuram-tier-text">Music Club · Volunteer</p></div>
+    </div>
+    <div class="gopuram-tier gopuram-tier-2">
+      <div class="gopuram-tier-content"><p class="gopuram-tier-ta">120+ Students · 45+ Events</p></div>
+    </div>
+    <div class="gopuram-tier gopuram-tier-1">
+      <div class="gopuram-tier-content"><p class="gopuram-tier-text">Sun Prairie, Wisconsin</p></div>
+    </div>
+    <!-- Hero text -->
+    <div class="gopuram-text" style="position:absolute; top:50%; transform:translateY(-60%); z-index:20; text-align:center; padding: 0 2rem;">
+      <p class="gopuram-eyebrow">Est. 2012 · Wisconsin</p>
+      <h1 class="gopuram-h1">Built like a<br>temple.<br>Lived like a<br>village.</h1>
+      <p class="gopuram-ta">சன் பிரேரி தமிழ் சமூகம்</p>
+      <p class="gopuram-sub">Tamil language, arts, music, and community — rooted in Wisconsin's soil, nourished by 2,000 years of civilization.</p>
+      <a href="#programs" class="gopuram-cta">Enter the Community →</a>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-stone">
+    <div class="stats-stone-inner">
+      <div class="stat-stone"><p class="stat-stone-num">120+</p><p class="stat-stone-label">Students Enrolled</p></div>
+      <div class="stat-stone"><p class="stat-stone-num">45</p><p class="stat-stone-label">Annual Events</p></div>
+      <div class="stat-stone"><p class="stat-stone-num">12</p><p class="stat-stone-label">Years of Service</p></div>
+      <div class="stat-stone"><p class="stat-stone-num">300+</p><p class="stat-stone-label">Volunteer Hours</p></div>
+    </div>
+  </div>
+
+  <!-- STONE DIVIDER -->
+  <div class="stone-divider">
+    <div class="stone-div-rule"></div>
+    <p class="stone-div-text">எங்கள் திட்டங்கள் — Our Programs</p>
+    <div class="stone-div-rule"></div>
+  </div>
+
+  <!-- PROGRAMS — Mandapa colonnade -->
+  <section class="programs-bg" id="programs">
+    <div class="max-c">
+      <p class="section-label reveal">Programs of the Society</p>
+      <h2 class="section-title reveal">Five pillars of the community.</h2>
+      <p class="section-sub reveal">Like the columns of a mandapa — each pillar distinct, all supporting the same sacred space.</p>
+      <div class="mandapa reveal">
+        <a href="#" class="pillar-card">
+          <div class="pillar-cap"></div>
+          <div class="pillar-icon">🏫</div>
+          <p class="pillar-ta">தமிழ்ப் பள்ளி</p>
+          <p class="pillar-en">Tamil School</p>
+          <p class="pillar-desc">Classical language education every Sunday. K through high school, taught by dedicated community volunteers.</p>
+          <div class="pillar-base"></div>
+        </a>
+        <a href="#" class="pillar-card">
+          <div class="pillar-cap"></div>
+          <div class="pillar-icon">📚</div>
+          <p class="pillar-ta">நூலகம்</p>
+          <p class="pillar-en">Library</p>
+          <p class="pillar-desc">Tamil books, classical texts, and children's literature. Borrow, read, and reconnect with home.</p>
+          <div class="pillar-base"></div>
+        </a>
+        <a href="#" class="pillar-card">
+          <div class="pillar-cap"></div>
+          <div class="pillar-icon">🎨</div>
+          <p class="pillar-ta">பட்டறை</p>
+          <p class="pillar-en">Pattarai</p>
+          <p class="pillar-desc">Arts studio for Tamil creative expression — Bharatanatyam, kolam, painting, and more.</p>
+          <div class="pillar-base"></div>
+        </a>
+        <a href="#" class="pillar-card">
+          <div class="pillar-cap"></div>
+          <div class="pillar-icon">🎵</div>
+          <p class="pillar-ta">இசை மன்றம்</p>
+          <p class="pillar-en">Music Club</p>
+          <p class="pillar-desc">Carnatic tradition — mridangam, veena, vocal. Weekly practice and annual kutcheri performances.</p>
+          <div class="pillar-base"></div>
+        </a>
+        <a href="#" class="pillar-card">
+          <div class="pillar-cap"></div>
+          <div class="pillar-icon">🤝</div>
+          <p class="pillar-ta">தன்னார்வல</p>
+          <p class="pillar-en">Volunteer</p>
+          <p class="pillar-desc">Community service — the Tamil value of upliftment made visible every year in Wisconsin.</p>
+          <div class="pillar-base"></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="events-bg" id="events">
+    <div class="max-c">
+      <p class="section-label reveal">Festivals · நிகழ்வுகள்</p>
+      <h2 class="section-title reveal">The sacred calendar.</h2>
+      <p class="section-sub reveal">Every gathering is a ceremony — an act of remembrance, renewal, and belonging.</p>
+      <div class="festival-list reveal">
+        <div class="festival-card">
+          <p class="festival-month">April 2026</p>
+          <p class="festival-day">13</p>
+          <p class="festival-ta">தமிழ் புத்தாண்டு</p>
+          <p class="festival-en">Tamil New Year Celebration</p>
+          <p class="festival-loc">📍 Sun Prairie Community Center</p>
+          <a href="#" class="festival-rsvp">Reserve a Seat →</a>
+        </div>
+        <div class="festival-card">
+          <p class="festival-month">May 2026</p>
+          <p class="festival-day">03</p>
+          <p class="festival-ta">கலை விழா</p>
+          <p class="festival-en">Annual Arts & Culture Festival</p>
+          <p class="festival-loc">📍 Whitehorse Middle School</p>
+          <a href="#" class="festival-rsvp">Reserve a Seat →</a>
+        </div>
+        <div class="festival-card">
+          <p class="festival-month">November 2026</p>
+          <p class="festival-day">01</p>
+          <p class="festival-ta">கார்த்திகை விளக்கு</p>
+          <p class="festival-en">Karthigai Deepam — Festival of Lights</p>
+          <p class="festival-loc">📍 Announcing Soon</p>
+          <a href="#" class="festival-rsvp">Notify Me →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS — Inscription style -->
+  <section class="ach-bg" id="achievements">
+    <div class="max-c">
+      <p class="section-label reveal">Achievements · சாதனைகள்</p>
+      <h2 class="section-title reveal">Inscribed in our memory.</h2>
+      <p class="section-sub reveal">Like temple inscriptions that outlast centuries — we record every achievement here, permanently.</p>
+      <div class="inscription-list reveal">
+        <div class="inscription-item">
+          <p class="inscription-award">1st Place</p>
+          <div><p class="inscription-name">Priya Krishnaswamy</p><p class="inscription-event">Wisconsin Tamil Oratory Competition · Senior Division</p></div>
+          <p class="inscription-year">2025</p>
+        </div>
+        <div class="inscription-item">
+          <p class="inscription-award">Best Essay</p>
+          <div><p class="inscription-name">Arjun Ramalingam</p><p class="inscription-event">National Tamil Youth Conference · Tamil Culture Category</p></div>
+          <p class="inscription-year">2025</p>
+        </div>
+        <div class="inscription-item">
+          <p class="inscription-award">Gold Medal</p>
+          <div><p class="inscription-name">Kavitha & Sundari Balaji</p><p class="inscription-event">Midwest Carnatic Music Festival · Vocal Duet</p></div>
+          <p class="inscription-year">2025</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-bg" id="gallery">
+    <div class="max-c" style="margin-bottom:1.5rem;">
+      <p class="section-label reveal">Gallery · புகைப்பட தொகுப்பு</p>
+      <h2 class="section-title reveal">The community in time.</h2>
+    </div>
+    <div class="gallery-mandapa reveal">
+      <div class="gallery-cell-i" style="background:#1A1010;">🎊<div class="gallery-cell-label">Pongal 2025</div></div>
+      <div class="gallery-cell-i" style="background:#0A0A1A;">🎭<div class="gallery-cell-label">Cultural Night</div></div>
+      <div class="gallery-cell-i" style="background:#0A1A0A;">📚<div class="gallery-cell-label">Tamil School</div></div>
+      <div class="gallery-cell-i" style="background:#1A0A1A;">🎶<div class="gallery-cell-label">Carnatic Concert</div></div>
+      <div class="gallery-cell-i" style="background:#1A1A0A;">🎨<div class="gallery-cell-label">Pattarai Workshop</div></div>
+    </div>
+  </section>
+
+  <!-- FEED + HELP -->
+  <section class="feed-bg" id="community">
+    <div class="max-c">
+      <p class="section-label reveal">Community · சமூகம்</p>
+      <h2 class="section-title reveal">The living community.</h2>
+      <div class="feed-grid-i reveal">
+        <div>
+          <div class="feed-post-i">
+            <div class="feed-avatar-i">👩</div>
+            <div><span class="feed-type-i">Announcement</span><p class="feed-text-i">Tamil New Year registration closes April 5th — limited seating. RSVP early!</p><p class="feed-meta-i">Meena Subramanian · 2 hours ago</p></div>
+          </div>
+          <div class="feed-post-i">
+            <div class="feed-avatar-i">👨</div>
+            <div><span class="feed-type-i">Achievement</span><p class="feed-text-i">Ananya placed first in the statewide Tamil essay competition. This community gave her the language.</p><p class="feed-meta-i">Ravi Natarajan · 1 day ago</p></div>
+          </div>
+          <div class="feed-post-i">
+            <div class="feed-avatar-i">👩</div>
+            <div><span class="feed-type-i">Help Request</span><p class="feed-text-i">New to Sun Prairie — looking for dentist recommendations from Tamil families 🙏</p><p class="feed-meta-i">Priya Chandrasekaran · 3 days ago</p></div>
+          </div>
+        </div>
+        <div class="help-panel-i">
+          <p class="help-panel-title">Open Help Requests</p>
+          <div class="help-item-i"><p class="help-title-i">Tamil-speaking pediatrician near Sun Prairie</p><p class="help-tag-i">Healthcare · 2 days ago</p></div>
+          <div class="help-item-i"><p class="help-title-i">Wisconsin state tax filing help — first year</p><p class="help-tag-i">Legal · 5 days ago</p></div>
+          <div class="help-item-i"><p class="help-title-i">Rides from Madison to Sunday Tamil school</p><p class="help-tag-i">Transport · 1 week ago</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOARD -->
+  <section class="board-bg" id="board">
+    <div class="max-c">
+      <p class="section-label reveal">Board · நிர்வாக குழு</p>
+      <h2 class="section-title reveal">The guardians of the community.</h2>
+      <p class="section-sub reveal">Like the utsava murtis that are carried into the community — our board members carry the vision out into daily life.</p>
+      <div class="board-colonnade reveal">
+        <div class="board-pillar"><div class="board-pillar-cap"></div><div class="board-portrait-i">👨</div><p class="board-role-i">President</p><p class="board-name-i">Suresh Arunachalam</p><p class="board-bio-i">Software engineer, SPTS member 8 years, father of two students.</p><div class="board-pillar-base"></div></div>
+        <div class="board-pillar"><div class="board-pillar-cap"></div><div class="board-portrait-i">👩</div><p class="board-role-i">Vice President</p><p class="board-name-i">Kavitha Venkataraman</p><p class="board-bio-i">Bharatanatyam teacher, cultural festival director, arts program lead.</p><div class="board-pillar-base"></div></div>
+        <div class="board-pillar"><div class="board-pillar-cap"></div><div class="board-portrait-i">👨</div><p class="board-role-i">Secretary</p><p class="board-name-i">Mohan Gopalaswamy</p><p class="board-bio-i">UW–Madison professor, volunteer Tamil school teacher since 2020.</p><div class="board-pillar-base"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <div class="cta-strip">
+    <p class="cta-strip-ta">சமூகத்துடன் இணையுங்கள்</p>
+    <p class="cta-strip-en">Join the Tamil community in Sun Prairie.</p>
+    <a href="#" class="cta-strip-btn">Become a Member →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner-i">
+      <div class="footer-top-i">
+        <div>
+          <p class="footer-ta-i">சன் பிரேரி தமிழ் சமூகம்</p>
+          <p class="footer-en-i">Sun Prairie Tamil Society</p>
+          <p class="footer-desc-i">Preserving Tamil language, culture, and belonging in Wisconsin since 2012.</p>
+        </div>
+        <div>
+          <p class="footer-col-title-i">Programs</p>
+          <ul class="footer-links-i">
+            <li><a href="#">Tamil School</a></li>
+            <li><a href="#">Library</a></li>
+            <li><a href="#">Pattarai</a></li>
+            <li><a href="#">Music Club</a></li>
+            <li><a href="#">Volunteer</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title-i">Community</p>
+          <ul class="footer-links-i">
+            <li><a href="#">Activity Feed</a></li>
+            <li><a href="#">Achievement Wall</a></li>
+            <li><a href="#">Help Board</a></li>
+            <li><a href="#">Membership</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="footer-col-title-i">Connect</p>
+          <ul class="footer-links-i">
+            <li><a href="#">Facebook</a></li>
+            <li><a href="#">WhatsApp</a></li>
+            <li><a href="#">Newsletter</a></li>
+            <li><a href="#">Contact Board</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom-i">
+        <p class="footer-copy-i">© 2026 Sun Prairie Tamil Society. All rights reserved.</p>
+        <p class="footer-kural-i">யாதும் ஊரே யாவரும் கேளிர்</p>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); obs.unobserve(e.target); }});
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  // Pillar nav active state
+  const links = document.querySelectorAll('.pillar-link');
+  window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('section[id]');
+    let current = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+    links.forEach(l => { l.classList.remove('active'); if (l.getAttribute('href') === `#${current}`) l.classList.add('active'); });
+  });
+</script>
+</body>
+</html>

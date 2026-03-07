@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design H — The Pattarai Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Noto+Serif+Tamil:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --black: #0A0A0A;
+    --off-black: #111111;
+    --dark: #161616;
+    --gray: #2A2A2A;
+    --gray-mid: #444444;
+    --gray-light: #888888;
+    --white: #F5F5F5;
+    --accent: #FF7A2A; /* Marigold/saffron — changes seasonally */
+    --accent-muted: rgba(255,122,42,0.15);
+    --accent-border: rgba(255,122,42,0.3);
+    --teal: #1ABABA;
+    --sans: 'Space Grotesk', sans-serif;
+    --mono: 'Space Mono', monospace;
+    --tamil: 'Noto Serif Tamil', serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--black); color: var(--white); }
+
+  /* ── ICON SIDEBAR NAV ── */
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0; width: 60px;
+    background: var(--off-black); border-right: 1px solid var(--gray);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 1.5rem 0; z-index: 200; gap: 0;
+  }
+  .sb-logo { font-size: 1.4rem; margin-bottom: 2rem; cursor: pointer; }
+  .sb-nav { flex: 1; display: flex; flex-direction: column; gap: 0.25rem; width: 100%; }
+  .sb-item { width: 100%; display: flex; align-items: center; justify-content: center; padding: 0.75rem 0; color: var(--gray-mid); font-size: 1.1rem; text-decoration: none; transition: all 0.2s; position: relative; }
+  .sb-item:hover { color: var(--white); background: var(--gray); }
+  .sb-item.active { color: var(--accent); }
+  .sb-item.active::before { content: ''; position: absolute; left: 0; top: 25%; bottom: 25%; width: 3px; background: var(--accent); border-radius: 0 2px 2px 0; }
+  .sb-bottom { padding: 1rem 0; }
+  .sb-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--gray); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; cursor: pointer; border: 1px solid var(--gray-mid); }
+
+  /* ── MAIN ── */
+  .main { margin-left: 60px; min-height: 100vh; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 0 4rem 5rem;
+  }
+  /* Tamil letterform background pattern */
+  .hero-letterforms {
+    position: absolute; inset: 0; display: flex; flex-wrap: wrap; gap: 0;
+    overflow: hidden; pointer-events: none;
+  }
+  .hero-letter {
+    font-family: var(--tamil); font-weight: 700; color: rgba(255,255,255,0.035);
+    user-select: none; line-height: 1; flex-shrink: 0;
+    font-size: clamp(4rem, 8vw, 10rem);
+  }
+  /* Spotlight gradient overlay */
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.95) 100%);
+  }
+  .hero-content { position: relative; z-index: 2; max-width: 780px; }
+  .hero-eyebrow { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .hero-eye-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .hero-eye-text { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--accent); }
+  .hero-h1 { font-size: clamp(3rem, 8vw, 7rem); font-weight: 700; line-height: 1.0; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+  .hero-h1 em { font-style: normal; color: var(--accent); }
+  .hero-ta { font-family: var(--tamil); font-size: clamp(1rem, 2.5vw, 1.5rem); color: rgba(255,255,255,0.4); margin-bottom: 0.5rem; }
+  .hero-sub { font-size: 1rem; color: var(--gray-light); max-width: 500px; line-height: 1.7; margin-bottom: 2.5rem; }
+  .hero-ctas { display: flex; gap: 1rem; align-items: center; }
+  .btn-accent { background: var(--accent); color: var(--black); font-size: 0.9rem; font-weight: 700; padding: 0.875rem 2rem; border-radius: 6px; text-decoration: none; transition: all 0.2s; letter-spacing: -0.01em; }
+  .btn-accent:hover { background: #FF9150; transform: translateY(-2px); }
+  .btn-outline { font-size: 0.85rem; color: var(--gray-light); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; transition: color 0.2s; }
+  .btn-outline:hover { color: var(--white); }
+  /* Stats row in hero bottom */
+  .hero-stats { display: flex; gap: 3rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--gray); }
+  .hero-stat-num { font-size: 1.8rem; font-weight: 700; color: var(--white); }
+  .hero-stat-label { font-size: 0.72rem; color: var(--gray-light); margin-top: 0.2rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+  /* ── SECTION STANDARD ── */
+  .section { padding: 5rem 4rem; }
+  .section-label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+  .section-label::before { content: '//'; opacity: 0.5; }
+  .section-h { font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1rem; color: var(--white); }
+  .section-sub { font-size: 0.95rem; color: var(--gray-light); max-width: 520px; line-height: 1.8; margin-bottom: 3rem; }
+  .max-c { max-width: 1100px; margin: 0 auto; }
+
+  /* ── PROGRAMS — horizontal scroll cards ── */
+  .prog-section { background: var(--off-black); border-top: 1px solid var(--gray); border-bottom: 1px solid var(--gray); }
+  .prog-scroll { display: flex; gap: 1px; overflow-x: auto; scrollbar-width: none; }
+  .prog-scroll::-webkit-scrollbar { display: none; }
+  .prog-card { flex-shrink: 0; width: 260px; background: var(--dark); padding: 2.5rem 2rem; display: flex; flex-direction: column; transition: background 0.2s; cursor: pointer; }
+  .prog-card:hover { background: var(--gray); }
+  .prog-card-num { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-mid); margin-bottom: 1.5rem; }
+  .prog-card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .prog-card-ta { font-family: var(--tamil); font-size: 0.85rem; color: var(--gray-light); margin-bottom: 0.25rem; }
+  .prog-card-en { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
+  .prog-card-body { font-size: 0.82rem; color: var(--gray-light); line-height: 1.7; flex: 1; }
+  .prog-card-arrow { margin-top: 1.5rem; font-size: 0.82rem; font-weight: 600; color: var(--accent); }
+  .prog-card-accent { background: var(--accent-muted); border-top: 2px solid var(--accent); }
+
+  /* ── EVENTS — masonry/editorial ── */
+  .events-section { background: var(--black); }
+  .events-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--gray); }
+  .event-card-h { background: var(--dark); padding: 2.5rem 2rem; cursor: pointer; transition: background 0.2s; }
+  .event-card-h:hover { background: var(--gray); }
+  .event-card-h:first-child { grid-row: span 2; display: flex; flex-direction: column; justify-content: space-between; }
+  .event-card-h:first-child .event-date-num { font-size: 5rem; }
+  .event-date-num { font-size: 3rem; font-weight: 700; color: var(--accent); line-height: 1; letter-spacing: -0.04em; }
+  .event-date-month { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-light); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.5rem; }
+  .event-title-ta-h { font-family: var(--tamil); font-size: 0.85rem; color: var(--gray-light); margin-bottom: 0.25rem; }
+  .event-title-en-h { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+  .event-loc-h { font-size: 0.75rem; color: var(--gray-mid); margin-bottom: 1.25rem; }
+  .event-rsvp-h { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; font-weight: 700; color: var(--accent); text-decoration: none; border: 1px solid var(--accent-border); padding: 0.4rem 1rem; border-radius: 4px; transition: all 0.2s; }
+  .event-rsvp-h:hover { background: var(--accent); color: var(--black); }
+
+  /* ── ACHIEVEMENTS — staggered type ── */
+  .ach-section { background: var(--off-black); border-top: 1px solid var(--gray); }
+  .ach-item { display: flex; align-items: flex-start; gap: 2rem; padding: 2rem 0; border-bottom: 1px solid var(--gray); }
+  .ach-num { font-family: var(--mono); font-size: 0.7rem; color: var(--gray-mid); padding-top: 0.4rem; min-width: 30px; }
+  .ach-award { font-size: clamp(1rem, 3vw, 2rem); font-weight: 700; color: var(--accent); letter-spacing: -0.02em; flex: 0 0 280px; line-height: 1.1; }
+  .ach-info { flex: 1; }
+  .ach-name { font-size: 1rem; font-weight: 600; color: var(--white); margin-bottom: 0.25rem; }
+  .ach-event { font-size: 0.82rem; color: var(--gray-light); }
+
+  /* ── GALLERY — full-bleed horizontal strip ── */
+  .gallery-section { border-top: 1px solid var(--gray); }
+  .gallery-strip-h { display: flex; gap: 2px; height: 280px; overflow: hidden; }
+  .gallery-photo-h { flex: 1; background: var(--dark); display: flex; align-items: center; justify-content: center; font-size: 3rem; position: relative; overflow: hidden; transition: flex 0.4s ease; }
+  .gallery-photo-h:hover { flex: 2; }
+  .gallery-photo-h:first-child { flex: 2; font-size: 5rem; }
+  .gallery-photo-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 0.875rem 1rem; font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.08em; color: rgba(245,245,245,0.6); background: linear-gradient(transparent, rgba(0,0,0,0.7)); opacity: 0; transition: opacity 0.3s; }
+  .gallery-photo-h:hover .gallery-photo-label { opacity: 1; }
+
+  /* ── COMMUNITY FEED ── */
+  .feed-section { background: var(--dark); border-top: 1px solid var(--gray); }
+  .feed-layout-h { display: grid; grid-template-columns: 2fr 1fr; gap: 3rem; }
+  .feed-list { }
+  .feed-item-h { padding: 1.5rem 0; border-bottom: 1px solid var(--gray); display: flex; gap: 1rem; align-items: flex-start; }
+  .feed-avatar-h { width: 36px; height: 36px; border-radius: 8px; background: var(--gray); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; }
+  .feed-type-tag { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.25rem; }
+  .feed-body-text { font-size: 0.875rem; color: rgba(245,245,245,0.8); line-height: 1.6; }
+  .feed-meta-h { font-size: 0.72rem; color: var(--gray-mid); margin-top: 0.4rem; }
+  .help-sidebar-h { padding-top: 0.5rem; }
+  .help-title-h { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; color: var(--teal); text-transform: uppercase; margin-bottom: 1.25rem; border-bottom: 1px solid var(--gray); padding-bottom: 0.75rem; }
+  .help-item-h { padding: 0.875rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .help-item-title-h { font-size: 0.82rem; color: rgba(245,245,245,0.75); margin-bottom: 0.25rem; }
+  .help-item-meta-h { font-family: var(--mono); font-size: 0.62rem; color: var(--teal); }
+
+  /* ── BOARD ── */
+  .board-section-h { background: var(--off-black); border-top: 1px solid var(--gray); }
+  .board-grid-h { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--gray); }
+  .board-card-h { background: var(--dark); padding: 2rem; transition: background 0.2s; }
+  .board-card-h:hover { background: var(--gray); }
+  .board-initials { width: 48px; height: 48px; border-radius: 10px; background: var(--accent-muted); border: 1px solid var(--accent-border); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 1.25rem; }
+  .board-role-h { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; color: var(--gray-light); text-transform: uppercase; margin-bottom: 0.35rem; }
+  .board-name-h { font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; }
+  .board-bio-h { font-size: 0.8rem; color: var(--gray-light); line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--off-black); border-top: 1px solid var(--gray); padding: 3rem 4rem 2rem; }
+  .footer-h-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: flex-start; justify-content: space-between; gap: 3rem; }
+  .footer-brand-h { }
+  .footer-brand-ta-h { font-family: var(--tamil); font-size: 1.1rem; color: var(--accent); margin-bottom: 0.35rem; }
+  .footer-brand-en-h { font-size: 0.9rem; font-weight: 700; color: var(--white); margin-bottom: 0.35rem; }
+  .footer-brand-copy { font-family: var(--mono); font-size: 0.68rem; color: var(--gray-mid); }
+  .footer-nav-h { display: flex; gap: 3rem; }
+  .footer-col-h { }
+  .footer-col-t { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray-mid); margin-bottom: 0.75rem; }
+  .footer-links-h { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-links-h a { font-size: 0.82rem; color: var(--gray-light); text-decoration: none; transition: color 0.2s; }
+  .footer-links-h a:hover { color: var(--white); }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .section { padding: 3.5rem 1.5rem; }
+    .hero { padding: 0 1.5rem 3rem; }
+    .events-grid { grid-template-columns: 1fr; }
+    .event-card-h:first-child { grid-row: span 1; }
+    .event-card-h:first-child .event-date-num { font-size: 3rem; }
+    .feed-layout-h, .board-grid-h, .footer-h-inner { grid-template-columns: 1fr; }
+    .board-grid-h { display: block; }
+    .board-card-h { border-bottom: 1px solid var(--gray); }
+    .footer-nav-h { flex-direction: column; gap: 1.5rem; }
+    .gallery-strip-h { flex-direction: column; height: auto; }
+    .gallery-photo-h { height: 120px; flex: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ICON SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo">🎨</div>
+  <nav class="sb-nav">
+    <a href="#" class="sb-item active" title="Home">🏠</a>
+    <a href="#programs" class="sb-item" title="Programs">🎯</a>
+    <a href="#events" class="sb-item" title="Events">📅</a>
+    <a href="#achievements" class="sb-item" title="Achievements">🏆</a>
+    <a href="#gallery" class="sb-item" title="Gallery">🖼️</a>
+    <a href="#feed" class="sb-item" title="Community">💬</a>
+    <a href="#board" class="sb-item" title="Board">👥</a>
+  </nav>
+  <div class="sb-bottom">
+    <div class="sb-avatar">👤</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HERO -->
+  <section class="hero">
+    <!-- Tamil letterforms background -->
+    <div class="hero-letterforms">
+      <span class="hero-letter">அ</span><span class="hero-letter">இ</span><span class="hero-letter">உ</span><span class="hero-letter">ஆ</span>
+      <span class="hero-letter">க</span><span class="hero-letter">ச</span><span class="hero-letter">ட</span><span class="hero-letter">ண</span>
+      <span class="hero-letter">த</span><span class="hero-letter">ந</span><span class="hero-letter">ப</span><span class="hero-letter">ம</span>
+      <span class="hero-letter">ய</span><span class="hero-letter">ர</span><span class="hero-letter">ல</span><span class="hero-letter">வ</span>
+      <span class="hero-letter">ழ</span><span class="hero-letter">ள</span><span class="hero-letter">ற</span><span class="hero-letter">ன</span>
+      <span class="hero-letter">அ</span><span class="hero-letter">இ</span><span class="hero-letter">உ</span><span class="hero-letter">ஆ</span>
+      <span class="hero-letter">க</span><span class="hero-letter">ச</span><span class="hero-letter">ட</span><span class="hero-letter">ண</span>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="hero-eye-dot"></span>
+        <span class="hero-eye-text">Est. 2012 · Sun Prairie, Wisconsin · Active Community</span>
+      </div>
+      <p class="hero-ta">சன் பிரேரி தமிழ் சமூகம்</p>
+      <h1 class="hero-h1">Tamil<br>culture<br><em>made.</em></h1>
+      <p class="hero-sub">Five programs. 120+ students. 12 years of building a Tamil future in Wisconsin — through language, music, art, stories, and service.</p>
+      <div class="hero-ctas">
+        <a href="#programs" class="btn-accent">Explore Programs →</a>
+        <a href="#events" class="btn-outline">Upcoming events ↓</a>
+      </div>
+      <div class="hero-stats">
+        <div><p class="hero-stat-num">120+</p><p class="hero-stat-label">Students</p></div>
+        <div><p class="hero-stat-num">45</p><p class="hero-stat-label">Events/year</p></div>
+        <div><p class="hero-stat-num">300+</p><p class="hero-stat-label">Volunteer hrs</p></div>
+        <div><p class="hero-stat-num">12</p><p class="hero-stat-label">Years active</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMS -->
+  <section class="section prog-section" id="programs">
+    <div class="max-c">
+      <p class="section-label">Programs · எங்கள் திட்டங்கள்</p>
+      <h2 class="section-h">Five ways we<br>keep culture alive.</h2>
+    </div>
+    <div class="prog-scroll">
+      <div class="prog-card prog-card-accent">
+        <p class="prog-card-num">01</p>
+        <div class="prog-card-icon">🏫</div>
+        <p class="prog-card-ta">தமிழ்ப் பள்ளி</p>
+        <p class="prog-card-en">Tamil School</p>
+        <p class="prog-card-body">The oldest living classical language, taught every Sunday. Kindergarten through high school. Curriculum covers reading, writing, speaking, and classical literature.</p>
+        <a href="#" class="prog-card-arrow">Enroll →</a>
+      </div>
+      <div class="prog-card">
+        <p class="prog-card-num">02</p>
+        <div class="prog-card-icon">📚</div>
+        <p class="prog-card-ta">நூலகம்</p>
+        <p class="prog-card-en">Library</p>
+        <p class="prog-card-body">Tamil books, classical texts, children's stories. Borrow a piece of our homeland. Every book is a conversation across time.</p>
+        <a href="#" class="prog-card-arrow">Browse →</a>
+      </div>
+      <div class="prog-card">
+        <p class="prog-card-num">03</p>
+        <div class="prog-card-icon">🎨</div>
+        <p class="prog-card-ta">பட்டறை</p>
+        <p class="prog-card-en">Pattarai Studio</p>
+        <p class="prog-card-body">Kolam workshops, Bharatanatyam, painting, storytelling. Tamil arts in an open studio format. Where culture becomes creation.</p>
+        <a href="#" class="prog-card-arrow">Join →</a>
+      </div>
+      <div class="prog-card">
+        <p class="prog-card-num">04</p>
+        <div class="prog-card-icon">🎵</div>
+        <p class="prog-card-ta">இசை மன்றம்</p>
+        <p class="prog-card-en">Music Club</p>
+        <p class="prog-card-body">Carnatic tradition — mridangam, veena, vocal. Weekly practice, annual concerts. The oldest music system, practiced in Wisconsin.</p>
+        <a href="#" class="prog-card-arrow">Learn →</a>
+      </div>
+      <div class="prog-card">
+        <p class="prog-card-num">05</p>
+        <div class="prog-card-icon">🤝</div>
+        <p class="prog-card-ta">தன்னார்வல</p>
+        <p class="prog-card-en">Volunteer</p>
+        <p class="prog-card-body">Service to the broader community. The Tamil value of upliftment — visible and active in Wisconsin every year.</p>
+        <a href="#" class="prog-card-arrow">Sign up →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="section events-section" id="events">
+    <div class="max-c">
+      <p class="section-label">Events · நிகழ்வுகள்</p>
+      <h2 class="section-h">Mark the calendar.</h2>
+      <p class="section-sub">Three generations gathering throughout the year. Every event an act of cultural renewal.</p>
+      <div class="events-grid">
+        <div class="event-card-h">
+          <p class="event-date-month">April 2026</p>
+          <p class="event-date-num">13</p>
+          <p class="event-title-ta-h">தமிழ் புத்தாண்டு</p>
+          <p class="event-title-en-h">Tamil New Year Celebration</p>
+          <p class="event-loc-h">📍 Sun Prairie Community Center</p>
+          <p style="font-size:0.82rem; color:var(--gray-light); line-height:1.7; margin-bottom:1.5rem;">The biggest celebration of the Tamil calendar. Traditional rituals, performances, food, and community gathering for all ages.</p>
+          <a href="#" class="event-rsvp-h">RSVP Now →</a>
+        </div>
+        <div class="event-card-h">
+          <p class="event-date-month">May 2026</p>
+          <p class="event-date-num">03</p>
+          <p class="event-title-ta-h">கலை விழா</p>
+          <p class="event-title-en-h">Annual Arts & Culture Festival</p>
+          <p class="event-loc-h">📍 Whitehorse Auditorium</p>
+          <a href="#" class="event-rsvp-h">RSVP Now →</a>
+        </div>
+        <div class="event-card-h">
+          <p class="event-date-month">November 2026</p>
+          <p class="event-date-num">01</p>
+          <p class="event-title-ta-h">கார்த்திகை விளக்கு</p>
+          <p class="event-title-en-h">Karthigai Deepam</p>
+          <p class="event-loc-h">📍 Announcing Soon</p>
+          <a href="#" class="event-rsvp-h">Notify Me</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACHIEVEMENTS -->
+  <section class="section ach-section" id="achievements">
+    <div class="max-c">
+      <p class="section-label">Achievements · சாதனைகள்</p>
+      <h2 class="section-h">Our community<br>makes history.</h2>
+      <div class="ach-item">
+        <span class="ach-num">01</span>
+        <p class="ach-award">1st Place</p>
+        <div class="ach-info"><p class="ach-name">Priya Krishnaswamy</p><p class="ach-event">Wisconsin Tamil Oratory Competition · Senior Division · 2025</p></div>
+      </div>
+      <div class="ach-item">
+        <span class="ach-num">02</span>
+        <p class="ach-award">Best Essay</p>
+        <div class="ach-info"><p class="ach-name">Arjun Ramalingam</p><p class="ach-event">National Tamil Youth Conference · Tamil Culture Category · 2025</p></div>
+      </div>
+      <div class="ach-item">
+        <span class="ach-num">03</span>
+        <p class="ach-award">Gold Medal</p>
+        <div class="ach-info"><p class="ach-name">Kavitha & Sundari Balaji</p><p class="ach-event">Midwest Carnatic Music Festival · Vocal Duet · 2025</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="section gallery-section" id="gallery">
+    <div class="max-c" style="margin-bottom:1.5rem;">
+      <p class="section-label">Gallery · புகைப்பட தொகுப்பு</p>
+      <h2 class="section-h">The community<br>in motion.</h2>
+    </div>
+    <div class="gallery-strip-h">
+      <div class="gallery-photo-h" style="background:#1A1010;">🎊<div class="gallery-photo-label">Pongal 2025</div></div>
+      <div class="gallery-photo-h" style="background:#0A1020;">🎭<div class="gallery-photo-label">Cultural Night</div></div>
+      <div class="gallery-photo-h" style="background:#0A1A10;">📚<div class="gallery-photo-label">Tamil School</div></div>
+      <div class="gallery-photo-h" style="background:#1A0A1A;">🎶<div class="gallery-photo-label">Carnatic Concert</div></div>
+      <div class="gallery-photo-h" style="background:#1A1A0A;">🎨<div class="gallery-photo-label">Pattarai Workshop</div></div>
+    </div>
+  </section>
+
+  <!-- FEED + HELP -->
+  <section class="section feed-section" id="feed">
+    <div class="max-c">
+      <p class="section-label">Community · சமூகம்</p>
+      <h2 class="section-h">The community<br>speaks.</h2>
+      <div class="feed-layout-h">
+        <div class="feed-list">
+          <div class="feed-item-h">
+            <div class="feed-avatar-h">👩</div>
+            <div>
+              <p class="feed-type-tag">Announcement</p>
+              <p class="feed-body-text">Tamil New Year registration closes April 5th. Limited seating — please RSVP early!</p>
+              <p class="feed-meta-h">Meena Subramanian · 2h ago</p>
+            </div>
+          </div>
+          <div class="feed-item-h">
+            <div class="feed-avatar-h">👨</div>
+            <div>
+              <p class="feed-type-tag">Achievement</p>
+              <p class="feed-body-text">So proud — Ananya placed first in the statewide Tamil essay competition. This community gave her the language.</p>
+              <p class="feed-meta-h">Ravi Natarajan · 1d ago</p>
+            </div>
+          </div>
+          <div class="feed-item-h">
+            <div class="feed-avatar-h">👩</div>
+            <div>
+              <p class="feed-type-tag">Help Request</p>
+              <p class="feed-body-text">New to Sun Prairie — looking for dentist recommendations from Tamil families. Any help appreciated! 🙏</p>
+              <p class="feed-meta-h">Priya Chandrasekaran · 3d ago</p>
+            </div>
+          </div>
+        </div>
+        <div class="help-sidebar-h">
+          <p class="help-title-h">// Open Help Requests</p>
+          <div class="help-item-h">
+            <p class="help-item-title-h">Tamil-speaking pediatrician near Sun Prairie</p>
+            <p class="help-item-meta-h">healthcare · 2d ago</p>
+          </div>
+          <div class="help-item-h">
+            <p class="help-item-title-h">Wisconsin state tax help — first year filing</p>
+            <p class="help-item-meta-h">legal · 5d ago</p>
+          </div>
+          <div class="help-item-h">
+            <p class="help-item-title-h">Rides from Madison to Sunday Tamil school</p>
+            <p class="help-item-meta-h">transport · 1w ago</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOARD -->
+  <section class="section board-section-h" id="board">
+    <div class="max-c">
+      <p class="section-label">Board · நிர்வாக குழு</p>
+      <h2 class="section-h">The people<br>behind the work.</h2>
+      <p class="section-sub">Elected volunteers who give their nights and weekends so SPTS can thrive.</p>
+      <div class="board-grid-h">
+        <div class="board-card-h">
+          <div class="board-initials">SA</div>
+          <p class="board-role-h">President</p>
+          <p class="board-name-h">Suresh Arunachalam</p>
+          <p class="board-bio-h">Software engineer. SPTS member 8 years. Believes the Tamil school is the community's most important investment.</p>
+        </div>
+        <div class="board-card-h">
+          <div class="board-initials">KV</div>
+          <p class="board-role-h">Vice President</p>
+          <p class="board-name-h">Kavitha Venkataraman</p>
+          <p class="board-bio-h">Bharatanatyam teacher, cultural festival director. Leads Pattarai studio programming.</p>
+        </div>
+        <div class="board-card-h">
+          <div class="board-initials">MG</div>
+          <p class="board-role-h">Secretary</p>
+          <p class="board-name-h">Mohan Gopalaswamy</p>
+          <p class="board-bio-h">UW–Madison professor. Volunteer Tamil school teacher since 2020. Originally from Madurai.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-h-inner">
+      <div class="footer-brand-h">
+        <p class="footer-brand-ta-h">சன் பிரேரி தமிழ் சமூகம்</p>
+        <p class="footer-brand-en-h">Sun Prairie Tamil Society</p>
+        <p class="footer-brand-copy">© 2026 SPTS · Built with community</p>
+      </div>
+      <div class="footer-nav-h">
+        <div class="footer-col-h">
+          <p class="footer-col-t">Programs</p>
+          <ul class="footer-links-h">
+            <li><a href="#">Tamil School</a></li>
+            <li><a href="#">Library</a></li>
+            <li><a href="#">Pattarai</a></li>
+            <li><a href="#">Music Club</a></li>
+            <li><a href="#">Volunteer</a></li>
+          </ul>
+        </div>
+        <div class="footer-col-h">
+          <p class="footer-col-t">Community</p>
+          <ul class="footer-links-h">
+            <li><a href="#">Activity Feed</a></li>
+            <li><a href="#">Achievements</a></li>
+            <li><a href="#">Help Board</a></li>
+            <li><a href="#">Join SPTS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>

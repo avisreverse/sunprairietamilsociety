@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Design F — The Bento Village</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Serif+Tamil:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --cream: #FAFAF5;
+    --cream-dark: #F2F2EA;
+    --charcoal: #1A1A1A;
+    --gray: #6B6B6B;
+    --gray-light: #D4D4CC;
+    /* Program Colors */
+    --school: #C84B31;
+    --school-light: #FFE8E3;
+    --library: #1B4332;
+    --library-light: #D1FAE5;
+    --pattarai: #C07020;
+    --pattarai-light: #FEF3C7;
+    --music: #5B2E8A;
+    --music-light: #EDE9FE;
+    --volunteer: #1D6FAB;
+    --volunteer-light: #DBEAFE;
+    --sans: 'Plus Jakarta Sans', sans-serif;
+    --tamil: 'Noto Serif Tamil', serif;
+    --sidebar-w: 72px;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--sans); background: var(--cream); color: var(--charcoal); min-height: 100vh; display: flex; }
+
+  /* ── SIDEBAR NAV ── */
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0; width: var(--sidebar-w);
+    background: var(--charcoal); display: flex; flex-direction: column; align-items: center;
+    padding: 1.25rem 0; z-index: 200; gap: 0;
+  }
+  .sidebar-logo { width: 40px; height: 40px; border-radius: 10px; background: var(--school); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; margin-bottom: 1.5rem; }
+  .sidebar-nav { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; width: 100%; }
+  .sidebar-item { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; padding: 0.75rem 0.5rem; text-decoration: none; color: rgba(255,255,255,0.4); transition: all 0.2s; width: 100%; }
+  .sidebar-item:hover, .sidebar-item.active { background: rgba(255,255,255,0.07); color: white; }
+  .sidebar-item-icon { font-size: 1.1rem; }
+  .sidebar-item-label { font-size: 0.55rem; letter-spacing: 0.05em; text-transform: uppercase; text-align: center; line-height: 1.2; }
+  .sidebar-bottom { padding: 1rem 0; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+  .sidebar-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--gray); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; cursor: pointer; }
+
+  /* ── MAIN CONTENT ── */
+  .main { margin-left: var(--sidebar-w); flex: 1; min-height: 100vh; }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    height: 64px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--gray-light); background: var(--cream); position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-title { font-size: 0.95rem; font-weight: 700; color: var(--charcoal); }
+  .topbar-ta { font-family: var(--tamil); font-size: 0.8rem; color: var(--gray); margin-left: 0.75rem; }
+  .topbar-actions { display: flex; align-items: center; gap: 1rem; }
+  .topbar-search { display: flex; align-items: center; gap: 0.5rem; background: var(--cream-dark); border-radius: 8px; padding: 0.4rem 0.75rem; font-size: 0.82rem; color: var(--gray); border: 1px solid var(--gray-light); }
+  .topbar-cta { background: var(--charcoal); color: white; font-size: 0.78rem; font-weight: 700; padding: 0.5rem 1.25rem; border-radius: 8px; text-decoration: none; transition: all 0.2s; }
+  .topbar-cta:hover { background: #333; }
+
+  /* ── BENTO GRID ── */
+  .bento { padding: 1.5rem 2rem; display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: 80px; gap: 12px; }
+
+  /* Tile base */
+  .tile {
+    border-radius: 16px; overflow: hidden; padding: 1.25rem; position: relative;
+    display: flex; flex-direction: column; justify-content: flex-end; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .tile:hover { transform: scale(1.01); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+
+  /* Grid spans */
+  .tile-hero       { grid-column: span 7; grid-row: span 5; }
+  .tile-next-event { grid-column: span 5; grid-row: span 2; }
+  .tile-stat-1     { grid-column: span 2; grid-row: span 2; }
+  .tile-stat-2     { grid-column: span 3; grid-row: span 2; }
+  .tile-quick      { grid-column: span 2; grid-row: span 2; }
+  .tile-school     { grid-column: span 4; grid-row: span 3; }
+  .tile-library    { grid-column: span 4; grid-row: span 3; }
+  .tile-pattarai   { grid-column: span 4; grid-row: span 3; }
+  .tile-music      { grid-column: span 3; grid-row: span 3; }
+  .tile-volunteer  { grid-column: span 3; grid-row: span 3; }
+  .tile-gallery    { grid-column: span 6; grid-row: span 2; }
+  .tile-feed       { grid-column: span 6; grid-row: span 2; }
+  .tile-achieve    { grid-column: span 5; grid-row: span 2; }
+  .tile-help       { grid-column: span 7; grid-row: span 2; }
+
+  /* Hero tile */
+  .tile-hero { background: var(--charcoal); }
+  .tile-hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 70% 30%, #3A2A1A 0%, #0A0A0A 70%); }
+  .tile-hero-dot { position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 20px 20px; }
+  .tile-hero-content { position: relative; z-index: 2; }
+  .tile-hero-tag { display: inline-flex; align-items: center; gap: 0.35rem; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.75rem; border-radius: 999px; margin-bottom: 1rem; }
+  .tile-hero-ta { font-family: var(--tamil); font-size: 1.1rem; color: rgba(255,255,255,0.5); margin-bottom: 0.5rem; }
+  .tile-hero-h1 { font-size: 2rem; font-weight: 800; color: white; line-height: 1.15; margin-bottom: 0.75rem; }
+  .tile-hero-desc { font-size: 0.82rem; color: rgba(255,255,255,0.5); line-height: 1.7; max-width: 360px; margin-bottom: 1.25rem; }
+  .tile-hero-cta { display: inline-flex; align-items: center; gap: 0.5rem; background: white; color: var(--charcoal); font-size: 0.82rem; font-weight: 700; padding: 0.6rem 1.25rem; border-radius: 8px; text-decoration: none; transition: all 0.2s; }
+  .tile-hero-cta:hover { background: var(--cream); }
+
+  /* Next event tile */
+  .tile-next-event { background: linear-gradient(135deg, var(--school) 0%, #A0351E 100%); }
+  .tile-ne-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.6); margin-bottom: 0.5rem; }
+  .tile-ne-date { font-size: 2rem; font-weight: 800; color: white; line-height: 1; }
+  .tile-ne-title { font-size: 0.9rem; font-weight: 600; color: rgba(255,255,255,0.9); margin-top: 0.25rem; }
+  .tile-ne-ta { font-family: var(--tamil); font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 0.2rem; }
+
+  /* Stat tiles */
+  .tile-stat { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .tile-stat-1 { background: var(--pattarai-light); }
+  .tile-stat-2 { background: var(--library-light); }
+  .tile-quick { background: var(--music-light); }
+  .tile-stat-num { font-size: 2rem; font-weight: 800; line-height: 1; }
+  .tile-stat-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray); margin-top: 0.25rem; }
+  .stat-1-num { color: var(--pattarai); }
+  .stat-2-num { color: var(--library); }
+  .quick-num { color: var(--music); }
+
+  /* Program tiles */
+  .tile-school   { background: var(--school); }
+  .tile-library  { background: var(--library); }
+  .tile-pattarai { background: var(--pattarai); }
+  .tile-music    { background: var(--music); }
+  .tile-volunteer { background: var(--volunteer); }
+  .prog-tile-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .prog-tile-ta { font-family: var(--tamil); font-size: 0.75rem; color: rgba(255,255,255,0.55); margin-bottom: 0.15rem; }
+  .prog-tile-en { font-size: 0.9rem; font-weight: 800; color: white; margin-bottom: 0.25rem; }
+  .prog-tile-desc { font-size: 0.72rem; color: rgba(255,255,255,0.6); line-height: 1.5; }
+  .prog-tile-link { display: inline-flex; align-items: center; gap: 0.3rem; margin-top: 0.75rem; font-size: 0.72rem; font-weight: 700; color: rgba(255,255,255,0.8); text-decoration: none; background: rgba(255,255,255,0.15); padding: 0.3rem 0.75rem; border-radius: 6px; transition: all 0.2s; }
+  .prog-tile-link:hover { background: rgba(255,255,255,0.25); }
+
+  /* Gallery tile */
+  .tile-gallery { background: var(--cream-dark); border: 1px solid var(--gray-light); }
+  .gallery-tile-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.5rem; }
+  .gallery-tile-photos { display: flex; gap: 6px; flex: 1; }
+  .gallery-photo-stub { flex: 1; border-radius: 8px; background: var(--gray-light); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+  .tile-gallery { display: flex; flex-direction: column; justify-content: space-between; }
+
+  /* Feed tile */
+  .tile-feed { background: white; border: 1px solid var(--gray-light); display: flex; flex-direction: column; justify-content: space-between; }
+  .feed-tile-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-bottom: 0.75rem; }
+  .feed-tile-post { display: flex; align-items: flex-start; gap: 0.6rem; }
+  .feed-tile-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--cream-dark); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; flex-shrink: 0; }
+  .feed-tile-text { font-size: 0.78rem; color: var(--charcoal); line-height: 1.5; }
+  .feed-tile-meta { font-size: 0.68rem; color: var(--gray); margin-top: 0.2rem; }
+  .feed-tile-divider { height: 1px; background: var(--gray-light); margin: 0.6rem 0; }
+
+  /* Achieve tile */
+  .tile-achieve { background: linear-gradient(135deg, #FDF6E3 0%, #FBE896 100%); border: 1px solid #E8D44D; display: flex; flex-direction: column; justify-content: space-between; }
+  .achieve-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #856404; }
+  .achieve-item { display: flex; align-items: center; gap: 0.5rem; }
+  .achieve-icon { font-size: 1rem; }
+  .achieve-text { font-size: 0.78rem; font-weight: 600; color: var(--charcoal); }
+  .achieve-sub { font-size: 0.68rem; color: var(--gray); }
+  .achieve-divider { height: 1px; background: rgba(133,100,4,0.15); margin: 0.4rem 0; }
+
+  /* Help tile */
+  .tile-help { background: var(--volunteer-light); border: 1px solid rgba(29,111,171,0.2); display: flex; flex-direction: column; justify-content: space-between; }
+  .help-label { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--volunteer); }
+  .help-items-row { display: flex; gap: 0.75rem; flex: 1; align-items: flex-start; margin-top: 0.5rem; }
+  .help-chip { background: white; border: 1px solid rgba(29,111,171,0.15); border-radius: 8px; padding: 0.5rem 0.75rem; font-size: 0.72rem; font-weight: 500; color: var(--charcoal); }
+  .help-chip-tag { font-size: 0.62rem; color: var(--volunteer); margin-top: 0.2rem; }
+
+  /* ── BOARD SECTION ── */
+  .board-section { padding: 2rem; margin: 0 2rem 2rem; background: var(--cream-dark); border-radius: 16px; }
+  .board-section-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gray); margin-bottom: 1.25rem; }
+  .board-row { display: flex; gap: 2rem; }
+  .board-member-compact { display: flex; align-items: center; gap: 1rem; }
+  .board-avatar-small { width: 44px; height: 44px; border-radius: 50%; background: var(--gray-light); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+  .board-info-role { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gray); }
+  .board-info-name { font-size: 0.9rem; font-weight: 700; color: var(--charcoal); }
+
+  /* ── FOOTER ── */
+  .footer-compact { padding: 1.5rem 2rem; border-top: 1px solid var(--gray-light); display: flex; align-items: center; justify-content: space-between; }
+  .footer-brand { font-size: 0.82rem; font-weight: 700; color: var(--charcoal); }
+  .footer-ta { font-family: var(--tamil); font-size: 0.78rem; color: var(--gray); margin-top: 0.2rem; }
+  .footer-links { display: flex; gap: 1.5rem; list-style: none; }
+  .footer-links a { font-size: 0.78rem; color: var(--gray); text-decoration: none; }
+  .footer-links a:hover { color: var(--charcoal); }
+  .footer-copy { font-size: 0.72rem; color: var(--gray); }
+
+  @media (max-width: 900px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .bento { grid-template-columns: 1fr 1fr; grid-auto-rows: auto; }
+    .tile-hero, .tile-next-event, .tile-school, .tile-library, .tile-pattarai, .tile-music, .tile-volunteer, .tile-gallery, .tile-feed, .tile-achieve, .tile-help { grid-column: span 2; }
+    .tile-stat-1, .tile-stat-2, .tile-quick { grid-column: span 1; }
+    .tile { min-height: 140px; }
+    .tile-stat, .tile-stat-1, .tile-stat-2 { min-height: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">🪷</div>
+  <nav class="sidebar-nav">
+    <a href="#" class="sidebar-item active">
+      <span class="sidebar-item-icon">🏠</span>
+      <span class="sidebar-item-label">Home</span>
+    </a>
+    <a href="#" class="sidebar-item">
+      <span class="sidebar-item-icon">🏫</span>
+      <span class="sidebar-item-label">School</span>
+    </a>
+    <a href="#" class="sidebar-item">
+      <span class="sidebar-item-icon">📅</span>
+      <span class="sidebar-item-label">Events</span>
+    </a>
+    <a href="#" class="sidebar-item">
+      <span class="sidebar-item-icon">🖼️</span>
+      <span class="sidebar-item-label">Gallery</span>
+    </a>
+    <a href="#" class="sidebar-item">
+      <span class="sidebar-item-icon">🏆</span>
+      <span class="sidebar-item-label">Achieve</span>
+    </a>
+    <a href="#" class="sidebar-item">
+      <span class="sidebar-item-icon">💬</span>
+      <span class="sidebar-item-label">Feed</span>
+    </a>
+    <a href="#" class="sidebar-item">
+      <span class="sidebar-item-icon">🤝</span>
+      <span class="sidebar-item-label">Help</span>
+    </a>
+    <a href="#" class="sidebar-item">
+      <span class="sidebar-item-icon">ℹ️</span>
+      <span class="sidebar-item-label">About</span>
+    </a>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-avatar">👤</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div style="display:flex; align-items:center;">
+      <span class="topbar-title">Sun Prairie Tamil Society</span>
+      <span class="topbar-ta">சன் பிரேரி தமிழ் சமூகம்</span>
+    </div>
+    <div class="topbar-actions">
+      <div class="topbar-search">🔍 Search...</div>
+      <a href="#" class="topbar-cta">Join the Society</a>
+    </div>
+  </header>
+
+  <!-- BENTO GRID -->
+  <div class="bento">
+
+    <!-- HERO TILE -->
+    <div class="tile tile-hero">
+      <div class="tile-hero-bg"></div>
+      <div class="tile-hero-dot"></div>
+      <div class="tile-hero-content">
+        <div class="tile-hero-tag"><span>🌟</span> Est. 2012 · Sun Prairie, WI</div>
+        <p class="tile-hero-ta">யாதும் ஊரே · யாவரும் கேளிர்</p>
+        <h1 class="tile-hero-h1">Tamil culture,<br>alive in Wisconsin.</h1>
+        <p class="tile-hero-desc">Five programs, one community. Tamil school, library, creative studio, music club, and volunteer service — all woven into life in Sun Prairie.</p>
+        <a href="#" class="tile-hero-cta">Explore the Village →</a>
+      </div>
+    </div>
+
+    <!-- NEXT EVENT TILE -->
+    <div class="tile tile-next-event">
+      <p class="tile-ne-label">⚡ Coming Up Next</p>
+      <div>
+        <p class="tile-ne-date">April 13</p>
+        <p class="tile-ne-title">Tamil New Year Celebration</p>
+        <p class="tile-ne-ta">தமிழ் புத்தாண்டு 2026</p>
+      </div>
+    </div>
+
+    <!-- STAT TILES -->
+    <div class="tile tile-stat tile-stat-1">
+      <span class="tile-stat-num stat-1-num">120+</span>
+      <span class="tile-stat-label">Students</span>
+    </div>
+    <div class="tile tile-stat tile-stat-2">
+      <span class="tile-stat-num stat-2-num">12 yrs</span>
+      <span class="tile-stat-label">Community</span>
+    </div>
+    <div class="tile tile-stat tile-quick">
+      <span class="tile-stat-num quick-num">300+</span>
+      <span class="tile-stat-label">Volunteer hrs</span>
+    </div>
+
+    <!-- PROGRAM TILES -->
+    <div class="tile tile-school">
+      <div class="prog-tile-icon">🏫</div>
+      <p class="prog-tile-ta">தமிழ்ப் பள்ளி</p>
+      <p class="prog-tile-en">Tamil School</p>
+      <p class="prog-tile-desc">Classical language education every Sunday. K through high school.</p>
+      <a href="#" class="prog-tile-link">Enroll →</a>
+    </div>
+    <div class="tile tile-library">
+      <div class="prog-tile-icon">📚</div>
+      <p class="prog-tile-ta">நூலகம்</p>
+      <p class="prog-tile-en">Library</p>
+      <p class="prog-tile-desc">Borrow Tamil books, classics, and children's stories.</p>
+      <a href="#" class="prog-tile-link">Browse →</a>
+    </div>
+    <div class="tile tile-pattarai">
+      <div class="prog-tile-icon">🎨</div>
+      <p class="prog-tile-ta">பட்டறை</p>
+      <p class="prog-tile-en">Pattarai Studio</p>
+      <p class="prog-tile-desc">Creative arts, Bharatanatyam, kolam, painting.</p>
+      <a href="#" class="prog-tile-link">Join →</a>
+    </div>
+    <div class="tile tile-music">
+      <div class="prog-tile-icon">🎵</div>
+      <p class="prog-tile-ta">இசை மன்றம்</p>
+      <p class="prog-tile-en">Music Club</p>
+      <p class="prog-tile-desc">Carnatic music — practice and perform.</p>
+      <a href="#" class="prog-tile-link">Learn →</a>
+    </div>
+    <div class="tile tile-volunteer">
+      <div class="prog-tile-icon">🤝</div>
+      <p class="prog-tile-ta">தன்னார்வல</p>
+      <p class="prog-tile-en">Volunteer</p>
+      <p class="prog-tile-desc">Serve the community. Help neighbors. Give back.</p>
+      <a href="#" class="prog-tile-link">Sign up →</a>
+    </div>
+
+    <!-- GALLERY TILE -->
+    <div class="tile tile-gallery">
+      <p class="gallery-tile-label">📸 Recent Gallery</p>
+      <div class="gallery-tile-photos">
+        <div class="gallery-photo-stub">🎊</div>
+        <div class="gallery-photo-stub">🎭</div>
+        <div class="gallery-photo-stub">📚</div>
+        <div class="gallery-photo-stub">🎶</div>
+      </div>
+    </div>
+
+    <!-- FEED TILE -->
+    <div class="tile tile-feed">
+      <p class="feed-tile-label">💬 Community Feed</p>
+      <div class="feed-tile-post">
+        <div class="feed-tile-avatar">👩</div>
+        <div>
+          <p class="feed-tile-text">Tamil New Year registration is open! Limited seats — RSVP by April 5th.</p>
+          <p class="feed-tile-meta">Meena S. · 2h ago</p>
+        </div>
+      </div>
+      <div class="feed-tile-divider"></div>
+      <div class="feed-tile-post">
+        <div class="feed-tile-avatar">👨</div>
+        <div>
+          <p class="feed-tile-text">Ananya placed first in the statewide Tamil essay competition 🎉</p>
+          <p class="feed-tile-meta">Ravi N. · 1d ago</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENT TILE -->
+    <div class="tile tile-achieve">
+      <p class="achieve-label">🏆 Recent Achievements</p>
+      <div>
+        <div class="achieve-item">
+          <span class="achieve-icon">🥇</span>
+          <div>
+            <p class="achieve-text">Priya Krishnaswamy</p>
+            <p class="achieve-sub">Tamil Oratory — 1st Place</p>
+          </div>
+        </div>
+        <div class="achieve-divider"></div>
+        <div class="achieve-item">
+          <span class="achieve-icon">🎵</span>
+          <div>
+            <p class="achieve-text">Kavitha & Sundari Balaji</p>
+            <p class="achieve-sub">Carnatic Music — Gold Medal</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HELP TILE -->
+    <div class="tile tile-help">
+      <p class="help-label">🙏 Help Board — Open Requests</p>
+      <div class="help-items-row">
+        <div class="help-chip">
+          <p>Tamil-speaking pediatrician near Sun Prairie?</p>
+          <p class="help-chip-tag">Healthcare · 2d ago</p>
+        </div>
+        <div class="help-chip">
+          <p>Rides needed from Madison to Sunday Tamil school</p>
+          <p class="help-chip-tag">Transportation · 1w ago</p>
+        </div>
+        <div class="help-chip">
+          <p>First-time Wisconsin state tax filing help</p>
+          <p class="help-chip-tag">Legal/Financial · 5d ago</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end bento -->
+
+  <!-- BOARD SECTION -->
+  <div class="board-section">
+    <p class="board-section-label">👥 Board of Directors</p>
+    <div class="board-row">
+      <div class="board-member-compact">
+        <div class="board-avatar-small">👨</div>
+        <div>
+          <p class="board-info-role">President</p>
+          <p class="board-info-name">Suresh Arunachalam</p>
+        </div>
+      </div>
+      <div class="board-member-compact">
+        <div class="board-avatar-small">👩</div>
+        <div>
+          <p class="board-info-role">Vice President</p>
+          <p class="board-info-name">Kavitha Venkataraman</p>
+        </div>
+      </div>
+      <div class="board-member-compact">
+        <div class="board-avatar-small">👨</div>
+        <div>
+          <p class="board-info-role">Secretary</p>
+          <p class="board-info-name">Mohan Gopalaswamy</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer-compact">
+    <div>
+      <p class="footer-brand">Sun Prairie Tamil Society</p>
+      <p class="footer-ta">சன் பிரேரி தமிழ் சமூகம்</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#">Programs</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">Community</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <p class="footer-copy">© 2026 SPTS</p>
+  </footer>
+
+</div><!-- end main -->
+
+</body>
+</html>
