@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPTS — Option C: Kinetic Minimal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,200;0,300;0,400;0,500;0,700;1,200&family=Noto+Serif+Tamil:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #D4930A;
+    --gold-dim: rgba(212,147,10,0.4);
+    --bg: #0C0C0C;
+    --bg-2: #111111;
+    --text: #F0EDE8;
+    --text-dim: rgba(240,237,232,0.4);
+    --text-faint: rgba(240,237,232,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+  }
+  .nav-mark {
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .nav-circle {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--gold-dim);
+  }
+  .nav-name {
+    font-size: 0.8rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-dim);
+  }
+  .nav-right {
+    display: flex; align-items: center; gap: 3rem;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.75rem; font-weight: 300; letter-spacing: 0.05em;
+    color: var(--text-dim); text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-join {
+    font-size: 0.75rem; font-weight: 400; color: var(--gold);
+    text-decoration: none; letter-spacing: 0.05em;
+    transition: opacity 0.2s;
+  }
+
+  /* ─── HERO ────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  /* Left — text side */
+  .hero-left {
+    padding: 9rem 4rem 5rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    border-right: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .hero-year {
+    font-size: 0.68rem; font-weight: 400; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--text-faint);
+    margin-bottom: 4rem;
+    animation: fadeIn 0.8s ease both;
+  }
+
+  .hero-headline {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 5.5vw, 6.5rem);
+    font-weight: 200; line-height: 1.05;
+    letter-spacing: -0.04em; color: var(--text);
+    animation: slideRight 0.8s 0.1s ease both;
+  }
+  .hero-title-accent {
+    font-weight: 700; letter-spacing: -0.04em;
+    color: var(--gold);
+  }
+  .hero-title-sub {
+    font-size: clamp(3rem, 5.5vw, 6.5rem);
+    font-weight: 200; line-height: 1.05;
+    letter-spacing: -0.04em; color: rgba(240,237,232,0.6);
+    animation: slideRight 0.8s 0.2s ease both;
+  }
+
+  /* Gold separator line */
+  .gold-line {
+    width: 48px; height: 1px; background: var(--gold);
+    margin: 2.5rem 0;
+    animation: expandLine 0.7s 0.45s ease both;
+    transform-origin: left;
+  }
+  @keyframes expandLine {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  .hero-desc {
+    font-size: 0.9rem; font-weight: 300; line-height: 1.9;
+    color: var(--text-dim); max-width: 380px;
+    animation: fadeIn 0.8s 0.5s ease both;
+  }
+
+  /* Bottom of left */
+  .hero-left-footer {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding-top: 3rem;
+    animation: fadeIn 0.8s 0.65s ease both;
+  }
+  .hero-tamil {
+    font-family: 'Noto Serif Tamil', serif;
+    font-size: 0.9rem; font-weight: 300;
+    color: rgba(212,147,10,0.5); letter-spacing: 0.06em;
+  }
+  .hero-ctas { display: flex; gap: 1rem; }
+  .btn-min {
+    font-size: 0.78rem; font-weight: 400;
+    padding: 0.75rem 1.6rem; text-decoration: none;
+    letter-spacing: 0.04em;
+  }
+  .btn-white {
+    background: var(--text); color: var(--bg); border-radius: 3px;
+    transition: opacity 0.2s;
+  }
+  .btn-white:hover { opacity: 0.85; }
+  .btn-border {
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text-dim); border-radius: 3px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-border:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+
+  /* Right — visual side */
+  .hero-right {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Giant year number as atmospheric bg */
+  .bg-year {
+    position: absolute;
+    font-size: clamp(14rem, 25vw, 26rem);
+    font-weight: 700; color: rgba(255,255,255,0.025);
+    letter-spacing: -0.06em; line-height: 1;
+    user-select: none; pointer-events: none;
+    animation: fadeIn 1.2s 0.3s ease both;
+  }
+
+  /* The single gold arc — architectural, geometric */
+  .gold-arc-wrap {
+    position: relative; width: 360px; height: 360px;
+    animation: fadeIn 1s 0.6s ease both, rotateSlow 30s linear infinite;
+  }
+  @keyframes rotateSlow {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+  .gold-arc {
+    width: 100%; height: 100%;
+  }
+
+  /* Thin horizontal lines crossing the arc */
+  .hero-right-lines {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+  .h-line {
+    position: absolute; left: 0; right: 0; height: 1px;
+    background: rgba(255,255,255,0.03);
+  }
+  .h-line:nth-child(1) { top: 20%; }
+  .h-line:nth-child(2) { top: 40%; }
+  .h-line:nth-child(3) { top: 60%; }
+  .h-line:nth-child(4) { top: 80%; }
+
+  /* Program tags floating */
+  .prog-float {
+    position: absolute;
+    font-size: 0.68rem; font-weight: 400; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(255,255,255,0.2);
+    pointer-events: none;
+    animation: fadeIn 1s ease both;
+  }
+  .pf-1 { top: 18%; left: 8%; animation-delay: 0.8s; }
+  .pf-2 { top: 28%; right: 10%; animation-delay: 0.9s; }
+  .pf-3 { top: 55%; left: 6%; animation-delay: 1.0s; }
+  .pf-4 { top: 65%; right: 8%; animation-delay: 1.1s; }
+  .pf-5 { top: 78%; left: 12%; animation-delay: 1.2s; }
+
+  /* ─── PROGRAMS SECTION ───────────────────────────── */
+  .programs {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: grid; grid-template-columns: repeat(5, 1fr);
+  }
+  .prog-item {
+    padding: 3rem 2.5rem;
+    border-right: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .prog-item:last-child { border-right: none; }
+  .prog-item:hover { background: rgba(255,255,255,0.02); }
+  .prog-num {
+    font-size: 0.65rem; font-weight: 400; letter-spacing: 0.2em;
+    color: var(--gold); margin-bottom: 1.5rem;
+  }
+  .prog-name {
+    font-size: 1rem; font-weight: 300; color: var(--text);
+    margin-bottom: 0.75rem; line-height: 1.2;
+  }
+  .prog-desc {
+    font-size: 0.75rem; font-weight: 300; line-height: 1.7;
+    color: var(--text-faint);
+  }
+  .prog-arrow {
+    margin-top: 2rem; font-size: 0.75rem;
+    color: var(--text-faint); transition: color 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .prog-item:hover .prog-arrow { color: var(--gold); transform: translateX(4px); }
+
+  /* ─── FOOTER ─────────────────────────────────────── */
+  footer {
+    padding: 2rem 4rem;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer span {
+    font-size: 0.7rem; font-weight: 300; letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.2);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes slideRight {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 7rem 1.5rem 4rem; border-right: none; }
+    .hero-right { height: 50vw; }
+    .bg-year { font-size: 10rem; }
+    .gold-arc-wrap { width: 220px; height: 220px; }
+    .programs { grid-template-columns: 1fr 1fr; }
+    .prog-item:nth-child(even) { border-right: none; }
+    footer { padding: 2rem 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-mark">
+    <div class="nav-circle"></div>
+    <span class="nav-name">SPTS</span>
+  </div>
+  <div class="nav-right">
+    <ul class="nav-links">
+      <li><a href="#">Programs</a></li>
+      <li><a href="#">Events</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <a href="#" class="nav-join">Join →</a>
+  </div>
+</nav>
+
+<section class="hero">
+
+  <!-- LEFT: text -->
+  <div class="hero-left">
+    <div class="hero-year">Sun Prairie, Wisconsin — Est. 2012</div>
+
+    <div class="hero-headline">
+      <h1 class="hero-title">
+        Sun Prairie<br><span class="hero-title-accent">Tamil</span>
+      </h1>
+      <div class="hero-title-sub">Society</div>
+      <div class="gold-line"></div>
+      <p class="hero-desc">
+        A community built on language, culture, and belonging.
+        Five programs. One home. Tamil heritage alive in Wisconsin.
+      </p>
+    </div>
+
+    <div class="hero-left-footer">
+      <span class="hero-tamil">சன் ப்ரேரி தமிழ்ச் சமூகம்</span>
+      <div class="hero-ctas">
+        <a href="#" class="btn-min btn-white">Join</a>
+        <a href="#" class="btn-min btn-border">Explore</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: geometric visual -->
+  <div class="hero-right">
+    <div class="hero-right-lines">
+      <div class="h-line"></div>
+      <div class="h-line"></div>
+      <div class="h-line"></div>
+      <div class="h-line"></div>
+    </div>
+
+    <div class="bg-year">2012</div>
+
+    <!-- Floating program names -->
+    <span class="prog-float pf-1">Tamil School</span>
+    <span class="prog-float pf-2">Library</span>
+    <span class="prog-float pf-3">Music Club</span>
+    <span class="prog-float pf-4">Pattarai</span>
+    <span class="prog-float pf-5">Volunteer</span>
+
+    <!-- Arc -->
+    <div class="gold-arc-wrap">
+      <svg class="gold-arc" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Main arc — 3/4 circle, open at bottom-left -->
+        <path
+          d="M 60 300
+             A 180 180 0 1 1 300 300"
+          stroke="#D4930A"
+          stroke-width="0.8"
+          opacity="0.5"
+        />
+        <!-- Inner concentric arc -->
+        <path
+          d="M 90 300
+             A 150 150 0 1 1 270 300"
+          stroke="#D4930A"
+          stroke-width="0.4"
+          opacity="0.25"
+        />
+        <!-- Outer subtle arc -->
+        <path
+          d="M 30 300
+             A 210 210 0 1 1 330 300"
+          stroke="#D4930A"
+          stroke-width="0.3"
+          opacity="0.12"
+        />
+        <!-- Tick marks on arc at 45° intervals -->
+        <g stroke="#D4930A" stroke-width="0.8" opacity="0.5">
+          <!-- 12 o'clock -->
+          <line x1="180" y1="0" x2="180" y2="16"/>
+          <!-- 1:30 -->
+          <line x1="307" y1="53" x2="297" y2="66"/>
+          <!-- 3 o'clock -->
+          <line x1="360" y1="180" x2="344" y2="180"/>
+          <!-- 4:30 -->
+          <line x1="307" y1="307" x2="297" y2="294"/>
+          <!-- 9 o'clock -->
+          <line x1="0" y1="180" x2="16" y2="180"/>
+          <!-- 7:30 -->
+          <line x1="53" y1="307" x2="63" y2="294"/>
+          <!-- 10:30 -->
+          <line x1="53" y1="53" x2="63" y2="66"/>
+        </g>
+        <!-- Center dot -->
+        <circle cx="180" cy="180" r="3" fill="#D4930A" opacity="0.4"/>
+        <!-- Spoke lines -->
+        <g stroke="#D4930A" stroke-width="0.3" opacity="0.15">
+          <line x1="180" y1="30" x2="180" y2="180"/>
+          <line x1="330" y1="180" x2="180" y2="180"/>
+          <line x1="297" y1="66" x2="180" y2="180"/>
+          <line x1="297" y1="294" x2="180" y2="180"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMS STRIP -->
+<div class="programs">
+  <div class="prog-item">
+    <div class="prog-num">01</div>
+    <div class="prog-name">Tamil School</div>
+    <div class="prog-desc">Language for the next generation.</div>
+    <span class="prog-arrow">→</span>
+  </div>
+  <div class="prog-item">
+    <div class="prog-num">02</div>
+    <div class="prog-name">Library</div>
+    <div class="prog-desc">Stories that carry culture forward.</div>
+    <span class="prog-arrow">→</span>
+  </div>
+  <div class="prog-item">
+    <div class="prog-num">03</div>
+    <div class="prog-name">Music Club</div>
+    <div class="prog-desc">Classical and folk — for all ages.</div>
+    <span class="prog-arrow">→</span>
+  </div>
+  <div class="prog-item">
+    <div class="prog-num">04</div>
+    <div class="prog-name">Tamil Pattarai</div>
+    <div class="prog-desc">Creative arts in the Tamil tradition.</div>
+    <span class="prog-arrow">→</span>
+  </div>
+  <div class="prog-item">
+    <div class="prog-num">05</div>
+    <div class="prog-name">Volunteer</div>
+    <div class="prog-desc">Build the community with your hands.</div>
+    <span class="prog-arrow">→</span>
+  </div>
+</div>
+
+<footer>
+  <span>© Sun Prairie Tamil Society · Sun Prairie, WI</span>
+  <span>சன் ப்ரேரி தமிழ்ச் சமூகம்</span>
+</footer>
+
+</body>
+</html>

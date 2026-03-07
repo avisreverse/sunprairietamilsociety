@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPTS — Option A: Editorial Grand</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Poppins:wght@300;400;500&family=Noto+Serif+Tamil:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C8860A;
+    --crimson: #8B1A1A;
+    --parchment: #FAF7F2;
+    --ink: #16120C;
+    --ink-mid: #3A2F24;
+    --ink-light: #7A6A56;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 300;
+    background: var(--parchment);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 3rem;
+    border-bottom: 1px solid rgba(22,18,12,0.08);
+    background: rgba(250,247,242,0.92);
+    backdrop-filter: blur(12px);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--ink); letter-spacing: 0.04em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.78rem; font-weight: 400; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-light);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em;
+    padding: 0.65rem 1.5rem; border-radius: 2px;
+    background: var(--ink); color: var(--parchment);
+    text-decoration: none; transition: background 0.2s;
+  }
+
+  /* ─── HERO ────────────────────────────────────────── */
+  .hero {
+    padding: 9rem 3rem 6rem;
+    max-width: 1400px; margin: 0 auto;
+    position: relative;
+  }
+
+  .hero-overline {
+    display: flex; align-items: center; gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  .hero-overline-line {
+    width: 48px; height: 1px; background: var(--gold);
+  }
+  .hero-overline-text {
+    font-size: 0.7rem; font-weight: 400; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--ink-light);
+  }
+
+  /* Giant ruled headline — editorial style */
+  .hero-headline-wrap {
+    border-top: 2px solid var(--ink);
+    padding-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4.5rem, 11vw, 10rem);
+    font-weight: 900; line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .hero-h1 .gold-word { color: var(--gold); }
+
+  .hero-rule { height: 2px; background: var(--ink); margin: 1.5rem 0; }
+
+  /* Tamil script as large atmospheric element */
+  .hero-tamil-bg {
+    position: absolute;
+    right: 2rem; top: 7rem;
+    font-family: 'Noto Serif Tamil', serif;
+    font-size: clamp(6rem, 14vw, 13rem);
+    font-weight: 600; line-height: 1;
+    color: var(--gold); opacity: 0.08;
+    pointer-events: none; user-select: none;
+    letter-spacing: 0.05em;
+  }
+
+  /* Three-column content below the headline */
+  .hero-columns {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 3rem;
+    padding-top: 2rem;
+  }
+  .hero-body {
+    font-size: 1.05rem; font-weight: 300; line-height: 1.9;
+    color: var(--ink-mid); max-width: 520px;
+  }
+  .hero-body strong { font-weight: 500; color: var(--ink); }
+  .hero-cta-group { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-block; padding: 0.85rem 2rem;
+    background: var(--ink); color: var(--parchment);
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none; border-radius: 2px;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--crimson); }
+  .btn-outline {
+    display: inline-block; padding: 0.85rem 2rem;
+    border: 1px solid rgba(22,18,12,0.25); color: var(--ink-mid);
+    font-size: 0.82rem; font-weight: 400; letter-spacing: 0.08em;
+    text-transform: uppercase; text-decoration: none; border-radius: 2px;
+  }
+
+  .hero-stat-col { border-left: 1px solid rgba(22,18,12,0.12); padding-left: 2rem; }
+  .stat-item { margin-bottom: 2.5rem; }
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem; font-weight: 700; color: var(--ink); line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.65rem; font-weight: 400; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-light); margin-top: 0.4rem;
+  }
+
+  .hero-programs-col { border-left: 1px solid rgba(22,18,12,0.12); padding-left: 2rem; }
+  .prog-label {
+    font-size: 0.65rem; font-weight: 400; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-light); margin-bottom: 1.2rem;
+  }
+  .prog-list { list-style: none; }
+  .prog-list li {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem; font-weight: 400; color: var(--ink-mid);
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(22,18,12,0.07);
+    display: flex; align-items: center; gap: 0.6rem; cursor: pointer;
+    transition: color 0.2s;
+  }
+  .prog-list li:hover { color: var(--crimson); }
+  .prog-list li::before {
+    content: ''; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold); flex-shrink: 0;
+  }
+
+  /* ─── DIVIDER ─────────────────────────────────────── */
+  .divider {
+    max-width: 1400px; margin: 0 auto;
+    padding: 0 3rem;
+  }
+  .divider-rule {
+    height: 1px; background: rgba(22,18,12,0.12);
+  }
+
+  /* ─── PROGRAMS SECTION ───────────────────────────── */
+  .programs {
+    max-width: 1400px; margin: 0 auto;
+    padding: 5rem 3rem;
+  }
+  .section-label {
+    font-size: 0.65rem; font-weight: 400; letter-spacing: 0.25em;
+    text-transform: uppercase; color: var(--gold);
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .section-label::before { content: ''; width: 32px; height: 1px; background: var(--gold); }
+
+  .programs-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
+    background: rgba(22,18,12,0.1);
+  }
+  .prog-card {
+    background: var(--parchment);
+    padding: 2.5rem 2rem;
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .prog-card:hover { background: var(--ink); }
+  .prog-card:hover .prog-card-title { color: var(--parchment); }
+  .prog-card:hover .prog-card-body { color: rgba(250,247,242,0.6); }
+  .prog-card:hover .prog-card-num { color: rgba(250,247,242,0.2); }
+  .prog-card-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem; font-weight: 900;
+    color: rgba(22,18,12,0.06); line-height: 1;
+    margin-bottom: 1.5rem; transition: color 0.3s;
+  }
+  .prog-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700; color: var(--ink);
+    margin-bottom: 0.75rem; transition: color 0.3s;
+    line-height: 1.2;
+  }
+  .prog-card-body {
+    font-size: 0.82rem; font-weight: 300; line-height: 1.7;
+    color: var(--ink-light); transition: color 0.3s;
+  }
+
+  /* ─── QUOTE SECTION ──────────────────────────────── */
+  .quote-section {
+    background: var(--ink);
+    padding: 7rem 3rem;
+    text-align: center;
+  }
+  .quote-inner { max-width: 900px; margin: 0 auto; }
+  .quote-kural {
+    font-family: 'Noto Serif Tamil', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    color: var(--gold); line-height: 1.6;
+    margin-bottom: 1rem; font-weight: 400;
+  }
+  .quote-translation {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    color: rgba(250,247,242,0.6); font-weight: 400;
+    font-style: normal; line-height: 1.7; margin-bottom: 1.5rem;
+  }
+  .quote-source {
+    font-size: 0.65rem; font-weight: 400; letter-spacing: 0.2em;
+    text-transform: uppercase; color: rgba(250,247,242,0.3);
+  }
+
+  /* ─── FOOTER ─────────────────────────────────────── */
+  footer {
+    padding: 3rem; max-width: 1400px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(22,18,12,0.1);
+  }
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem; color: var(--ink-light);
+  }
+  .footer-loc {
+    font-size: 0.72rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--ink-light);
+  }
+
+  /* ─── ANIMATIONS ─────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-overline { animation: fadeUp 0.7s ease forwards; }
+  .hero-headline-wrap { animation: fadeUp 0.7s 0.15s ease both; }
+  .hero-rule { animation: fadeUp 0.5s 0.35s ease both; }
+  .hero-columns { animation: fadeUp 0.7s 0.45s ease both; }
+
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+    .hero-columns { grid-template-columns: 1fr; }
+    .hero-stat-col, .hero-programs-col { border-left: none; border-top: 1px solid rgba(22,18,12,0.12); padding: 1.5rem 0 0; }
+    .hero-tamil-bg { font-size: 5rem; opacity: 0.06; }
+    .programs { padding: 3rem 1.5rem; }
+    .programs-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">SPTS<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Programs</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Community</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Join Us</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <!-- Tamil text watermark right side -->
+  <div class="hero-tamil-bg" aria-hidden="true">
+    தமிழ்ச்<br>சமூகம்
+  </div>
+
+  <div class="hero-overline">
+    <span class="hero-overline-line"></span>
+    <span class="hero-overline-text">Sun Prairie, Wisconsin &nbsp;·&nbsp; Est. 2012</span>
+  </div>
+
+  <div class="hero-headline-wrap">
+    <h1 class="hero-h1">
+      <span class="gold-word">Tamil</span><br>Society
+    </h1>
+  </div>
+  <div class="hero-rule"></div>
+
+  <div class="hero-columns">
+    <!-- Story column -->
+    <div>
+      <p class="hero-body">
+        In 2012, Tamil families in Sun Prairie asked a shared question:<br>
+        <strong>how do we give our children the language, the culture, and the belonging we carry?</strong><br><br>
+        Today, SPTS is that answer — a home for Tamil culture, alive in Wisconsin.
+        Five programs. One community. One purpose.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#" class="btn-primary">Join the Society</a>
+        <a href="#" class="btn-outline">Explore Programs ↓</a>
+      </div>
+    </div>
+    <!-- Stats column -->
+    <div class="hero-stat-col">
+      <div class="stat-item">
+        <div class="stat-value">2012</div>
+        <div class="stat-label">Year Founded</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">5</div>
+        <div class="stat-label">Active Programs</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-value">WI</div>
+        <div class="stat-label">Sun Prairie</div>
+      </div>
+    </div>
+    <!-- Programs column -->
+    <div class="hero-programs-col">
+      <div class="prog-label">Our Programs</div>
+      <ul class="prog-list">
+        <li>Tamil School</li>
+        <li>Library</li>
+        <li>Music Club</li>
+        <li>Tamil Pattarai</li>
+        <li>Volunteer</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider"><div class="divider-rule"></div></div>
+
+<!-- PROGRAMS -->
+<section class="programs">
+  <div class="section-label">What We Offer</div>
+  <div class="programs-grid">
+    <div class="prog-card">
+      <div class="prog-card-num">01</div>
+      <div class="prog-card-title">Tamil School</div>
+      <div class="prog-card-body">Language classes for children — reading, writing, and speaking Tamil.</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-num">02</div>
+      <div class="prog-card-title">Library</div>
+      <div class="prog-card-body">Tamil literature, children's books, and community reading programs.</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-num">03</div>
+      <div class="prog-card-title">Music Club</div>
+      <div class="prog-card-body">Carnatic music, folk songs, and cultural performances for all ages.</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-num">04</div>
+      <div class="prog-card-title">Tamil Pattarai</div>
+      <div class="prog-card-body">Creative arts studio — drawing, crafts, and Tamil cultural expression.</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-card-num">05</div>
+      <div class="prog-card-title">Volunteer</div>
+      <div class="prog-card-body">Give your time. Shape the community. Every contribution matters.</div>
+    </div>
+  </div>
+</section>
+
+<!-- KURAL QUOTE -->
+<div class="quote-section">
+  <div class="quote-inner">
+    <p class="quote-kural">கற்க கசடறக் கற்பவை கற்றபின்<br>நிற்க அதற்குத் தக</p>
+    <p class="quote-translation">"Learn thoroughly that which must be learned,<br>then live accordingly."</p>
+    <p class="quote-source">Thirukkural · Chapter 40 · Verse 391</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">Sun Prairie Tamil Society</span>
+  <span class="footer-loc">Sun Prairie, Wisconsin</span>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPTS — Option B: Gradient Cinema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&family=Noto+Serif+Tamil:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #E8A020;
+    --crimson: #8B1A1A;
+    --forest: #1B5E3B;
+    --bg: #08080F;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: white;
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 3rem;
+  }
+  .nav-logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: white; text-decoration: none;
+  }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-size: 0.78rem; font-weight: 400; color: rgba(255,255,255,0.5);
+    text-decoration: none; letter-spacing: 0.02em; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: white; }
+  .nav-cta {
+    font-size: 0.78rem; font-weight: 500;
+    padding: 0.6rem 1.4rem; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white; text-decoration: none; transition: border-color 0.2s, background 0.2s;
+  }
+  .nav-cta:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.4); }
+
+  /* ─── HERO ────────────────────────────────────────── */
+  .hero {
+    position: relative; min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 7rem 3rem 5rem;
+    overflow: hidden;
+  }
+
+  /* Mesh gradient blobs */
+  .blob {
+    position: absolute; pointer-events: none; border-radius: 50%;
+    filter: blur(80px); opacity: 0.4;
+  }
+  .blob-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, #8B1A1A 0%, transparent 70%);
+    top: -100px; left: -100px;
+    animation: float1 12s ease-in-out infinite;
+  }
+  .blob-2 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, #1B5E3B 0%, transparent 70%);
+    bottom: -80px; right: 10%;
+    animation: float2 15s ease-in-out infinite;
+  }
+  .blob-3 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, #6B3A1A 0%, transparent 70%);
+    top: 30%; right: 25%;
+    animation: float3 18s ease-in-out infinite;
+  }
+  @keyframes float1 {
+    0%,100% { transform: translate(0,0); }
+    50%      { transform: translate(60px, 40px); }
+  }
+  @keyframes float2 {
+    0%,100% { transform: translate(0,0); }
+    50%      { transform: translate(-50px, -30px); }
+  }
+  @keyframes float3 {
+    0%,100% { transform: translate(0,0) scale(1); }
+    50%      { transform: translate(30px, 50px) scale(1.1); }
+  }
+
+  /* Subtle grid overlay */
+  .grid-overlay {
+    position: absolute; inset: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .hero-inner {
+    position: relative; z-index: 2;
+    max-width: 1400px; margin: 0 auto; width: 100%;
+  }
+
+  /* Badge */
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.45rem 1rem; border-radius: 999px;
+    border: 1px solid rgba(232,160,32,0.3);
+    background: rgba(232,160,32,0.06);
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge-dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--gold);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+  }
+
+  /* Hero headline */
+  .hero-h1 {
+    font-size: clamp(3.5rem, 8vw, 8rem);
+    font-weight: 300; line-height: 1.0;
+    letter-spacing: -0.03em; color: white;
+    margin-bottom: 0.25rem;
+    animation: fadeUp 0.7s 0.1s ease both;
+  }
+  .hero-h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #E8A020 0%, #F5C842 40%, #C8860A 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .hero-h1-line2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 8vw, 8rem);
+    font-weight: 700; line-height: 1.0;
+    letter-spacing: -0.02em; color: rgba(255,255,255,0.9);
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.2s ease both;
+  }
+
+  /* Tamil name */
+  .hero-tamil {
+    font-family: 'Noto Serif Tamil', serif;
+    font-size: 1.1rem; font-weight: 400;
+    color: rgba(232,160,32,0.7); letter-spacing: 0.08em;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.7s 0.3s ease both;
+  }
+
+  /* Subtext + CTA row */
+  .hero-bottom {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    flex-wrap: wrap; gap: 2rem;
+    animation: fadeUp 0.7s 0.4s ease both;
+  }
+  .hero-desc {
+    max-width: 440px; font-size: 1rem; font-weight: 300;
+    line-height: 1.8; color: rgba(255,255,255,0.55);
+  }
+  .hero-desc strong { font-weight: 500; color: rgba(255,255,255,0.85); }
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-glow {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.9rem 2rem; border-radius: 999px;
+    background: white; color: #08080F;
+    font-size: 0.85rem; font-weight: 600;
+    text-decoration: none; letter-spacing: 0.02em;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-glow:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.9rem 2rem; border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.7);
+    font-size: 0.85rem; font-weight: 400;
+    text-decoration: none; transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: white; }
+
+  /* ─── STATS BAR ──────────────────────────────────── */
+  .stats-bar {
+    position: relative; z-index: 2;
+    max-width: 1400px; margin: 0 auto;
+    padding: 3rem 3rem 0;
+    animation: fadeUp 0.7s 0.55s ease both;
+  }
+  .stats-inner {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+  }
+  .stat {
+    padding: 2rem 2.5rem;
+    border-right: 1px solid rgba(255,255,255,0.07);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-value {
+    font-size: 2.8rem; font-weight: 300;
+    color: white; line-height: 1; margin-bottom: 0.4rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-value span { color: var(--gold); }
+  .stat-label {
+    font-size: 0.75rem; font-weight: 400; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(255,255,255,0.4);
+  }
+
+  /* ─── PROGRAMS ────────────────────────────────────── */
+  .programs {
+    max-width: 1400px; margin: 6rem auto 0; padding: 0 3rem 6rem;
+  }
+  .section-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 2.5rem;
+  }
+  .section-tag {
+    font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem; font-weight: 700;
+    color: white; margin-top: 0.5rem;
+  }
+  .view-all {
+    font-size: 0.8rem; color: rgba(255,255,255,0.4);
+    text-decoration: none; display: flex; align-items: center; gap: 0.4rem;
+    transition: color 0.2s;
+  }
+  .view-all:hover { color: white; }
+
+  .programs-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
+  }
+  .prog-card {
+    padding: 1.75rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+    transition: border-color 0.3s, background 0.3s, transform 0.3s;
+    cursor: pointer;
+  }
+  .prog-card:hover {
+    border-color: rgba(232,160,32,0.4);
+    background: rgba(232,160,32,0.05);
+    transform: translateY(-4px);
+  }
+  .prog-icon {
+    width: 36px; height: 36px; margin-bottom: 1.25rem;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .prog-icon-1 { background: rgba(139,26,26,0.3); }
+  .prog-icon-2 { background: rgba(27,94,59,0.3); }
+  .prog-icon-3 { background: rgba(107,58,26,0.3); }
+  .prog-icon-4 { background: rgba(26,62,107,0.3); }
+  .prog-icon-5 { background: rgba(70,40,107,0.3); }
+  .prog-card-title {
+    font-size: 0.92rem; font-weight: 500; color: white;
+    margin-bottom: 0.6rem;
+  }
+  .prog-card-body {
+    font-size: 0.78rem; font-weight: 300; line-height: 1.6;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* ─── FOOTER ─────────────────────────────────────── */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 2.5rem 3rem;
+    max-width: 1400px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer span { font-size: 0.75rem; color: rgba(255,255,255,0.3); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { padding: 6rem 1.5rem 3rem; }
+    .hero-bottom { flex-direction: column; align-items: flex-start; }
+    .stats-bar { padding: 2rem 1.5rem 0; }
+    .stats-inner { grid-template-columns: 1fr; }
+    .stat { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .programs { padding: 0 1.5rem 4rem; }
+    .programs-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="nav-logo">SPTS</a>
+  <ul class="nav-links">
+    <li><a href="#">Programs</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Community</a></li>
+  </ul>
+  <a href="#" class="nav-cta">Join Us</a>
+</nav>
+
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="grid-overlay"></div>
+
+  <div class="hero-inner">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Sun Prairie, Wisconsin · Est. 2012
+    </div>
+
+    <h1 class="hero-h1">Sun Prairie</h1>
+    <div class="hero-h1-line2"><em>Tamil</em> Society</div>
+
+    <p class="hero-tamil">சன் ப்ரேரி தமிழ்ச் சமூகம்</p>
+
+    <div class="hero-bottom">
+      <p class="hero-desc">
+        A home for Tamil culture in the heart of Wisconsin.<br>
+        <strong>Language. Arts. Community. Heritage.</strong><br>
+        Five programs bringing Tamil families together since 2012.
+      </p>
+      <div class="hero-ctas">
+        <a href="#" class="btn-glow">Join the Society →</a>
+        <a href="#" class="btn-ghost">Explore Programs</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-value"><span>12</span>+</div>
+      <div class="stat-label">Years of community building</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">5</div>
+      <div class="stat-label">Active cultural programs</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">1</div>
+      <div class="stat-label">Community · Sun Prairie, WI</div>
+    </div>
+  </div>
+</div>
+
+<section class="programs">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">What We Offer</div>
+      <h2 class="section-title">Five ways to belong</h2>
+    </div>
+    <a href="#" class="view-all">View all programs →</a>
+  </div>
+  <div class="programs-grid">
+    <div class="prog-card">
+      <div class="prog-icon prog-icon-1">📚</div>
+      <div class="prog-card-title">Tamil School</div>
+      <div class="prog-card-body">Language classes for children — reading, writing, speaking Tamil fluently.</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-icon prog-icon-2">📖</div>
+      <div class="prog-card-title">Library</div>
+      <div class="prog-card-body">Tamil literature, children's books, and community reading programs.</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-icon prog-icon-3">🎵</div>
+      <div class="prog-card-title">Music Club</div>
+      <div class="prog-card-body">Carnatic music, folk songs, and cultural performances for all ages.</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-icon prog-icon-4">🎨</div>
+      <div class="prog-card-title">Tamil Pattarai</div>
+      <div class="prog-card-body">Creative arts studio — drawing, crafts, and Tamil cultural expression.</div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-icon prog-icon-5">🤝</div>
+      <div class="prog-card-title">Volunteer</div>
+      <div class="prog-card-body">Give your time. Shape the community. Every contribution matters.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>Sun Prairie Tamil Society · Sun Prairie, WI</span>
+  <span>சன் ப்ரேரி தமிழ்ச் சமூகம்</span>
+</footer>
+
+</body>
+</html>
