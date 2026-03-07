@@ -14,6 +14,13 @@ import type { Kural } from "@/types";
  * @see D-007 — Strategic Tamil placement
  */
 
+/** Derive the 3 high-level books from kural number */
+function getBook(n: number): { en: string; ta: string } {
+  if (n <= 380) return { en: "Aram", ta: "அறத்துப்பால்" };
+  if (n <= 1080) return { en: "Porul", ta: "பொருட்பால்" };
+  return { en: "Inbam", ta: "காமத்துப்பால்" };
+}
+
 const KURAL_URL =
   "https://raw.githubusercontent.com/tk120404/thirukkural/master/thirukkural.json";
 const CACHE_KEY = "spts_thirukkural_v1";
@@ -96,6 +103,8 @@ export default function ThirukkuralSection() {
   }, [loaded, kurals.length]);
 
   const kural = kurals[index];
+  const book = getBook(kural?.Number ?? 1);
+  const chapterName = kural?.Chapter ?? `Chapter ${Math.ceil((kural?.Number ?? 1) / 10)}`;
 
   return (
     <section
@@ -107,7 +116,7 @@ export default function ThirukkuralSection() {
         overflow: "hidden",
       }}
     >
-      {/* Subtle background texture — large faded Tamil numeral */}
+      {/* Right watermark — large faded kural number */}
       <div
         aria-hidden="true"
         style={{
@@ -125,6 +134,69 @@ export default function ThirukkuralSection() {
         }}
       >
         {kural?.Number}
+      </div>
+
+      {/* Left watermark — book name (vertical) + chapter name */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          left: "2.5rem",
+          top: "50%",
+          transform: "translateY(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.6rem",
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      >
+        {/* Book name — Tamil, large, rotated vertical */}
+        <div
+          style={{
+            fontFamily: "var(--font-tamil)",
+            fontSize: "1.05rem",
+            fontWeight: 600,
+            color: "rgba(255,255,255,0.07)",
+            writingMode: "vertical-rl",
+            textOrientation: "mixed",
+            letterSpacing: "0.18em",
+          }}
+        >
+          {book.ta}
+        </div>
+        {/* Book name — English */}
+        <div
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "0.6rem",
+            fontWeight: 600,
+            color: "rgba(255,255,255,0.05)",
+            writingMode: "vertical-rl",
+            letterSpacing: "0.25em",
+            textTransform: "uppercase",
+          }}
+        >
+          {book.en}
+        </div>
+        {/* Chapter name */}
+        {chapterName && (
+          <div
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "0.55rem",
+              fontWeight: 400,
+              color: "rgba(255,255,255,0.04)",
+              writingMode: "vertical-rl",
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+              marginTop: "0.5rem",
+            }}
+          >
+            {chapterName}
+          </div>
+        )}
       </div>
 
       <div style={{ maxWidth: "900px", margin: "0 auto", textAlign: "center", position: "relative" }}>

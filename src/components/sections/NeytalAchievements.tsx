@@ -55,7 +55,7 @@ export default function NeytalAchievements() {
           {ACHIEVEMENTS.map((item, i) => (
             <ScrollReveal key={item.initials + i} delay={i * 0.07}>
               <motion.a
-                href="/achievements/submit"
+                href={`/achievements/${i}`}
                 style={{
                   padding: "2rem",
                   borderRadius: "16px",

@@ -14,10 +14,10 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
  */
 
 const BOARD = [
-  { initials: "SA", name: "Sivasankar A.", role: "President", color: "#C0392B" },
-  { initials: "KV", name: "Kavitha V.", role: "Secretary", color: "#27AE60" },
-  { initials: "MG", name: "Murali G.", role: "Treasurer", color: "#E67E22" },
-  { initials: "DK", name: "Divya K.", role: "Programs Director", color: "#2980B9" },
+  { slug: "sivasankar", initials: "SA", name: "Sivasankar A.", role: "President", color: "#C0392B" },
+  { slug: "kavitha", initials: "KV", name: "Kavitha V.", role: "Secretary", color: "#27AE60" },
+  { slug: "murali", initials: "MG", name: "Murali G.", role: "Treasurer", color: "#E67E22" },
+  { slug: "divya", initials: "DK", name: "Divya K.", role: "Programs Director", color: "#2980B9" },
 ];
 
 const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
@@ -60,7 +60,7 @@ export default function PalaiBoard() {
                 }}
                 whileHover={{ y: -8, boxShadow: "0 20px 60px rgba(26,20,16,0.16)" }}
                 transition={SPRING}
-                onClick={() => window.location.href = "/board"}
+                onClick={() => window.location.href = `/board/${member.slug}`}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${member.color}45`)}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${member.color}20`)}
               >

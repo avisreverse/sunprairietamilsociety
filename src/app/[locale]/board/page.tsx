@@ -15,42 +15,10 @@ import Link from "next/link";
  */
 
 const BOARD = [
-  {
-    initials: "SA",
-    name: "Sivasankar A.",
-    role: "President",
-    color: "#C0392B",
-    bio: "Sivasankar has led SPTS since its founding, championing Tamil language education and cultural programs across Sun Prairie. A software engineer by profession, he brings both vision and operational discipline to the society.",
-    since: "2012",
-    contact: "president@sunprairietamil.org",
-  },
-  {
-    initials: "KV",
-    name: "Kavitha V.",
-    role: "Secretary",
-    color: "#27AE60",
-    bio: "Kavitha manages SPTS communications, member records, and coordinates between all program directors. She has been instrumental in growing SPTS membership and expanding outreach to the broader Wisconsin Tamil community.",
-    since: "2014",
-    contact: "secretary@sunprairietamil.org",
-  },
-  {
-    initials: "MG",
-    name: "Murali G.",
-    role: "Treasurer",
-    color: "#E67E22",
-    bio: "Murali oversees SPTS finances, event budgets, and grant applications. His careful stewardship ensures the society can sustain and grow its programs year after year.",
-    since: "2016",
-    contact: "treasurer@sunprairietamil.org",
-  },
-  {
-    initials: "DK",
-    name: "Divya K.",
-    role: "Programs Director",
-    color: "#2980B9",
-    bio: "Divya designs and coordinates all SPTS cultural programs — from Tamil School curriculum to Music Club showcases and Tamil Pattarai workshops. Her creativity and energy are the heartbeat of SPTS programming.",
-    since: "2018",
-    contact: "programs@sunprairietamil.org",
-  },
+  { slug: "sivasankar", initials: "SA", name: "Sivasankar A.", role: "President", color: "#C0392B", since: "2012", contact: "president@sunprairietamil.org", bio: "Sivasankar has led SPTS since its founding, championing Tamil language education and cultural programs across Sun Prairie." },
+  { slug: "kavitha", initials: "KV", name: "Kavitha V.", role: "Secretary", color: "#27AE60", since: "2014", contact: "secretary@sunprairietamil.org", bio: "Kavitha manages SPTS communications, member records, and coordinates between all program directors." },
+  { slug: "murali", initials: "MG", name: "Murali G.", role: "Treasurer", color: "#E67E22", since: "2016", contact: "treasurer@sunprairietamil.org", bio: "Murali oversees SPTS finances, event budgets, and grant applications." },
+  { slug: "divya", initials: "DK", name: "Divya K.", role: "Programs Director", color: "#2980B9", since: "2018", contact: "programs@sunprairietamil.org", bio: "Divya designs and coordinates all SPTS cultural programs — Tamil School, Music Club, and Tamil Pattarai." },
 ];
 
 export default function BoardPage() {
@@ -80,62 +48,58 @@ export default function BoardPage() {
             </p>
           </div>
 
-          {/* Board members */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", marginBottom: "5rem" }}>
-            {BOARD.map((member, i) => (
-              <div
+          {/* Board members — responsive grid, each card links to individual page */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.25rem", marginBottom: "5rem" }}>
+            {BOARD.map((member) => (
+              <Link
                 key={member.initials}
+                href={`/board/${member.slug}`}
                 style={{
+                  display: "block",
                   background: "white",
                   borderRadius: "20px",
                   border: `1px solid ${member.color}20`,
-                  padding: "2.5rem",
-                  display: "grid",
-                  gridTemplateColumns: "100px 1fr",
-                  gap: "2rem",
-                  alignItems: "flex-start",
+                  padding: "2rem",
+                  textDecoration: "none",
                   boxShadow: "0 4px 28px rgba(26,20,16,0.07)",
-                  animation: `fadeInUp 0.4s ease ${i * 0.08}s both`,
+                  transition: "transform 0.2s, box-shadow 0.2s, border-color 0.2s",
                 }}
+                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 12px 48px rgba(26,20,16,0.13)"; el.style.borderColor = `${member.color}40`; }}
+                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "none"; el.style.boxShadow = "0 4px 28px rgba(26,20,16,0.07)"; el.style.borderColor = `${member.color}20`; }}
               >
-                {/* Avatar */}
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.25rem" }}>
                   <div
                     style={{
-                      width: "80px", height: "80px", borderRadius: "50%",
+                      width: "64px", height: "64px", borderRadius: "50%",
                       background: `${member.color}18`,
                       border: `2px solid ${member.color}55`,
                       display: "flex", alignItems: "center", justifyContent: "center",
                       fontFamily: "var(--font-display)",
-                      fontSize: "1.6rem", fontWeight: 700, color: member.color,
+                      fontSize: "1.3rem", fontWeight: 700, color: member.color,
+                      flexShrink: 0,
                     }}
                   >
                     {member.initials}
                   </div>
-                  <div style={{ fontFamily: "var(--font-body)", fontSize: "0.62rem", fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(26,20,16,0.4)", textAlign: "center" }}>
-                    Since {member.since}
+                  <div>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: member.color, marginBottom: "0.3rem" }}>
+                      {member.role}
+                    </div>
+                    <div style={{ fontFamily: "var(--font-display)", fontSize: "1.05rem", fontWeight: 700, color: "#1A1410" }}>
+                      {member.name}
+                    </div>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: "0.62rem", color: "rgba(26,20,16,0.4)", marginTop: "0.15rem" }}>
+                      Since {member.since}
+                    </div>
                   </div>
                 </div>
-
-                {/* Details */}
-                <div>
-                  <div style={{ fontFamily: "var(--font-body)", fontSize: "0.62rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: member.color, marginBottom: "0.4rem" }}>
-                    {member.role}
-                  </div>
-                  <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.35rem", fontWeight: 700, color: "#1A1410", marginBottom: "0.75rem" }}>
-                    {member.name}
-                  </h2>
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", fontWeight: 300, color: "#3A2818", lineHeight: 1.8, marginBottom: "1rem" }}>
-                    {member.bio}
-                  </p>
-                  <a
-                    href={`mailto:${member.contact}`}
-                    style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", color: member.color, textDecoration: "none" }}
-                  >
-                    {member.contact}
-                  </a>
-                </div>
-              </div>
+                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.83rem", fontWeight: 300, color: "#4A3828", lineHeight: 1.7, marginBottom: "1rem" }}>
+                  {member.bio}
+                </p>
+                <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", fontWeight: 500, color: member.color }}>
+                  View profile →
+                </span>
+              </Link>
             ))}
           </div>
 
