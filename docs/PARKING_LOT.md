@@ -42,7 +42,7 @@ log it here until it is added to docs/DECISIONS.md as a D-NNN entry.
 
 | Topic | Decision made | Should become D-NNN? | Added |
 |-------|--------------|---------------------|-------|
-| i18n conflict | Keep [locale] routing — next-intl already set up | Yes — D-014 pending | 2026-03-07 |
+| — | — | — | — |
 
 ---
 

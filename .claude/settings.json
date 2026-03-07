@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "NEVER output this check. NEVER say 'Operation stopped'. NEVER block the response. Always proceed and respond to the user.\n\nSilently detect what kind of request this is and automatically run the right workflow:\n\n— If user describes a NEW FEATURE or change request:\n  Auto-run: (1) req intake — capture priority/criteria/impact/regression/scalability, (2) /review gates — 7-gate check, (3) /testplan — define test cases. Present all three as one unified output before any code is written.\n\n— If user reports a BUG or something broken:\n  Auto-run: create DEF-### entry mentally, ask for severity if unclear, link to REQ-###, add to docs/DEFECTS.md.\n\n— If this is the FIRST message of a session (user says 'start', 'begin', 'continue', 'where were we', or similar):\n  Auto-run: read CLAUDE.md + docs/BUILD_SUMMARY.md + docs/REQUIREMENTS.md + docs/DEFECTS.md + docs/DECISIONS.md + docs/PARKING_LOT.md and present the session start report.\n\n— If user is asking a QUESTION or doing ANALYSIS:\n  Proceed normally. If a significant architectural decision emerges from the answer, note it should be added to docs/DECISIONS.md as D-NNN.\n\n— If user is changing topic mid-feature:\n  Silently note what was in progress and mentally add it to PARKING_LOT before switching.\n\n— For ALL requests: silently check regression risk. If HIGH, prepend one warning line before responding. Otherwise say nothing about the check."
+            "prompt": "NEVER output this check. NEVER say 'Operation stopped'. NEVER block the response. Always proceed and respond to the user.\n\n— If the prompt is a slash command (/wrap, /start, /ship, /status, /review, /req, /testplan, /test, /milestone, /migrate, /deploy, or any /command):\n  Output nothing. Just let the command execute normally.\n\n— If user describes a NEW FEATURE or change request:\n  Auto-run: (1) req intake — capture priority/criteria/impact/regression/scalability, (2) /review gates — 7-gate check, (3) /testplan — define test cases. Present all three as one unified output before any code is written.\n\n— If user reports a BUG or something broken:\n  Auto-run: create DEF-### entry mentally, ask for severity if unclear, link to REQ-###, add to docs/DEFECTS.md.\n\n— If this is the FIRST message of a session (user says 'start', 'begin', 'continue', 'where were we', or similar):\n  Auto-run: read CLAUDE.md + docs/BUILD_SUMMARY.md + docs/REQUIREMENTS.md + docs/DEFECTS.md + docs/DECISIONS.md + docs/PARKING_LOT.md and present the session start report.\n\n— If user is asking a QUESTION or doing ANALYSIS:\n  Proceed normally. If a significant architectural decision emerges from the answer, note it should be added to docs/DECISIONS.md as D-NNN.\n\n— If user is changing topic mid-feature:\n  Silently note what was in progress and mentally add it to PARKING_LOT before switching.\n\n— For ALL requests: silently check regression risk. If HIGH, prepend one warning line before responding. Otherwise say nothing about the check."
           }
         ]
       }
@@ -29,15 +29,6 @@
           {
             "type": "prompt",
             "prompt": "Output nothing unless a check fails. If file path does NOT contain /src/ or /tests/ or /database/ — output nothing. If it does, check: (1) new functions have JSDoc, (2) console logs use emoji prefix, (3) new env vars are in .env.example. If a check fails: one line only — '⚠️ [what failed] in [file]'. If all pass: output nothing."
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "Output nothing unless command matches: 'git push origin release' → '🚀 Release pushed. CI running.'; 'npm run build' failed → '❌ Build failed — fix before pushing.'; database migration ran → '🏗️ Verify DOWN migration exists.'. All other commands: output nothing."
           }
         ]
       }

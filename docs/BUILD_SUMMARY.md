@@ -64,6 +64,36 @@ None.
 
 ## Session Log
 
+### Session 6 — 2026-03-07
+
+**Focus:** Project management system — hooks, agents, commands, GitHub setup attempt
+
+**Completed:**
+- Fixed `/wrap` blocked by UserPromptSubmit hook: added slash-command passthrough case so `/wrap`, `/start`, `/ship` etc. are never blocked
+- Created `.env.example` with all required env vars (Supabase, SMTP, Sentry, site URL)
+- Created `.github/workflows/ci.yml` — GitHub Actions CI pipeline (typecheck → lint → test → build)
+- Updated `.gitignore` — added `.claude/settings.local.json`, added `!.env.example` exception
+- All 5 agents upgraded (blueprint, forge, verify, scout, devops) — model assignments, NEVER DOES lists, SPTS patterns
+- All commands created/upgraded: start, wrap, ship, req, testplan, test, milestone, migrate, deploy, review
+- Global commands created at `~/.claude/commands/`: github-setup, vercel-setup, supabase-setup
+- CLAUDE.md updated: corrected Next.js version reference, added auto-orchestration section
+- PARKING_LOT.md created — tracks interrupted work and pending decisions
+- Committed all changes: `1926f8e` — 37 files changed, 3303 insertions
+- Converted PARKING_LOT D-014 pending → DECISIONS.md D-014
+
+**Deferred:**
+- GitHub repo creation — blocked: `gh` CLI installed but `gh auth login` not yet completed (user running it now)
+- Supabase connection — pending GitHub + Vercel first
+- Vercel deploy — pending GitHub first
+
+**New Defects Found:**
+None.
+
+**Deployment:**
+No deployment this session. Site still local only.
+
+---
+
 ### Session 5 — 2026-03-07
 
 **Focus:** Full landing page visual redesign — cinematic animations, Thiruvalluvar illustration, Kolam ring, shadow pill removal, Playwright verification

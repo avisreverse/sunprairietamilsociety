@@ -144,3 +144,14 @@ Format:
 **Decision:** Framer Motion for all animations and transitions.
 **Rationale:** zenith uses it with great results. Declarative API works well with React. Accessible by default (respects prefers-reduced-motion).
 **Consequences:** Import from `framer-motion`. Use `motion.div` etc. for animated elements.
+
+---
+
+## D-014: Keep [locale] Routing with next-intl (Strategic Tamil, Not Full Translation)
+**Date:** 2026-03-07
+**Status:** Accepted
+**Context:** D-007 revised Tamil strategy to "strategic placement only, no full i18n system." However, next-intl v4 was already set up with `[locale]` route segments and `src/proxy.ts`. Removing it would require significant refactoring with no clear benefit.
+**Decision:** Keep `[locale]` routing in place. Use next-intl for routing infrastructure but not for full translation. Translations remain minimal — nav, hero titles, program names — not every string.
+**Rationale:** next-intl is already installed and configured. Removing it gains nothing while losing the ability to expand Tamil support later. The `[locale]` segment is invisible to users (default locale redirects cleanly). This is the spts-clean pattern as well.
+**Consequences:** All page components live under `src/app/[locale]/`. `generateStaticParams` returns `['en', 'ta']`. Tamil strings are populated only where culturally meaningful, not for every UI label.
+**References:** D-007 (original Tamil strategy), src/proxy.ts, src/i18n/routing.ts
