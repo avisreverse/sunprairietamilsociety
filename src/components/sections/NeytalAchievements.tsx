@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
@@ -40,14 +39,14 @@ export default function NeytalAchievements() {
                 Community Achievements
               </h2>
             </div>
-            <Link
+            <a
               href="/achievements/submit"
               style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", color: "rgba(255,255,255,0.35)", textDecoration: "none" }}
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#D4930A")}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.35)")}
             >
               Submit achievement →
-            </Link>
+            </a>
           </div>
         </ScrollReveal>
 
@@ -55,14 +54,17 @@ export default function NeytalAchievements() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
           {ACHIEVEMENTS.map((item, i) => (
             <ScrollReveal key={item.initials + i} delay={i * 0.07}>
-              <motion.div
+              <motion.a
+                href="/achievements/submit"
                 style={{
                   padding: "2rem",
                   borderRadius: "16px",
                   border: `1px solid ${item.color}25`,
                   background: `linear-gradient(135deg, ${item.color}15 0%, #1A1A1A 70%)`,
-                  cursor: "default",
+                  cursor: "pointer",
                   boxShadow: "0 6px 28px rgba(0,0,0,0.45)",
+                  display: "block",
+                  textDecoration: "none",
                 }}
                 whileHover={{ y: -8, scale: 1.02, boxShadow: `0 20px 60px rgba(0,0,0,0.65)` }}
                 transition={SPRING}
@@ -106,7 +108,7 @@ export default function NeytalAchievements() {
                 <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", fontWeight: 400, color: "rgba(255,255,255,0.75)", lineHeight: 1.5 }}>
                   {item.achievement}
                 </p>
-              </motion.div>
+              </motion.a>
             </ScrollReveal>
           ))}
         </div>

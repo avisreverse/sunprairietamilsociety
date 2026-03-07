@@ -61,8 +61,10 @@ export default function ThirukkuralSection() {
         const cached = sessionStorage.getItem(CACHE_KEY);
         if (cached) {
           const data = JSON.parse(cached) as Kural[];
-          setKurals(data);
-          setIndex(Math.floor(Math.random() * data.length));
+          // Validate it's an array (not the old { kural: [] } shape stored in cache)
+          const arr = Array.isArray(data) ? data : (data as unknown as { kural: Kural[] }).kural;
+          setKurals(arr);
+          setIndex(Math.floor(Math.random() * arr.length));
           setLoaded(true);
           return;
         }
@@ -70,7 +72,9 @@ export default function ThirukkuralSection() {
 
       try {
         const res = await fetch(KURAL_URL);
-        const data = (await res.json()) as Kural[];
+        // GitHub JSON structure: { kural: [...] } — must unwrap
+        const json = await res.json() as { kural: Kural[] };
+        const data = json.kural;
         try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch { /* skip */ }
         setKurals(data);
         setIndex(Math.floor(Math.random() * data.length));

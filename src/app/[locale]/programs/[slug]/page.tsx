@@ -1,3 +1,7 @@
+"use client";
+
+// Note: params unwrapped via React.use() since this is a Client Component
+import { use } from "react";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Link from "next/link";
@@ -106,8 +110,9 @@ interface Props {
   params: Promise<{ slug: string; locale: string }>;
 }
 
-export default async function ProgramDetailPage({ params }: Props) {
-  const { slug } = await params;
+export default function ProgramDetailPage({ params }: Props) {
+  // Client Component: use React.use() to unwrap the params Promise
+  const { slug } = use(params);
   const program = PROGRAMS[slug];
 
   if (!program) notFound();
@@ -236,6 +241,4 @@ export default async function ProgramDetailPage({ params }: Props) {
   );
 }
 
-export function generateStaticParams() {
-  return Object.keys(PROGRAMS).map((slug) => ({ slug }));
-}
+// generateStaticParams not used — Client Component renders dynamically

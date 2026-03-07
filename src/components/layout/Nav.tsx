@@ -110,6 +110,22 @@ export default function Nav() {
         ))}
       </ul>
 
+      {/* Admin link — small, subtle */}
+      <Link
+        href="/admin"
+        style={{
+          fontFamily: "var(--font-body)",
+          fontSize: "0.72rem", fontWeight: 400,
+          color: "rgba(26,20,16,0.3)",
+          textDecoration: "none", transition: "color 0.2s",
+        }}
+        className="hidden md:inline"
+        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#D4930A")}
+        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(26,20,16,0.3)")}
+      >
+        Admin
+      </Link>
+
       {/* Join CTA — crimson pill */}
       <Link
         href="#palai"
