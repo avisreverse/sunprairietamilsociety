@@ -3,7 +3,7 @@
 
 /* Google Fonts must come first — before @layer and @import of other CSS modules.
    LOCK: Zero italic. Playfair Display 700 upright ONLY. Poppins 300/400/600. Noto Serif Tamil 400/600. */
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&family=Noto+Serif+Tamil:wght@400;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&family=Noto+Serif+Tamil:wght@400;600;700&display=swap");
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -71,7 +71,7 @@
   --spts-parchment: #faf7f0;
   /* SPTS font families */
   --font-display: "Playfair Display", serif;
-  --font-body: "Poppins", sans-serif;
+  --font-body: "DM Sans", sans-serif;
   --font-tamil: "Noto Serif Tamil", serif;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -145,11 +145,12 @@
   * {
     @apply border-border outline-ring/50;
   }
-  /* D-003: Poppins 300 as default body — matches design-g.html prototype */
+  /* D-003: DM Sans 300 as default body — Design D warm cultural */
   body {
     font-family: var(--font-body);
     font-weight: 300;
-    color: white;
+    background: #FDF8F0;
+    color: #1A1410;
   }
   /* Smooth scroll for section navigation */
   html {
