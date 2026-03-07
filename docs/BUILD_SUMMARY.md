@@ -9,7 +9,8 @@ Track session-by-session progress. Always read this at session start.
 **Phase:** Phase 1 — Landing Page Visual Polish Complete
 **Status:** All 6 sections fully rebuilt with cinematic animations, Framer Motion scroll-reveal, no shadow pills, Playwright-verified. Not yet deployed to Vercel.
 **Last Updated:** 2026-03-07
-**Release Branch:** Not yet created (still on main)
+**Release Branch:** Created — https://github.com/avisreverse/sunprairietamilsociety
+**Live URL:** https://sunprairietamilsociety.vercel.app/en
 
 ### What's Done
 - [x] CLAUDE.md with ground rules, tech stack, standards
@@ -44,7 +45,8 @@ Track session-by-session progress. Always read this at session start.
 - [x] **Playwright screenshot verification** — all 6 sections confirmed rendering correctly
 
 ### What's Pending (Next Session)
-- [ ] **GitHub repo creation + Vercel deployment** — site is not yet hosted
+- [x] **GitHub repo creation** — https://github.com/avisreverse/sunprairietamilsociety
+- [x] **Vercel deployment** — https://sunprairietamilsociety.vercel.app/en (live ✅)
 - [ ] Supabase project connection (confirm project ID with user)
 - [ ] Database initial schema (events, achievements, board members)
 - [ ] Auth pages (login, signup)
