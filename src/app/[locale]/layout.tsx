@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import PageTransition from "@/components/layout/PageTransition";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -79,7 +80,9 @@ export default async function LocaleLayout({
     >
       <body>
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <PageTransition>
+            {children}
+          </PageTransition>
         </NextIntlClientProvider>
       </body>
     </html>

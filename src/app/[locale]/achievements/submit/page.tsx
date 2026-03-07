@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef } from "react";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Link from "next/link";
@@ -15,6 +16,21 @@ import Link from "next/link";
  */
 
 export default function SubmitAchievementPage() {
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /**
+   * Load selected file into local preview using object URL.
+   * No server upload until Admin CMS / Supabase Storage is wired.
+   * @param e - File input change event
+   */
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    setPhotoPreview(url);
+  }
+
   return (
     <>
       <Nav />
@@ -132,26 +148,58 @@ export default function SubmitAchievementPage() {
                 />
               </div>
 
-              {/* Photo upload placeholder */}
+              {/* Photo upload — functional local preview */}
               <div>
                 <label style={{ display: "block", fontFamily: "var(--font-body)", fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase", color: "#D4930A", marginBottom: "0.5rem" }}>
                   Photo (optional)
                 </label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
                 <div
+                  onClick={() => fileInputRef.current?.click()}
                   style={{
-                    width: "100%", padding: "2rem",
-                    borderRadius: "10px", border: "2px dashed rgba(255,255,255,0.12)",
+                    width: "100%", padding: photoPreview ? "1rem" : "2rem",
+                    borderRadius: "10px",
+                    border: photoPreview ? "2px solid rgba(212,147,10,0.4)" : "2px dashed rgba(255,255,255,0.12)",
                     background: "rgba(255,255,255,0.03)",
                     textAlign: "center",
                     cursor: "pointer",
+                    transition: "border-color 0.2s",
+                    boxSizing: "border-box",
                   }}
                 >
-                  <div style={{ fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 300, color: "rgba(255,255,255,0.35)", marginBottom: "0.3rem" }}>
-                    Click to upload a photo
-                  </div>
-                  <div style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "rgba(255,255,255,0.2)" }}>
-                    JPG, PNG up to 5MB — photo upload active after Admin CMS launch
-                  </div>
+                  {photoPreview ? (
+                    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                      <img
+                        src={photoPreview}
+                        alt="Preview"
+                        style={{ width: "72px", height: "72px", borderRadius: "8px", objectFit: "cover", flexShrink: 0 }}
+                      />
+                      <div style={{ textAlign: "left" }}>
+                        <div style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", fontWeight: 500, color: "#D4930A", marginBottom: "0.2rem" }}>
+                          Photo selected
+                        </div>
+                        <div style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "rgba(255,255,255,0.35)" }}>
+                          Click to change
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>📷</div>
+                      <div style={{ fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 300, color: "rgba(255,255,255,0.45)", marginBottom: "0.25rem" }}>
+                        Click to select a photo
+                      </div>
+                      <div style={{ fontFamily: "var(--font-body)", fontSize: "0.7rem", color: "rgba(255,255,255,0.2)" }}>
+                        JPG, PNG, WEBP — up to 5MB
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 

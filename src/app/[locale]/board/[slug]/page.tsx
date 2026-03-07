@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useState, useRef } from "react";
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Link from "next/link";
@@ -99,6 +99,19 @@ interface Props {
 export default function BoardMemberPage({ params }: Props) {
   const { slug } = use(params);
   const member = BOARD[slug];
+  const [headshot, setHeadshot] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  /**
+   * Load selected headshot into local preview using object URL.
+   * Photo is not persisted — Supabase Storage upload wired in Admin CMS phase.
+   * @param e - File input change event
+   */
+  function handleHeadshotChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setHeadshot(URL.createObjectURL(file));
+  }
 
   if (!member) notFound();
 
@@ -123,18 +136,46 @@ export default function BoardMemberPage({ params }: Props) {
 
           {/* Person header */}
           <div style={{ display: "flex", alignItems: "flex-start", gap: "2rem", marginBottom: "3rem" }}>
-            <div
-              style={{
-                width: "96px", height: "96px", borderRadius: "50%",
-                background: `${member.color}18`,
-                border: `3px solid ${member.color}55`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                fontFamily: "var(--font-display)",
-                fontSize: "2rem", fontWeight: 700, color: member.color,
-                flexShrink: 0,
-              }}
-            >
-              {member.initials}
+            {/* Avatar — shows uploaded headshot or initials fallback */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem", flexShrink: 0 }}>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                style={{ display: "none" }}
+                onChange={handleHeadshotChange}
+              />
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                title="Click to upload headshot"
+                style={{
+                  width: "96px", height: "96px", borderRadius: "50%",
+                  background: headshot ? "transparent" : `${member.color}18`,
+                  border: `3px solid ${headshot ? member.color : `${member.color}55`}`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "2rem", fontWeight: 700, color: member.color,
+                  cursor: "pointer",
+                  overflow: "hidden",
+                  position: "relative",
+                }}
+              >
+                {headshot ? (
+                  <img src={headshot} alt={member.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  member.initials
+                )}
+              </div>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  fontFamily: "var(--font-body)", fontSize: "0.62rem", fontWeight: 500,
+                  color: member.color, background: "none", border: "none",
+                  cursor: "pointer", letterSpacing: "0.05em", padding: 0,
+                }}
+              >
+                {headshot ? "Change photo" : "Upload photo"}
+              </button>
             </div>
             <div>
               <div style={{ fontFamily: "var(--font-tamil)", fontSize: "0.85rem", color: `${member.color}99`, marginBottom: "0.3rem" }}>
