@@ -21,7 +21,10 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 
 | ID | Priority | Status | Title | Notes |
 |----|----------|--------|-------|-------|
-| REQ-202603-001 | P1 | in_progress | Landing page — Sangam Scroll design | Visual complete: 6 sections, 5 poem transitions, landscape watermarks, Tamil spelling locked. Backend/auth/real-photos pending. |
+| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | Design D applied to hero + nav. All sections, programs bento, Thirukkural, admin CMS in progress. |
+| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | Bento grid layout. Each program → /programs/[slug]. Admin-editable via CMS (REQ-202603-004). |
+| REQ-202603-003 | P1 | in_progress | Thirukkural rotation — standalone section | Rotating all 1330 kurals in dedicated crimson section. 8s interval. Fade transition. |
+| REQ-202603-004 | P1 | backlog | Admin CMS — full landing page customizable | Supabase tables: programs, events, achievements, board, hero. Admin portal at /admin/*. Photo uploads to Supabase Storage. Role-based access. |
 
 ---
 

@@ -1,284 +1,133 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 /**
- * Section 3: Marutam — Field — Events / Celebration
- * Redesigned from plain date-list → featured hero event + smaller secondary list.
- * Featured event: full-width card, large date, prominent RSVP.
- * Secondary events: compact rows beneath, staggered scroll-reveal.
+ * Events section — Design D: Warm Cultural.
+ * Parchment background. Featured hero event + list rows with date cards.
+ * Static data — Admin CMS (REQ-202603-004) will replace this.
  *
- * @see REQ-202603-001 — Events section
- * @see D-013 — Framer Motion scroll-reveal + entrance
+ * @see REQ-202603-001 — Landing page
  */
 
 const EVENTS = [
   {
-    day: "13",
-    month: "Apr",
-    year: "2026",
-    titleTa: "தமிழ் புத்தாண்டு",
-    titleEn: "Tamil New Year Celebration",
-    location: "Sun Prairie Community Center",
-    rsvpLabel: "rsvp" as const,
+    id: "puthandu-2025",
+    title: "Tamil New Year — Puthandu",
+    titleTa: "புத்தாண்டு விழா",
+    month: "Apr", day: "12",
+    time: "4:00 PM", location: "Sun Prairie Community Center",
+    description: "Celebrate the Tamil New Year with traditional music, dance, food, and community. All families welcome.",
     featured: true,
   },
   {
-    day: "03",
-    month: "May",
-    year: "2026",
-    titleTa: "கலை விழா",
-    titleEn: "Annual Arts & Culture Festival",
-    location: "Whitehorse Auditorium",
-    rsvpLabel: "rsvp" as const,
+    id: "music-2025",
+    title: "Annual Music & Dance Showcase",
+    titleTa: "இசை & நடன விழா",
+    month: "May", day: "3",
+    time: "6:30 PM", location: "SPHS Auditorium",
+    description: "Students from all SPTS programs perform on stage.",
     featured: false,
   },
   {
-    day: "01",
-    month: "Nov",
-    year: "2026",
-    titleTa: "கார்த்திகை விளக்கு",
-    titleEn: "Karthigai Deepam — Festival of Lights",
-    location: "Announcing Soon",
-    rsvpLabel: "notify" as const,
+    id: "graduation-2025",
+    title: "Tamil School Year-End Graduation",
+    titleTa: "பட்டமளிப்பு விழா",
+    month: "Jun", day: "21",
+    time: "2:00 PM", location: "Sun Prairie Community Center",
+    description: "Celebrating our students' achievements in Tamil language learning.",
     featured: false,
   },
-] as const;
+];
+
+const SPRING = { type: "spring", stiffness: 320, damping: 28 } as const;
 
 export default function MarutamEvents() {
-  const t = useTranslations("marutam");
-
   const featured = EVENTS[0];
-  const secondary = EVENTS.slice(1);
+  const rest = EVENTS.slice(1);
 
   return (
-    <section
-      id="marutam"
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        position: "relative",
-        overflow: "hidden",
-        background: "linear-gradient(160deg, #4A2A00 0%, #B36200 40%, #8A4800 100%)",
-      }}
-      className="px-8 md:px-24 py-32"
-    >
-      {/* Paddy field watermark */}
-      <div
-        aria-hidden="true"
-        style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-end", opacity: 0.06, pointerEvents: "none" }}
-      >
-        <svg viewBox="0 0 1400 600" fill="white" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "80%" }}>
-          <path d="M0,600 L0,360 Q175,310 350,360 Q525,410 700,360 Q875,310 1050,360 Q1225,410 1400,360 L1400,600 Z" />
-          <path d="M0,600 L0,460 Q175,430 350,460 Q525,490 700,460 Q875,430 1050,460 Q1225,490 1400,460 L1400,600 Z" />
-        </svg>
-      </div>
+    <section id="marutam" style={{ background: "#FAF5EB", padding: "6rem 3.5rem" }}>
+      <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
-      {/* Right-side poem overlay */}
-      <div
-        style={{ position: "absolute", right: "6rem", top: "50%", transform: "translateY(-50%)", textAlign: "right" }}
-        className="hidden lg:block"
-        aria-hidden="true"
-      >
-        <p style={{ fontFamily: "var(--font-tamil)", fontSize: "clamp(1rem,2.5vw,1.6rem)", opacity: 0.5, lineHeight: 1.8 }}>
-          {t("poemTa")}
-        </p>
-        <p style={{ fontFamily: "var(--font-body)", fontWeight: 300, fontStyle: "normal", fontSize: "0.8rem", opacity: 0.4, marginTop: "0.75rem", maxWidth: "280px", marginLeft: "auto", lineHeight: 1.7 }}>
-          {t("poemEn")}
-        </p>
-      </div>
-
-      {/* Tinai label */}
-      <ScrollReveal delay={0}>
-        <div
-          style={{
-            display: "inline-flex",
-            flexDirection: "column",
-            alignSelf: "flex-start",
-            gap: "0.35rem",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <p style={{ fontSize: "0.72rem", letterSpacing: "0.22em", textTransform: "uppercase", opacity: 0.75, fontFamily: "var(--font-body)", margin: 0 }}>
-            {t("tinaiLabel")}
-          </p>
-          <p style={{ fontFamily: "var(--font-tamil)", fontSize: "0.9rem", opacity: 0.8, margin: 0 }}>
-            {t("tinaiTa")}
-          </p>
-        </div>
-      </ScrollReveal>
-
-      {/* Heading */}
-      <ScrollReveal delay={0.08}>
-        <h2
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(2.2rem, 4.2vw, 3.8rem)",
-            fontWeight: 700,
-            fontStyle: "normal",
-            lineHeight: 1.15,
-            maxWidth: "600px",
-            marginBottom: "2rem",
-            color: "rgba(245,240,228,0.96)",
-          }}
-        >
-          {t("heading")}
-        </h2>
-      </ScrollReveal>
-
-      {/* ── Featured event card ── */}
-      <motion.div
-        initial={{ opacity: 0, x: -32 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.14 }}
-        style={{ maxWidth: "560px", marginBottom: "1rem" }}
-      >
-        <div
-          style={{
-            background: "rgba(255,255,255,0.10)",
-            border: "1px solid rgba(255,255,255,0.16)",
-            borderLeft: "3px solid #D4930A",
-            borderRadius: "16px",
-            padding: "1.75rem",
-            display: "flex",
-            gap: "1.75rem",
-            alignItems: "flex-start",
-          }}
-        >
-          {/* Large date block */}
-          <div style={{ textAlign: "center", minWidth: "64px", flexShrink: 0 }}>
-            <p style={{ fontFamily: "var(--font-body)", fontSize: "3rem", fontWeight: 600, lineHeight: 1, color: "#D4930A" }}>
-              {featured.day}
-            </p>
-            <p style={{ fontSize: "0.72rem", letterSpacing: "0.14em", textTransform: "uppercase", opacity: 0.65, marginTop: "0.2rem" }}>
-              {featured.month} {featured.year}
-            </p>
-          </div>
-
-          {/* Event info */}
-          <div style={{ flex: 1 }}>
-            <p style={{ fontFamily: "var(--font-tamil)", fontSize: "0.88rem", opacity: 0.65, marginBottom: "0.3rem" }}>
-              {featured.titleTa}
-            </p>
-            <p style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", fontWeight: 700, fontStyle: "normal", marginBottom: "0.5rem", lineHeight: 1.2 }}>
-              {featured.titleEn}
-            </p>
-            <p style={{ fontSize: "0.82rem", opacity: 0.60, marginBottom: "1.25rem" }}>
-              📍 {featured.location}
-            </p>
-            <Link
-              href="#"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                padding: "0.6rem 1.5rem",
-                borderRadius: "999px",
-                fontSize: "0.82rem",
-                fontWeight: 600,
-                fontFamily: "var(--font-body)",
-                textDecoration: "none",
-                background: "#D4930A",
-                color: "#2A1500",
-                letterSpacing: "0.03em",
-              }}
+        {/* ── Header ── */}
+        <ScrollReveal>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "3rem" }}>
+            <div>
+              <div style={{ fontFamily: "var(--font-body)", fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.22em", textTransform: "uppercase", color: "#B8750A", marginBottom: "0.6rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <div style={{ width: "20px", height: "1px", background: "#B8750A" }} />
+                Coming Up
+              </div>
+              <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem,3vw,2.8rem)", fontWeight: 700, color: "#1A1410" }}>
+                Upcoming Events
+              </h2>
+            </div>
+            <Link href="/events"
+              style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", color: "rgba(26,20,16,0.4)", textDecoration: "none" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#7A1515")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(26,20,16,0.4)")}
             >
-              {t(featured.rsvpLabel)} →
+              View all events →
             </Link>
           </div>
-        </div>
-      </motion.div>
+        </ScrollReveal>
 
-      {/* ── Secondary events list ── */}
-      <div style={{ maxWidth: "560px", marginBottom: "2.5rem" }}>
-        {secondary.map((event, i) => (
+        {/* ── Featured event ── */}
+        <ScrollReveal delay={0.1}>
           <motion.div
-            key={event.titleEn}
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-30px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.22 + i * 0.10 }}
-            style={{
-              padding: "1rem 0",
-              borderBottom: "1px solid rgba(255,255,255,0.09)",
-              display: "flex",
-              alignItems: "center",
-              gap: "1.5rem",
-            }}
+            whileHover={{ y: -4 }}
+            transition={SPRING}
+            style={{ background: "#1A1410", borderRadius: "16px", padding: "2.5rem", marginBottom: "1rem", display: "grid", gridTemplateColumns: "110px 1fr auto", gap: "2rem", alignItems: "center" }}
           >
-            {/* Compact date */}
-            <div style={{ textAlign: "center", minWidth: "48px", flexShrink: 0 }}>
-              <p style={{ fontFamily: "var(--font-body)", fontSize: "1.5rem", fontWeight: 600, lineHeight: 1 }}>
-                {event.day}
-              </p>
-              <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", opacity: 0.50 }}>
-                {event.month}
-              </p>
+            <div style={{ background: "#7A1515", borderRadius: "12px", padding: "1rem", textAlign: "center" }}>
+              <div style={{ fontFamily: "var(--font-body)", fontSize: "0.56rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: "0.2rem" }}>{featured.month}</div>
+              <div style={{ fontFamily: "var(--font-display)", fontSize: "2.4rem", fontWeight: 900, color: "white", lineHeight: 1 }}>{featured.day}</div>
             </div>
-
-            {/* Info */}
-            <div style={{ flex: 1 }}>
-              <p style={{ fontFamily: "var(--font-tamil)", fontSize: "0.78rem", opacity: 0.58, marginBottom: "0.15rem" }}>
-                {event.titleTa}
-              </p>
-              <p style={{ fontFamily: "var(--font-body)", fontSize: "0.92rem", fontWeight: 400 }}>
-                {event.titleEn}
-              </p>
-              <p style={{ fontSize: "0.75rem", opacity: 0.55, marginTop: "0.15rem" }}>
-                📍 {event.location}
-              </p>
+            <div>
+              <div style={{ fontFamily: "var(--font-tamil)", fontSize: "0.78rem", color: "rgba(184,117,10,0.7)", marginBottom: "0.3rem" }}>{featured.titleTa}</div>
+              <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.35rem", fontWeight: 700, color: "white", marginBottom: "0.35rem", lineHeight: 1.2 }}>{featured.title}</h3>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", fontWeight: 300, color: "rgba(255,255,255,0.45)", marginBottom: "0.35rem" }}>{featured.time} · {featured.location}</p>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", fontWeight: 300, color: "rgba(255,255,255,0.32)", lineHeight: 1.6 }}>{featured.description}</p>
             </div>
-
-            {/* RSVP pill */}
-            <Link
-              href="#"
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "0.68rem",
-                fontWeight: 400,
-                color: "#D4930A",
-                textDecoration: "none",
-                padding: "0.3rem 0.85rem",
-                border: "1px solid rgba(212,147,10,0.38)",
-                borderRadius: "999px",
-                whiteSpace: "nowrap",
-                flexShrink: 0,
-              }}
+            <a href="#"
+              style={{ display: "inline-block", padding: "0.8rem 1.6rem", borderRadius: "999px", background: "#7A1515", color: "white", fontFamily: "var(--font-body)", fontSize: "0.8rem", fontWeight: 500, textDecoration: "none", whiteSpace: "nowrap" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#6A1010")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#7A1515")}
             >
-              {t(event.rsvpLabel)}
-            </Link>
+              RSVP →
+            </a>
           </motion.div>
+        </ScrollReveal>
+
+        {/* ── List rows ── */}
+        {rest.map((event, i) => (
+          <ScrollReveal key={event.id} delay={0.15 + i * 0.08}>
+            <motion.div
+              whileHover={{ x: 4 }}
+              transition={SPRING}
+              style={{ display: "grid", gridTemplateColumns: "90px 1fr auto", gap: "2rem", alignItems: "center", padding: "1.6rem 0", borderBottom: "1px solid rgba(26,20,16,0.08)" }}
+            >
+              <div style={{ background: "white", border: "1px solid rgba(26,20,16,0.08)", borderRadius: "10px", padding: "0.7rem", textAlign: "center" }}>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: "0.54rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "#7A1515" }}>{event.month}</div>
+                <div style={{ fontFamily: "var(--font-display)", fontSize: "1.7rem", fontWeight: 700, color: "#1A1410", lineHeight: 1.1 }}>{event.day}</div>
+              </div>
+              <div>
+                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1rem", fontWeight: 700, color: "#1A1410", marginBottom: "0.25rem" }}>{event.title}</h3>
+                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.78rem", fontWeight: 300, color: "#8A7060" }}>{event.time} · {event.location}</p>
+              </div>
+              <a href="#"
+                style={{ padding: "0.55rem 1.3rem", borderRadius: "999px", border: "1px solid rgba(26,20,16,0.15)", fontFamily: "var(--font-body)", fontSize: "0.76rem", color: "#1A1410", textDecoration: "none", whiteSpace: "nowrap" }}
+                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.background = "#1A1410"; el.style.color = "white"; }}
+                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.background = "transparent"; el.style.color = "#1A1410"; }}
+              >
+                RSVP →
+              </a>
+            </motion.div>
+          </ScrollReveal>
         ))}
       </div>
-
-      {/* CTA */}
-      <ScrollReveal delay={0.3}>
-        <Link
-          href="#"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            padding: "0.875rem 2rem",
-            borderRadius: "999px",
-            fontSize: "0.9rem",
-            fontWeight: 600,
-            fontFamily: "var(--font-body)",
-            textDecoration: "none",
-            background: "rgba(255,255,255,0.14)",
-            color: "white",
-            border: "1px solid rgba(255,255,255,0.28)",
-            width: "fit-content",
-          }}
-        >
-          {t("cta")} →
-        </Link>
-      </ScrollReveal>
     </section>
   );
 }

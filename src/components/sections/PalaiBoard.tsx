@@ -1,284 +1,128 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import Link from "next/link";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 /**
- * Section 5: Palai — Desert — Community Welcome / Board / Help Requests
- * Board member cards now use initial-based circular avatars (honest until
- * real photos and confirmed names are available — see BUILD_SUMMARY.md).
- * Help request chips kept — they add authentic community texture.
- * Final CTA: "Join the community" — page's ultimate call-to-action.
- * Scroll-reveal on all sub-sections.
+ * Board / About section — Design D: Warm Cultural.
+ * Parchment background. Board member cards with initials avatars.
+ * Join CTA and help request chips.
+ * Static data — Admin CMS (REQ-202603-004) will replace this.
  *
- * PLACEHOLDER NOTE: Names and roles below are not real.
- * Replace with confirmed board member data when available.
- *
- * @see REQ-202603-001 — About / board section
- * @see D-013 — Framer Motion scroll-reveal
+ * @see REQ-202603-001 — Landing page
  */
 
-const BOARD_MEMBERS = [
-  { role: "president"     as const, name: "Suresh Arunachalam",   initials: "SA" },
-  { role: "vicePresident" as const, name: "Kavitha Venkataraman", initials: "KV" },
-  { role: "secretary"     as const, name: "Mohan Gopalaswamy",    initials: "MG" },
-] as const;
+const BOARD = [
+  { initials: "SA", name: "Sivasankar A.", role: "President", color: "#7A1515" },
+  { initials: "KV", name: "Kavitha V.", role: "Secretary", color: "#1A5035" },
+  { initials: "MG", name: "Murali G.", role: "Treasurer", color: "#7A4A10" },
+  { initials: "DK", name: "Divya K.", role: "Programs Director", color: "#1A2A7A" },
+];
 
-const HELP_REQUESTS = [
-  "Tamil-speaking dentist near Sun Prairie?",
-  "Rides to Sunday Tamil school from Madison",
-  "First Wisconsin state tax filing help",
-] as const;
-
-/**
- * Circular avatar showing initials — gold letter on dark amber circle.
- * Used for board members until real photos are available.
- *
- * @param initials - Two-letter string (e.g. "SA")
- * @param size     - Diameter in px (default 48)
- */
-function BoardAvatar({ initials, size = 48 }: { initials: string; size?: number }) {
-  return (
-    <div
-      style={{
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        background: "rgba(212,147,10,0.20)",
-        border: "1.5px solid rgba(212,147,10,0.38)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-      }}
-    >
-      <span
-        style={{
-          fontFamily: "var(--font-body)",
-          fontSize: size * 0.30,
-          fontWeight: 600,
-          color: "#D4930A",
-          letterSpacing: "0.04em",
-        }}
-      >
-        {initials}
-      </span>
-    </div>
-  );
-}
+const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
 
 export default function PalaiBoard() {
-  const t = useTranslations("palai");
-
   return (
-    <section
-      id="palai"
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        position: "relative",
-        overflow: "hidden",
-        background: "linear-gradient(160deg, #2E1800 0%, #8B4513 50%, #4A2A00 100%)",
-      }}
-      className="px-8 md:px-24 py-32"
-    >
-      {/* Desert dunes watermark */}
-      <div
-        aria-hidden="true"
-        style={{ position: "absolute", inset: 0, display: "flex", alignItems: "flex-end", opacity: 0.06, pointerEvents: "none" }}
-      >
-        <svg viewBox="0 0 1400 600" fill="white" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "80%" }}>
-          <path d="M0,600 L0,420 Q200,330 500,370 Q700,395 900,320 Q1100,250 1250,300 Q1340,330 1400,310 L1400,600 Z" />
-          <path d="M0,600 L0,510 Q250,470 500,495 Q650,510 800,470 Q1000,430 1150,460 Q1300,485 1400,470 L1400,600 Z" />
-        </svg>
-      </div>
+    <section id="palai" style={{ background: "#FDF8F0", padding: "6rem 3.5rem" }}>
+      <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
-      {/* Right-side poem overlay */}
-      <div
-        style={{ position: "absolute", right: "6rem", top: "50%", transform: "translateY(-50%)", textAlign: "right" }}
-        className="hidden lg:block"
-        aria-hidden="true"
-      >
-        <p style={{ fontFamily: "var(--font-tamil)", fontSize: "clamp(1rem,2.5vw,1.6rem)", opacity: 0.50, lineHeight: 1.8 }}>
-          {t("poemTa")}
-        </p>
-        <p style={{ fontFamily: "var(--font-body)", fontWeight: 300, fontStyle: "normal", fontSize: "0.8rem", opacity: 0.40, marginTop: "0.75rem", maxWidth: "280px", marginLeft: "auto", lineHeight: 1.7 }}>
-          {t("poemEn")}
-        </p>
-      </div>
+        {/* Header */}
+        <ScrollReveal>
+          <div style={{ textAlign: "center", marginBottom: "4rem" }}>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.22em", textTransform: "uppercase", color: "#B8750A", marginBottom: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.75rem" }}>
+              <div style={{ width: "20px", height: "1px", background: "#B8750A" }} />
+              Who We Are
+              <div style={{ width: "20px", height: "1px", background: "#B8750A" }} />
+            </div>
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem,3vw,2.8rem)", fontWeight: 700, color: "#1A1410", marginBottom: "1rem" }}>
+              Board of Directors
+            </h2>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem", fontWeight: 300, lineHeight: 1.8, color: "#4A3828", maxWidth: "540px", margin: "0 auto" }}>
+              Volunteers dedicated to preserving Tamil culture and building community in Sun Prairie, Wisconsin.
+            </p>
+          </div>
+        </ScrollReveal>
 
-      {/* Tinai label */}
-      <ScrollReveal delay={0}>
-        <div
-          style={{
-            display: "inline-flex",
-            flexDirection: "column",
-            alignSelf: "flex-start",
-            gap: "0.35rem",
-            marginBottom: "1.5rem",
-          }}
-        >
-          <p style={{ fontSize: "0.72rem", letterSpacing: "0.22em", textTransform: "uppercase", opacity: 0.75, fontFamily: "var(--font-body)", margin: 0 }}>
-            {t("tinaiLabel")}
-          </p>
-          <p style={{ fontFamily: "var(--font-tamil)", fontSize: "0.9rem", opacity: 0.8, margin: 0 }}>
-            {t("tinaiTa")}
-          </p>
-        </div>
-      </ScrollReveal>
-
-      {/* Heading */}
-      <ScrollReveal delay={0.08}>
-        <h2
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(2.2rem, 4.2vw, 3.8rem)",
-            fontWeight: 700,
-            fontStyle: "normal",
-            lineHeight: 1.15,
-            maxWidth: "600px",
-            marginBottom: "1rem",
-            color: "rgba(245,240,228,0.96)",
-          }}
-        >
-          {t("heading")}
-        </h2>
-      </ScrollReveal>
-
-      {/* Body copy */}
-      <ScrollReveal delay={0.14}>
-        <p
-          style={{
-            fontFamily: "var(--font-body)",
-            fontWeight: 300,
-            fontSize: "1.05rem",
-            maxWidth: "520px",
-            lineHeight: 1.85,
-            opacity: 0.78,
-            marginBottom: "2rem",
-          }}
-        >
-          {t("body")}
-        </p>
-      </ScrollReveal>
-
-      {/* ── Board members ── */}
-      <div
-        style={{
-          display: "flex",
-          gap: "1rem",
-          flexWrap: "wrap",
-          marginBottom: "2rem",
-        }}
-      >
-        {BOARD_MEMBERS.map(({ role, name, initials }, i) => (
-          <motion.div
-            key={name}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-30px" }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.18 + i * 0.09 }}
-          >
-            <motion.div
-              whileHover={{ y: -3, background: "rgba(255,255,255,0.12)" }}
-              transition={{ duration: 0.2 }}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                padding: "1rem 1.25rem",
-                background: "rgba(255,255,255,0.08)",
-                borderRadius: "14px",
-              }}
-            >
-              <BoardAvatar initials={initials} size={48} />
-              <div>
-                <p
+        {/* Board grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.5rem", marginBottom: "4rem" }}>
+          {BOARD.map((member, i) => (
+            <ScrollReveal key={member.initials} delay={i * 0.08}>
+              <motion.div
+                whileHover={{ y: -6 }}
+                transition={SPRING}
+                style={{
+                  padding: "2.5rem 2rem",
+                  borderRadius: "16px",
+                  background: "white",
+                  border: "1px solid rgba(26,20,16,0.07)",
+                  textAlign: "center",
+                  boxShadow: "0 2px 16px rgba(26,20,16,0.04)",
+                  transition: "box-shadow 0.3s",
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(26,20,16,0.10)")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 2px 16px rgba(26,20,16,0.04)")}
+              >
+                {/* Avatar */}
+                <div
                   style={{
-                    fontFamily: "var(--font-body)",
-                    fontWeight: 300,
-                    fontSize: "0.65rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.12em",
-                    opacity: 0.62,
-                    marginBottom: "0.2rem",
+                    width: "64px", height: "64px", borderRadius: "50%",
+                    background: `${member.color}18`,
+                    border: `2px solid ${member.color}44`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    margin: "0 auto 1.25rem",
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.3rem", fontWeight: 700, color: member.color,
                   }}
                 >
-                  {t(`board.${role}`)}
-                </p>
-                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", fontWeight: 400 }}>
-                  {name}
-                </p>
-              </div>
-            </motion.div>
-          </motion.div>
-        ))}
-      </div>
+                  {member.initials}
+                </div>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem", fontWeight: 500, color: "#1A1410", marginBottom: "0.3rem" }}>{member.name}</div>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", fontWeight: 400, letterSpacing: "0.1em", textTransform: "uppercase", color: member.color }}>{member.role}</div>
+              </motion.div>
+            </ScrollReveal>
+          ))}
+        </div>
 
-      {/* ── Help requests ── */}
-      <ScrollReveal delay={0.24}>
-        <div style={{ marginBottom: "2rem" }}>
-          <p
+        {/* CTA row */}
+        <ScrollReveal delay={0.3}>
+          <div
             style={{
-              fontSize: "0.72rem",
-              opacity: 0.46,
-              marginBottom: "0.75rem",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              fontFamily: "var(--font-body)",
+              background: "#1A1410",
+              borderRadius: "20px",
+              padding: "3rem",
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "2rem",
+              alignItems: "center",
             }}
           >
-            {t("helpRequestsLabel")}
-          </p>
-          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-            {HELP_REQUESTS.map((req) => (
-              <div
-                key={req}
-                style={{
-                  background: "rgba(255,255,255,0.10)",
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  borderRadius: "8px",
-                  padding: "0.65rem 1rem",
-                  fontSize: "0.78rem",
-                  maxWidth: "210px",
-                  fontFamily: "var(--font-body)",
-                  fontWeight: 300,
-                  lineHeight: 1.5,
-                }}
+            <div>
+              <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.6rem", fontWeight: 700, color: "white", marginBottom: "0.75rem" }}>
+                Join the community
+              </h3>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", fontWeight: 300, color: "rgba(255,255,255,0.5)", lineHeight: 1.7 }}>
+                Whether you want to enroll your child in Tamil School, volunteer, or simply belong — SPTS is your home.
+              </p>
+            </div>
+            <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
+              <a href="#"
+                style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", background: "#7A1515", color: "white", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 500, textDecoration: "none", transition: "background 0.2s" }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#6A1010")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#7A1515")}
               >
-                {req}
-              </div>
-            ))}
+                Join the Society
+              </a>
+              <a href="#"
+                style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 400, textDecoration: "none", transition: "border-color 0.2s, color 0.2s" }}
+                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(255,255,255,0.4)"; el.style.color = "white"; }}
+                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(255,255,255,0.15)"; el.style.color = "rgba(255,255,255,0.7)"; }}
+              >
+                Contact Board →
+              </a>
+            </div>
           </div>
-        </div>
-      </ScrollReveal>
-
-      {/* Final CTA — page's primary action */}
-      <ScrollReveal delay={0.3}>
-        <Link
-          href="#"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: "0.5rem",
-            padding: "0.95rem 2.25rem",
-            borderRadius: "999px",
-            fontSize: "0.95rem",
-            fontWeight: 600,
-            fontFamily: "var(--font-body)",
-            textDecoration: "none",
-            background: "white",
-            color: "#4A2A00",
-            width: "fit-content",
-          }}
-        >
-          {t("cta")} →
-        </Link>
-      </ScrollReveal>
+        </ScrollReveal>
+      </div>
     </section>
   );
 }
