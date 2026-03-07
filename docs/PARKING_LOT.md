@@ -15,7 +15,9 @@ Items land here when:
 
 | ID | Item | Context | Waiting for | Added |
 |----|------|---------|------------|-------|
-| — | No items | — | — | — |
+| PL-001 | Visual feedback on Design D | User to review live site at sunprairietamilsociety.vercel.app/en after session 8 deploy | User feedback on fonts, colors, sections, Thirukkural display | 2026-03-07 |
+| PL-002 | Real content from user | Photos, board member names/bios, real event dates, real org stats | User to supply | 2026-03-07 |
+| PL-003 | Admin CMS priority | REQ-202603-004 is backlog — when to start? Needs Supabase schema design | User to confirm priority | 2026-03-07 |
 
 ---
 
@@ -23,7 +25,8 @@ Items land here when:
 
 | Feature/REQ | What was done | What remains | Status |
 |-------------|--------------|--------------|--------|
-| — | — | — | — |
+| REQ-202603-003 Thirukkural | Component live with fallback | Verify GitHub raw fetch works on Vercel (CORS) — test from live URL in incognito | Needs verification |
+| Mobile responsiveness | Not yet audited | Test all pages at 375px (iPhone SE), 768px (tablet) | Deferred until visual feedback done |
 
 ---
 
@@ -37,12 +40,9 @@ Items land here when:
 
 ## Analysis / Q&A Decisions to Document
 
-When a significant decision is made during a Q&A or analysis conversation,
-log it here until it is added to docs/DECISIONS.md as a D-NNN entry.
-
 | Topic | Decision made | Should become D-NNN? | Added |
 |-------|--------------|---------------------|-------|
-| — | — | — | — |
+| — | All decisions from this session already documented as D-015 and D-016 | — | — |
 
 ---
 

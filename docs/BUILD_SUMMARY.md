@@ -6,65 +6,122 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 1 — Landing Page Visual Polish Complete
-**Status:** All 6 sections fully rebuilt with cinematic animations, Framer Motion scroll-reveal, no shadow pills, Playwright-verified. Not yet deployed to Vercel.
+**Phase:** Phase 2 — Design D (Warm Cultural) complete. All sections, programs routing, inner pages, font system live on Vercel.
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Awaiting user feedback on Design D before next visual iteration.
 **Last Updated:** 2026-03-07
-**Release Branch:** Created — https://github.com/avisreverse/sunprairietamilsociety
+**Release Branch:** `release` — Vercel watches this branch (NOT main). Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
+**Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel
 
 ### What's Done
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
 - [x] Tech stack decided (see docs/DECISIONS.md)
-- [x] Design locked in `prototypes/design-g.html` (The Sangam Scroll)
-- [x] **Next.js 16 project scaffolded** (package.json, tsconfig, eslint)
-- [x] **All dependencies installed** — Supabase, TanStack Query v5, next-intl v4, Framer Motion, Shadcn/UI, Vitest, Playwright
-- [x] **Full project folder structure** per CLAUDE.md
-- [x] `next.config.ts` with next-intl plugin
-- [x] `src/proxy.ts` — locale routing (Next.js 16 uses proxy not middleware)
-- [x] `src/i18n/routing.ts` + `request.ts` — next-intl v4 config
-- [x] `src/i18n/messages/en.json` + `ta.json` — all translations, Tamil spelling correct (ப்ரேரி, தமிழ்ச்)
-- [x] `src/lib/supabase/client.ts` + `server.ts` — Supabase clients
-- [x] `src/types/index.ts` — all TypeScript types
-- [x] `src/app/globals.css` — SPTS colors, Google Fonts + Kolam ring CSS keyframe animations
-- [x] `src/app/[locale]/layout.tsx` — locale root layout with next-intl provider
-- [x] **All layout components** — Nav.tsx (scroll-aware glass blur), DotNav.tsx (6 dots), Footer.tsx
-- [x] **`ScrollReveal.tsx`** — reusable Framer Motion scroll-trigger wrapper (direction + delay props)
-- [x] **`KolamDivider.tsx`** — SVG gold kolam dot-motif horizontal divider between sections
-- [x] **`LandingHero.tsx`** — FULL REBUILD: Thiruvalluvar SVG illustration + animated Kolam ring + identity pillars (no fake stats), cinematic staggered entrance
-- [x] **`KurinciHero.tsx`** — REBUILT: ScrollReveal, CTA added, shadow pill removed
-- [x] **`MullaiPrograms.tsx`** — FULL REBUILD: 5 line-art SVG icons, card grid, whileHover lift, shadow pill removed
-- [x] **`MarutamEvents.tsx`** — FULL REBUILD: featured hero event + secondary list, RSVP buttons, shadow pill removed
-- [x] **`NeytalAchievements.tsx`** — FULL REBUILD: initials avatars, 3-col grid + submit slot, cinematic rotate entrance, shadow pill removed
-- [x] **`PalaiBoard.tsx`** — FULL REBUILD: initials board avatars, help request chips, shadow pill removed
-- [x] **PoemScreen.tsx** + **ThirukkuralLoader.tsx** — Thirukkural rotation (all 1330)
-- [x] 5 PoemScreen transitions + KolamDividers between every section
-- [x] `src/app/[locale]/page.tsx` — landing page assembled (6 sections + 5 poem transitions + dividers + footer)
-- [x] **Build passes** (`npm run build` — clean, no TypeScript errors)
-- [x] **Playwright screenshot verification** — all 6 sections confirmed rendering correctly
+- [x] **GitHub repo** — https://github.com/avisreverse/sunprairietamilsociety
+- [x] **Vercel deployment** — https://sunprairietamilsociety.vercel.app/en (live)
+- [x] **Supabase connected** — .env.local + Vercel env vars set
+- [x] **Design D (Warm Cultural)** — all sections rebuilt
+- [x] **Fonts** — Space Grotesk + Outfit via next/font/google (D-015), Noto Serif Tamil
+- [x] **LandingHero** — Tamil script as dominant visual artwork, parchment background
+- [x] **Nav** — parchment style, Tamil crest, crimson Join button
+- [x] **MullaiPrograms** — bento grid, 5 programs, floating card shadows, spring hover
+- [x] **ThirukkuralSection** — standalone crimson section, rotates all 1330 kurals
+- [x] **MarutamEvents** — featured event card + list rows, RSVP optional (rsvpUrl field)
+- [x] **NeytalAchievements** — dark bg, initials avatars, floating cards, submit → /achievements/submit
+- [x] **PalaiBoard** — 4-col board grid, floating cards, CTAs → /join and /board
+- [x] **Programs listing** — /programs grid page
+- [x] **Program detail pages** — /programs/[slug] for all 5 programs
+- [x] **Events list** — /events page with color-coded date cards
+- [x] **Board details** — /board page with full bios + contact emails
+- [x] **Submit Achievement** — /achievements/submit form with photo upload placeholder
+- [x] **Join page** — /join with membership form + ways to get involved
+- [x] **All broken links fixed** — no more href="#" anywhere
+- [x] **Build passes** — 26 routes, clean TypeScript
 
 ### What's Pending (Next Session)
-- [x] **GitHub repo creation** — https://github.com/avisreverse/sunprairietamilsociety
-- [x] **Vercel deployment** — https://sunprairietamilsociety.vercel.app/en (live ✅)
-- [ ] Supabase project connection (confirm project ID with user)
-- [ ] Database initial schema (events, achievements, board members)
-- [ ] Auth pages (login, signup)
-- [ ] Inner pages (Programs detail, Events list, Achievements wall, About)
+- [ ] User feedback on Design D — visual review pending
+- [ ] Admin CMS (REQ-202603-004) — Supabase schema + admin portal
+- [ ] Database initial schema migrations (001–005)
+- [ ] Real content — photos, board names, real event dates (user to supply)
+- [ ] Auth pages (login, signup) — needed for achievements submit, admin
 - [ ] Sentry integration
-- [ ] Real photos replacing all grey placeholder boxes (user to supply)
-- [ ] Real board member names (user to supply)
-- [ ] Real event dates (user to confirm)
+- [ ] Mobile responsiveness audit (375px breakpoints not yet tested)
+- [ ] Thirukkural GitHub fetch may be blocked by CORS on some networks — needs monitoring
 
 ### Open Defects
 None.
 
 ### Active Requirements
-- REQ-202603-001: Landing page — in_progress (visual complete, backend/auth pending)
+- REQ-202603-001: in_progress — Design D applied, links fixed, pending user feedback
+- REQ-202603-002: in_progress — Programs bento + all 5 detail pages live
+- REQ-202603-003: in_progress — ThirukkuralSection live, needs real-world fetch verification
+- REQ-202603-004: backlog — Admin CMS
 
 ---
 
 ## Session Log
+
+### Session 8 — 2026-03-07
+
+**Focus:** Design D polish — fonts, floating cards, new inner pages, fix all broken links
+
+**Completed:**
+- REQ-202603-001: Switched fonts to Space Grotesk + Outfit via next/font (D-015) — fixes font visibility and Thirukkural Tamil rendering
+- REQ-202603-001: Removed broken Google Fonts @import from globals.css
+- REQ-202603-001: All section cards now have persistent floating box-shadows (visible at rest)
+- REQ-202603-001: Fixed all `href="#"` broken links — replaced with real routes
+- REQ-202603-002: RSVP made optional — `rsvpUrl` field, shows "Details TBA" if admin hasn't set it
+- REQ-202603-001: New pages — /events, /board, /achievements/submit, /join
+- REQ-202603-001: Board cards clickable → /board; CTA buttons → /join and /board
+- REQ-202603-001: NeytalAchievements "Submit achievement" → /achievements/submit
+- Build passes clean — 26 routes
+- Pushed to both `main` and `release` (Vercel deploys from `release`)
+
+**Deferred:**
+- Mobile responsiveness audit — not yet done, needs user feedback first
+- Thirukkural CORS testing — needs verification on multiple networks
+- Admin CMS (REQ-202603-004) — backlog, pending user priority
+
+**New Defects Found:**
+None.
+
+**Deployment:**
+- Branch `release` → Vercel production — https://sunprairietamilsociety.vercel.app/en
+- Commit: `14258b8`
+
+---
+
+### Session 7 — 2026-03-07
+
+**Focus:** Full Design D implementation — all 6 sections, programs routing, Thirukkural section
+
+**Completed:**
+- User rejected Phase 1 (Thiruvalluvar + Kolam) — full redesign requested
+- 4 prototype HTML files created: editorial, gradient-cinema, minimal-dark, warm-cultural
+- User selected Design D (warm-cultural)
+- Fixed UserPromptSubmit hook — was blocking all user input; removed entirely
+- GitHub repo created: https://github.com/avisreverse/sunprairietamilsociety
+- Vercel deployed: https://sunprairietamilsociety.vercel.app/en (release branch = production)
+- Supabase connected — env vars in .env.local and Vercel
+- LandingHero: Tamil script as hero artwork, parchment background, DM Sans (later upgraded)
+- Nav: Design D parchment style, Tamil crest
+- MullaiPrograms: bento grid 5 programs with spring hover
+- ThirukkuralSection: new self-contained component, AnimatePresence rotation, crimson bg
+- MarutamEvents: featured dark card + compact list rows
+- NeytalAchievements: dark bg, initials avatars, 3-col grid
+- PalaiBoard: 4-col board grid, dark CTA band
+- Programs listing: /programs
+- Programs detail: /programs/[slug] for all 5 slugs
+- Build passes — 26 pages
+
+**New Defects Found:**
+None.
+
+**Deployment:**
+- Branch `release` → Vercel — https://sunprairietamilsociety.vercel.app/en
+
+---
 
 ### Session 6 — 2026-03-07
 

@@ -21,10 +21,12 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 
 | ID | Priority | Status | Title | Notes |
 |----|----------|--------|-------|-------|
-| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | Design D applied to hero + nav. All sections, programs bento, Thirukkural, admin CMS in progress. |
-| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | Bento grid layout. Each program → /programs/[slug]. Admin-editable via CMS (REQ-202603-004). |
-| REQ-202603-003 | P1 | in_progress | Thirukkural rotation — standalone section | Rotating all 1330 kurals in dedicated crimson section. 8s interval. Fade transition. |
-| REQ-202603-004 | P1 | backlog | Admin CMS — full landing page customizable | Supabase tables: programs, events, achievements, board, hero. Admin portal at /admin/*. Photo uploads to Supabase Storage. Role-based access. |
+| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | Design D all sections live. Fonts fixed (Space Grotesk + Outfit). All broken links fixed. Inner pages: /events, /board, /join, /achievements/submit. Awaiting user visual feedback. |
+| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | Bento grid with floating cards live. All 5 /programs/[slug] detail pages live. RSVP made optional via rsvpUrl field. |
+| REQ-202603-003 | P1 | in_progress | Thirukkural rotation — standalone section | ThirukkuralSection live on landing page. Font fix ensures Tamil text renders. Fallback to 4 kurals if GitHub fetch fails. Needs real-world CORS verification. |
+| REQ-202603-004 | P1 | backlog | Admin CMS — full landing page customizable | Supabase tables: programs, events, achievements, board, hero. Admin portal at /admin/*. Photo uploads to Supabase Storage. Role-based access. All current pages use static data as placeholders. |
+| REQ-202603-005 | P2 | backlog | Achievement submit — form + photo upload | /achievements/submit page created (form stub). Needs Supabase Storage integration for photo upload + email notification to board. Depends on REQ-202603-004. |
+| REQ-202603-006 | P2 | backlog | Board management — dedicated page + admin edit | /board page created (static bios). Needs admin edit capability via CMS. Depends on REQ-202603-004. |
 
 ---
 

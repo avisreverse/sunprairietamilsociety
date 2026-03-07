@@ -147,6 +147,27 @@ Format:
 
 ---
 
+## D-016: RSVP is Admin-Optional Per Event
+**Date:** 2026-03-07
+**Status:** Accepted
+**Context:** Original MarutamEvents had hardcoded RSVP buttons for all events. Not all events have external RSVP registration.
+**Decision:** Each event has an optional `rsvpUrl` field. If set by admin, RSVP button renders. If not set, button shows "Details TBA".
+**Rationale:** Avoids misleading users with dead RSVP links. Admin CMS (REQ-202603-004) will let board set rsvpUrl per event.
+**Consequences:** Never render RSVP with `href="#"`. Always check `rsvpUrl` before rendering. Applied in both MarutamEvents (landing) and /events list page.
+
+---
+
+## D-015: Space Grotesk + Outfit Fonts (Zenith Pattern)
+**Date:** 2026-03-07
+**Status:** Accepted
+**Context:** Original font stack (Playfair Display + DM Sans) loaded via CSS `@import` — caused invisible text and Thirukkural Tamil section not rendering.
+**Decision:** Switch to Space Grotesk (display headings) + Outfit (body/UI) loaded via Next.js `next/font/google`. Keep Noto Serif Tamil for Tamil script.
+**Rationale:** This is the zenith repo font pattern. `next/font/google` is zero-FOUT — fonts are self-hosted by Next.js with no external network request at render time. Eliminates broken @import. Space Grotesk is more readable than Playfair Display for community/information sites.
+**Consequences:** `--font-display` → Space Grotesk. `--font-body` → Outfit. `--font-tamil` → Noto Serif Tamil. Font CSS variables applied to `<html>` via className. No @import needed in globals.css.
+**References:** zenith/src/app/layout.tsx, zenith/src/app/globals.css
+
+---
+
 ## D-014: Keep [locale] Routing with next-intl (Strategic Tamil, Not Full Translation)
 **Date:** 2026-03-07
 **Status:** Accepted
