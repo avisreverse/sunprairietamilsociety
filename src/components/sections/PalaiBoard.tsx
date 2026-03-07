@@ -1,22 +1,23 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
 /**
  * Board / About section — Design D: Warm Cultural.
- * Parchment background. Board member cards with initials avatars.
- * Join CTA and help request chips.
+ * Parchment background. Board member cards with floating shadows.
+ * Clicking a card goes to /board for full details.
  * Static data — Admin CMS (REQ-202603-004) will replace this.
  *
  * @see REQ-202603-001 — Landing page
  */
 
 const BOARD = [
-  { initials: "SA", name: "Sivasankar A.", role: "President", color: "#7A1515" },
-  { initials: "KV", name: "Kavitha V.", role: "Secretary", color: "#1A5035" },
-  { initials: "MG", name: "Murali G.", role: "Treasurer", color: "#7A4A10" },
-  { initials: "DK", name: "Divya K.", role: "Programs Director", color: "#1A2A7A" },
+  { initials: "SA", name: "Sivasankar A.", role: "President", color: "#C0392B" },
+  { initials: "KV", name: "Kavitha V.", role: "Secretary", color: "#27AE60" },
+  { initials: "MG", name: "Murali G.", role: "Treasurer", color: "#E67E22" },
+  { initials: "DK", name: "Divya K.", role: "Programs Director", color: "#2980B9" },
 ];
 
 const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
@@ -48,26 +49,26 @@ export default function PalaiBoard() {
           {BOARD.map((member, i) => (
             <ScrollReveal key={member.initials} delay={i * 0.08}>
               <motion.div
-                whileHover={{ y: -6 }}
-                transition={SPRING}
                 style={{
                   padding: "2.5rem 2rem",
-                  borderRadius: "16px",
+                  borderRadius: "18px",
                   background: "white",
-                  border: "1px solid rgba(26,20,16,0.07)",
+                  border: `1px solid ${member.color}20`,
                   textAlign: "center",
-                  boxShadow: "0 2px 16px rgba(26,20,16,0.04)",
-                  transition: "box-shadow 0.3s",
+                  boxShadow: "0 6px 32px rgba(26,20,16,0.08)",
+                  cursor: "pointer",
                 }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 8px 32px rgba(26,20,16,0.10)")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.boxShadow = "0 2px 16px rgba(26,20,16,0.04)")}
+                whileHover={{ y: -8, boxShadow: "0 20px 60px rgba(26,20,16,0.16)" }}
+                transition={SPRING}
+                onClick={() => window.location.href = "/board"}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${member.color}45`)}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${member.color}20`)}
               >
-                {/* Avatar */}
                 <div
                   style={{
-                    width: "64px", height: "64px", borderRadius: "50%",
+                    width: "68px", height: "68px", borderRadius: "50%",
                     background: `${member.color}18`,
-                    border: `2px solid ${member.color}44`,
+                    border: `2px solid ${member.color}55`,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     margin: "0 auto 1.25rem",
                     fontFamily: "var(--font-display)",
@@ -76,8 +77,8 @@ export default function PalaiBoard() {
                 >
                   {member.initials}
                 </div>
-                <div style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem", fontWeight: 500, color: "#1A1410", marginBottom: "0.3rem" }}>{member.name}</div>
-                <div style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", fontWeight: 400, letterSpacing: "0.1em", textTransform: "uppercase", color: member.color }}>{member.role}</div>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem", fontWeight: 600, color: "#1A1410", marginBottom: "0.3rem" }}>{member.name}</div>
+                <div style={{ fontFamily: "var(--font-body)", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: member.color }}>{member.role}</div>
               </motion.div>
             </ScrollReveal>
           ))}
@@ -94,6 +95,7 @@ export default function PalaiBoard() {
               gridTemplateColumns: "1fr 1fr",
               gap: "2rem",
               alignItems: "center",
+              boxShadow: "0 8px 48px rgba(26,20,16,0.18)",
             }}
           >
             <div>
@@ -105,20 +107,22 @@ export default function PalaiBoard() {
               </p>
             </div>
             <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
-              <a href="#"
-                style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", background: "#7A1515", color: "white", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 500, textDecoration: "none", transition: "background 0.2s" }}
+              <Link
+                href="/join"
+                style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", background: "#8B1A1A", color: "white", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 500, textDecoration: "none" }}
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#6A1010")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#7A1515")}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#8B1A1A")}
               >
                 Join the Society
-              </a>
-              <a href="#"
-                style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.7)", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 400, textDecoration: "none", transition: "border-color 0.2s, color 0.2s" }}
-                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(255,255,255,0.4)"; el.style.color = "white"; }}
-                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(255,255,255,0.15)"; el.style.color = "rgba(255,255,255,0.7)"; }}
+              </Link>
+              <Link
+                href="/board"
+                style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.75)", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 400, textDecoration: "none" }}
+                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(255,255,255,0.45)"; el.style.color = "white"; }}
+                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(255,255,255,0.18)"; el.style.color = "rgba(255,255,255,0.75)"; }}
               >
-                Contact Board →
-              </a>
+                Meet the Board →
+              </Link>
             </div>
           </div>
         </ScrollReveal>
