@@ -64,6 +64,28 @@ All bugs and defects tracked here with `DEF-YYYYMM-NNN` IDs.
 
 ## Fixed Defects
 
+## DEF-202603-002: Page transition flash with AnimatePresence in App Router shared layout
+**Severity:** P2
+**Status:** fixed
+**Created:** 2026-03-08
+**Fixed:** 2026-03-08
+**Linked Requirement:** REQ-202603-001
+**Found In:** Session 9
+
+### Description
+Using `AnimatePresence mode="wait"` in the locale layout caused a visible flash on navigation. Content snapped from top instead of transitioning smoothly.
+
+### Root Cause
+In Next.js App Router, the shared layout (`[locale]/layout.tsx`) does **not** unmount/remount on navigation — React reconciles the tree in-place. `AnimatePresence` relies on unmount to trigger exit animations, so `mode="wait"` stalled without a clean exit, causing a flash before the enter animation ran.
+
+### Fix Applied
+Replaced `AnimatePresence` wrapper with a plain `motion.div` keyed by `usePathname()`. When pathname changes, React treats it as a new element and plays the enter animation (`opacity: 0→1`, `y: 18→0`, 0.38s). No exit animation needed — the old content disappears instantly, new content fades in smoothly.
+
+### Regression Tests Added
+- TC-DEF-202603-002: Navigate between 3+ pages and verify no flash or snap-to-top behavior
+
+---
+
 ## DEF-202603-001: onMouseEnter/onMouseLeave in Server Component
 **Severity:** P0
 **Status:** fixed

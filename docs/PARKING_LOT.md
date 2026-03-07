@@ -15,9 +15,8 @@ Items land here when:
 
 | ID | Item | Context | Waiting for | Added |
 |----|------|---------|------------|-------|
-| PL-001 | Visual feedback on Design D | User to review live site at sunprairietamilsociety.vercel.app/en after session 8 deploy | User feedback on fonts, colors, sections, Thirukkural display | 2026-03-07 |
-| PL-002 | Real content from user | Photos, board member names/bios, real event dates, real org stats | User to supply | 2026-03-07 |
-| PL-003 | Admin CMS priority | REQ-202603-004 is backlog — when to start? Needs Supabase schema design | User to confirm priority | 2026-03-07 |
+| PL-002 | Real content from user | Photos (event, board headshots), real board names/bios, real event dates, real org stats | User to supply when ready | 2026-03-07 |
+| PL-003 | Admin CMS priority | REQ-202603-004 — user actively using site and giving feedback. When to start Supabase schema + admin portal? | User to confirm priority | 2026-03-07 |
 
 ---
 
@@ -25,8 +24,9 @@ Items land here when:
 
 | Feature/REQ | What was done | What remains | Status |
 |-------------|--------------|--------------|--------|
-| REQ-202603-003 Thirukkural | Component live with fallback | Verify GitHub raw fetch works on Vercel (CORS) — test from live URL in incognito | Needs verification |
-| Mobile responsiveness | Not yet audited | Test all pages at 375px (iPhone SE), 768px (tablet) | Deferred until visual feedback done |
+| REQ-202603-003 Thirukkural | Full chapter lookup, watermarks, 3-line fix | Verify GitHub raw fetch works on Vercel (CORS) — test from live URL in incognito | Needs verification |
+| Mobile responsiveness | Not yet audited | Test all pages at 375px (iPhone SE), 768px (tablet) | Deferred — active feedback cycle in progress |
+| Events detail pages | /events listing exists | Create /events/[slug] individual event pages | Not started |
 
 ---
 

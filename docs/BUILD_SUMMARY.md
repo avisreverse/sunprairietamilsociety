@@ -6,14 +6,14 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 2 — Design D (Warm Cultural) complete. All sections, programs routing, inner pages, font system live on Vercel.
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Awaiting user feedback on Design D before next visual iteration.
-**Last Updated:** 2026-03-07
+**Phase:** Phase 2 — Design D complete + UX polish iteration. All pages live, individual detail pages for achievements and board members, Thirukkural fully working with chapter names, page transitions smooth.
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. User actively reviewing and providing feedback.
+**Last Updated:** 2026-03-08
 **Release Branch:** `release` — Vercel watches this branch (NOT main). Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
 **Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel
 
-### What's Done
+### What's Done (updated 2026-03-08)
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
@@ -34,20 +34,28 @@ Track session-by-session progress. Always read this at session start.
 - [x] **Program detail pages** — /programs/[slug] for all 5 programs
 - [x] **Events list** — /events page with color-coded date cards
 - [x] **Board details** — /board page with full bios + contact emails
-- [x] **Submit Achievement** — /achievements/submit form with photo upload placeholder
+- [x] **Submit Achievement** — /achievements/submit with functional photo upload (local preview)
 - [x] **Join page** — /join with membership form + ways to get involved
 - [x] **All broken links fixed** — no more href="#" anywhere
-- [x] **Build passes** — 26 routes, clean TypeScript
+- [x] **Achievement detail pages** — /achievements/[id] individual detail pages (6 achievements)
+- [x] **Board member detail pages** — /board/[slug] individual pages (4 members)
+- [x] **/board grid** — responsive auto-fill grid, each card links to individual page
+- [x] **Admin page** — /admin placeholder with section cards + "how to edit content" guide
+- [x] **Page transitions** — smooth fade+slide-up on every navigation (keyed motion.div)
+- [x] **Thirukkural chapter names** — full 133-chapter Tamil lookup table; Book + chapter watermark left side
+- [x] **Thirukkural 3-line fix** — Line1/Line2 rendered as separate divs, no wrapping artifacts
+- [x] **Board headshot upload** — correctly admin-only (removed from public page, will be in Admin CMS)
+- [x] **Build passes** — 12 routes, clean TypeScript
 
 ### What's Pending (Next Session)
-- [ ] User feedback on Design D — visual review pending
-- [ ] Admin CMS (REQ-202603-004) — Supabase schema + admin portal
-- [ ] Database initial schema migrations (001–005)
-- [ ] Real content — photos, board names, real event dates (user to supply)
-- [ ] Auth pages (login, signup) — needed for achievements submit, admin
-- [ ] Sentry integration
+- [ ] Admin CMS (REQ-202603-004) — Supabase schema + admin portal (top priority)
+- [ ] Photo upload persistence — currently local preview only; needs Supabase Storage + admin auth
+- [ ] Events detail pages — /events/[slug] individual event pages
 - [ ] Mobile responsiveness audit (375px breakpoints not yet tested)
-- [ ] Thirukkural GitHub fetch may be blocked by CORS on some networks — needs monitoring
+- [ ] Real content — photos, board headshots, real event dates (user to supply)
+- [ ] Auth pages (login, signup) — needed for admin CMS, achievement submit backend
+- [ ] Sentry integration
+- [ ] Thirukkural GitHub fetch CORS verification on Vercel network
 
 ### Open Defects
 None.
@@ -61,6 +69,40 @@ None.
 ---
 
 ## Session Log
+
+### Session 9 — 2026-03-08
+
+**Focus:** UX polish — individual detail pages, page transitions, Thirukkural chapter names, photo upload, admin security
+
+**Completed:**
+- DEF fix: /programs page crash — missing `"use client"` on Server Component with mouse handlers
+- DEF fix: Page transitions — removed AnimatePresence (wrong for App Router shared layouts); replaced with keyed motion.div enter-only (smooth fade+slide, 0.38s)
+- REQ-202603-001: Achievement cards now link to `/achievements/[id]` detail pages (not submit form)
+- REQ-202603-001: Created `/achievements/[id]/page.tsx` — individual achievement detail with bio, highlight callout, submit CTA
+- REQ-202603-001: Board member cards (homepage + /board grid) now link to `/board/[slug]` individual pages
+- REQ-202603-001: Created `/board/[slug]/page.tsx` — individual board member detail (bio, responsibilities, contact sidebar)
+- REQ-202603-001: `/board` page redesigned as responsive auto-fill grid (adjusts as members are added)
+- REQ-202603-003: Thirukkural — full 133-chapter Tamil name lookup table (derived from kural number, no missing JSON fields)
+- REQ-202603-003: Thirukkural left watermark — bigger (1.6rem Tamil), book + chapter names both shown; chapter also displayed in subtitle below verse number
+- REQ-202603-003: Thirukkural 3-line bug fixed — Line1/Line2 rendered as separate divs; no pre-line wrap artifacts
+- REQ-202603-005: Achievement submit form — functional photo upload with local preview (thumbnail, change button, file picker)
+- Security: Removed headshot upload from public board member page — admin-only, to be added to Admin CMS panel
+- Admin link added to Nav (subtle, desktop-only, gold hover)
+- All 12 routes build clean — `be52191` → both `main` and `release`
+
+**Deferred:**
+- Mobile responsiveness — deferred until user clears feedback queue
+- Thirukkural CORS on Vercel — needs monitoring from live URL
+- Admin CMS (REQ-202603-004) — awaiting user confirmation to start
+
+**New Defects Found:**
+- DEF-202603-002: Page transition using AnimatePresence caused flash in App Router shared layout — fixed immediately (see fix above)
+
+**Deployment:**
+- `release` branch → Vercel — https://sunprairietamilsociety.vercel.app/en
+- Commits: `96ab1a0`, `0dcf538`, `be52191`
+
+---
 
 ### Session 8 — 2026-03-07
 
