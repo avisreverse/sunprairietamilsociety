@@ -71,6 +71,13 @@ Track session-by-session progress. Always read this at session start.
 - DEF-202603-007: Featured event not clickable on public site (P2)
 - DEF-202603-008: RSVP page not built (P2)
 - DEF-202603-009: Achievement category not extensible (P3)
+- DEF-202603-010: Programs bento grid hardcoded for 5 items (P2)
+- DEF-202603-011: "Five ways to belong" heading hardcoded (P3)
+- DEF-202603-012: Admin allows multiple featured events — public shows only first (P2)
+- DEF-202603-013: /en/events listing page uses hardcoded 2025 data (P1)
+- DEF-202603-014: Achievement detail pages use hardcoded array — DB UUID → 404 (P1)
+- DEF-202603-015: Photo upload fails — Supabase Storage media bucket not created (P1)
+<!-- 13 open defects: DEF-202603-003 through 015 -->
 
 ### Active Requirements
 - REQ-202603-001: in_progress — Design D live, DB-driven. 7 UX defects to fix next session.
@@ -83,6 +90,36 @@ Track session-by-session progress. Always read this at session start.
 ---
 
 ## Session Log
+
+### Session 11 — 2026-03-08
+
+**Focus:** UX defect fixes (DEF-202603-003 through 007) — board grid, photo upload fields, featured event click, add program form
+
+**Completed:**
+- DEF-202603-003: Board grid tile alignment — orphaned last card fix applied
+- DEF-202603-004: Admin board members — photo upload field added
+- DEF-202603-005: Admin programs — Add New Program form added
+- DEF-202603-006: Admin achievements — photo upload field added
+- DEF-202603-007: Public featured event card — made clickable with link to /events/[slug]
+
+**New Defects Found:**
+- DEF-202603-010: Programs bento grid hardcoded for 5 items — breaks with 6+, P2
+- DEF-202603-011: "Five ways to belong" heading hardcoded — ignores actual count, P3
+- DEF-202603-012: Admin allows multiple featured events — public shows only first, P2
+- DEF-202603-013: /en/events listing page uses hardcoded 2025 data — not DB-driven, P1
+- DEF-202603-014: Achievement detail pages use hardcoded array — DB UUID → 404, P1
+- DEF-202603-015: Photo upload fails — Supabase Storage media bucket not created, P1
+
+**Deferred:**
+- Supabase Storage bucket migration — user must manually run `database/migrations/002_create_media_storage.up.sql` in Supabase SQL editor (https://supabase.com/dashboard/project/gzdndcytxpmhjuxwnsxv/sql) before photo uploads will work
+- Playwright E2E testing setup — user requested automated testing to replace manual testing; deferred to next session
+- /en/events DB wire-up (DEF-202603-013)
+- /achievements/[id] DB wire-up (DEF-202603-014)
+
+**Deployment:**
+- Pushed to `main` and `release` branches → Vercel production
+
+---
 
 ### Session 10 — 2026-03-09
 

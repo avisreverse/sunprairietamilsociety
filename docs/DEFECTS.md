@@ -28,6 +28,12 @@ All bugs and defects tracked here with `DEF-YYYYMM-NNN` IDs.
 | DEF-202603-007 | P2 | open | Public featured event card not clickable | REQ-202603-001 | Session 10 |
 | DEF-202603-008 | P2 | open | RSVP page not built — DB table exists, no public form | REQ-202603-007 | Session 10 |
 | DEF-202603-009 | P3 | open | Achievement category — no option to add custom categories | REQ-202603-005 | Session 10 |
+| DEF-202603-010 | P2 | open | Programs bento grid hardcoded for 5 items — breaks with 6+ | REQ-202603-002 | Session 11 |
+| DEF-202603-011 | P3 | open | "Five ways to belong" heading hardcoded — ignores actual count | REQ-202603-002 | Session 11 |
+| DEF-202603-012 | P2 | open | Admin allows multiple featured events — public shows only first | REQ-202603-001 | Session 11 |
+| DEF-202603-013 | P1 | open | /en/events listing page uses hardcoded 2025 data — not DB-driven | REQ-202603-001 | Session 11 |
+| DEF-202603-014 | P1 | open | Achievement detail pages use hardcoded array — DB UUID → 404 | REQ-202603-005 | Session 11 |
+| DEF-202603-015 | P1 | open | Photo upload fails — Supabase Storage media bucket not created | REQ-202603-005 | Session 11 |
 
 ---
 
@@ -137,6 +143,107 @@ Achievement categories are a hardcoded list in the submit form. There is no admi
 
 ### Expected Behavior
 Admin CMS should include a category management section, or the achievement submit form should allow free-form category input.
+
+---
+
+## DEF-202603-010: Programs Bento Grid Hardcoded for 5 Items
+**Severity:** P2
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-002
+**Found In:** Session 11
+
+### Description
+MullaiPrograms.tsx bento grid layout is hardcoded for exactly 5 programs (1 featured large card + 4 regular). When a 6th program is added via admin, it renders as a standalone card below the grid, breaking the visual layout.
+
+### Root Cause
+The bento grid uses a fixed CSS grid layout optimized for the original 5 seeded programs. No dynamic layout logic exists for varying program counts.
+
+### Expected Behavior
+Bento grid should adapt to any number of programs — either a flexible grid layout or a warning in admin that max N programs are displayed at once.
+
+---
+
+## DEF-202603-011: "Five Ways to Belong" Heading Hardcoded
+**Severity:** P3
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-002
+**Found In:** Session 11
+
+### Description
+The programs section heading "Five ways to belong" is hardcoded text at line 61 of MullaiPrograms.tsx. When the program count changes (e.g., 6 programs), the heading still says "Five" which is incorrect.
+
+### Expected Behavior
+Heading should either be dynamic ("N ways to belong") or generic ("Ways to belong") to remain accurate regardless of program count.
+
+---
+
+## DEF-202603-012: Admin Allows Multiple Featured Events — Public Shows Only First
+**Severity:** P2
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-001
+**Found In:** Session 11
+
+### Description
+Admin events page allows multiple events to be marked "Featured" simultaneously (TGest and Tamil New Year both show FEATURED badge). However, the public landing page uses `events.find(e => e.featured)` which returns only the first featured event. The second featured event is not visually distinguished.
+
+### Expected Behavior
+Either: (a) Admin enforces only one featured event at a time (un-featuring the previous when a new one is featured), OR (b) a clear admin note explains that only the earliest-date featured event appears as the hero card.
+
+---
+
+## DEF-202603-013: /en/events Listing Page Uses Hardcoded 2025 Data
+**Severity:** P1
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-001
+**Found In:** Session 11
+
+### Description
+The events listing page at `/en/events` has a hardcoded EVENTS array with 2025 dates. It is not connected to the Supabase events table. Admin-added events (2026 dates) do not appear on this page. The page was created in an earlier session with `"Static for now"` comment.
+
+### Expected Behavior
+`/en/events` should fetch from Supabase and display all published events, matching the admin's data.
+
+---
+
+## DEF-202603-014: Achievement Detail Pages Use Hardcoded Array — DB UUID → 404
+**Severity:** P1
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-005
+**Found In:** Session 11
+
+### Description
+Achievement cards on the landing page link to `/achievements/[UUID]` (DB UUID). The achievement detail page `/achievements/[id]/page.tsx` has a hardcoded ACHIEVEMENTS array indexed by number. A UUID resolves to `array[NaN]` → undefined → `notFound()` → 404.
+
+### Root Cause
+`/achievements/[id]/page.tsx` was built with a hardcoded array in an earlier session before DB was wired. Not updated to fetch from Supabase.
+
+### Expected Behavior
+`/achievements/[id]/page.tsx` should fetch achievement by UUID from Supabase and display real data.
+
+---
+
+## DEF-202603-015: Photo Upload Fails — Supabase Storage Media Bucket Not Created
+**Severity:** P1
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-005
+**Found In:** Session 11
+
+### Description
+Photo upload in admin board members and admin achievements pages fails with a storage error. The Supabase Storage `media` bucket was defined in migration `002_create_media_storage.up.sql` but the SQL has not yet been run in the Supabase dashboard.
+
+### Steps to Fix
+1. Go to: https://supabase.com/dashboard/project/gzdndcytxpmhjuxwnsxv/sql
+2. Paste and run the contents of `database/migrations/002_create_media_storage.up.sql`
+3. Verify bucket appears in Storage dashboard
+
+### Regression Tests Added
+- TC-DEF-202603-015: Upload a photo in admin board edit form → verify image appears, photo_url saved to DB.
 
 ---
 
