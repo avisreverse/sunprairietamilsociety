@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
@@ -14,6 +15,16 @@ import { usePathname } from "next/navigation";
  */
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+
+  // Disable browser scroll restoration so every page load/refresh starts at top.
+  // Without this, the browser restores the previous scroll position on refresh,
+  // which drops the user mid-page after navigating to an anchor section.
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo(0, 0);
+    }
+  }, [pathname]);
 
   return (
     <motion.div
