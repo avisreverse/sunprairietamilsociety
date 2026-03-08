@@ -90,7 +90,7 @@ export default function JoinPage() {
                 Get in touch
               </h2>
               <p style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", fontWeight: 300, color: "#8A7060", lineHeight: 1.6, marginBottom: "2rem" }}>
-                Tell us how you'd like to connect and we'll reach out.
+                Tell us how you&apos;d like to connect and we&apos;ll reach out.
               </p>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>

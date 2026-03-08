@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
@@ -61,14 +62,14 @@ export default function NeytalAchievements({ achievements }: Props) {
                 Community Achievements
               </h2>
             </div>
-            <a
+            <Link
               href="/achievements/submit"
               style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", color: "rgba(255,255,255,0.35)", textDecoration: "none" }}
               onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#D4930A")}
               onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.35)")}
             >
               Submit achievement →
-            </a>
+            </Link>
           </div>
         </ScrollReveal>
 

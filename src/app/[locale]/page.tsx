@@ -105,7 +105,7 @@ export default async function HomePage() {
       {/* Board / About — parchment, join CTA */}
       <PalaiBoard board={board} />
 
-      <Footer />
+      <Footer foundingYear={heroContent.year} />
 
     </>
   );

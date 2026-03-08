@@ -71,7 +71,8 @@ export default function AdminProgramsPage() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
+  useEffect(() => { void load(); }, []); // load is stable (useCallback with no deps)
 
   const openEdit = (p: Program) => {
     setEditing(p);

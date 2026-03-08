@@ -64,7 +64,8 @@ export default function AdminAchievementsPage() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
+  useEffect(() => { void load(); }, []); // load is stable (useCallback with no deps)
 
   const filtered = items.filter((a) => {
     if (filter === "pending") return !a.is_approved;

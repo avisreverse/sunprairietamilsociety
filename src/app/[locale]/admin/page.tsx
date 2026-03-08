@@ -45,10 +45,10 @@ export default function AdminDashboard() {
 
         setStats({
           events: Array.isArray(events) ? events.length : 0,
-          achievements: Array.isArray(achievements) ? achievements.filter((a: any) => a.is_published).length : 0,
-          pendingAchievements: Array.isArray(achievements) ? achievements.filter((a: any) => !a.is_approved).length : 0,
-          board: Array.isArray(board) ? board.filter((b: any) => b.is_active).length : 0,
-          programs: Array.isArray(programs) ? programs.filter((p: any) => p.is_active).length : 0,
+          achievements: Array.isArray(achievements) ? achievements.filter((a: Record<string, unknown>) => a.is_published).length : 0,
+          pendingAchievements: Array.isArray(achievements) ? achievements.filter((a: Record<string, unknown>) => !a.is_approved).length : 0,
+          board: Array.isArray(board) ? board.filter((b: Record<string, unknown>) => b.is_active).length : 0,
+          programs: Array.isArray(programs) ? programs.filter((p: Record<string, unknown>) => p.is_active).length : 0,
           announcements: Array.isArray(announcements) ? announcements.length : 0,
         });
       } catch (err) {

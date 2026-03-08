@@ -59,7 +59,8 @@ export default function AdminAnnouncementsPage() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
+  useEffect(() => { void load(); }, []); // load is stable (useCallback with no deps)
 
   const openAdd = () => { setEditing(null); setForm(EMPTY); setShowForm(true); setError(null); };
   const openEdit = (a: Announcement) => {

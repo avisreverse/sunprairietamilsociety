@@ -4,9 +4,12 @@ import Link from "next/link";
 /**
  * Site footer — dark (#080808), Tamil brand in gold, English below, nav columns.
  * Bottom strip: copyright left, Purananuru quote right in gold Tamil.
+ * Accepts optional foundingYear prop (from site_settings via page.tsx server fetch).
+ * Falls back to "2012" if not provided.
  * @see REQ-202603-001 — Landing page
+ * @see REQ-202603-010 — Admin-editable home page content
  */
-export default function Footer() {
+export default function Footer({ foundingYear = "2012" }: { foundingYear?: string }) {
   const t = useTranslations("footer");
 
   return (
@@ -65,7 +68,8 @@ export default function Footer() {
                 maxWidth: "280px",
               }}
             >
-              {t("desc")}
+              {/* foundingYear is fetched from site_settings so admin changes reflect here */}
+              Tamil culture, alive in Wisconsin since {foundingYear}. A volunteer-run community of families.
             </p>
           </div>
 

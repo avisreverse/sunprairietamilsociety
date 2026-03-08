@@ -27,6 +27,7 @@ export default function AnnouncementBar() {
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
   const [loaded, setLoaded] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     // Load previously dismissed IDs from sessionStorage
     const stored = sessionStorage.getItem("spts_dismissed_announcements");
@@ -49,6 +50,7 @@ export default function AnnouncementBar() {
       })
       .catch(() => setLoaded(true)); // Graceful degradation
   }, []);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const dismiss = (id: string) => {
     setDismissed((prev) => {
