@@ -52,36 +52,25 @@ export default function Nav() {
     </span>
   );
 
+  // All ticker items link to the internal /announcements/[id] detail page
+  // which shows the poster, full write-up, and the external action URL as a button.
   const renderItems = (keySuffix: string) =>
     announcements.map((item, i) => (
       <span key={`${item.id}-${keySuffix}-${i}`} style={{ display: "inline-flex", alignItems: "center" }}>
-        {item.action_url ? (
-          <a
-            href={item.action_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "rgba(255,255,255,0.88)", textDecoration: "none", cursor: "pointer", transition: "color 0.15s" }}
-            onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#D4930A")}
-            onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.88)")}
-          >
-            {item.title}
-            {item.body && (
-              <span style={{ color: "rgba(255,255,255,0.5)", fontWeight: 300 }}>
-                {" — "}{item.body.length > 80 ? item.body.slice(0, 80) + "…" : item.body}
-              </span>
-            )}
-            <span style={{ color: "#D4930A", marginLeft: "0.3rem" }}>→</span>
-          </a>
-        ) : (
-          <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "rgba(255,255,255,0.88)" }}>
-            {item.title}
-            {item.body && (
-              <span style={{ color: "rgba(255,255,255,0.5)", fontWeight: 300 }}>
-                {" — "}{item.body.length > 80 ? item.body.slice(0, 80) + "…" : item.body}
-              </span>
-            )}
-          </span>
-        )}
+        <a
+          href={`/announcements/${item.id}`}
+          style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "rgba(255,255,255,0.88)", textDecoration: "none", cursor: "pointer", transition: "color 0.15s" }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#D4930A")}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.88)")}
+        >
+          {item.title}
+          {item.body && (
+            <span style={{ color: "rgba(255,255,255,0.5)", fontWeight: 300 }}>
+              {" — "}{item.body.length > 80 ? item.body.slice(0, 80) + "…" : item.body}
+            </span>
+          )}
+          <span style={{ color: "#D4930A", marginLeft: "0.3rem" }}>→</span>
+        </a>
         {sep}
       </span>
     ));
