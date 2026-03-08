@@ -84,8 +84,9 @@ export default async function EventsPage() {
                 const { month, day, year } = parseDateDisplay(event.date);
                 const accentColor = MONTH_COLORS[month] ?? "#8B1A1A";
                 return (
-                  <div
+                  <Link
                     key={event.id}
+                    href={`/events/${event.id}`}
                     style={{
                       background: "white",
                       borderRadius: "16px",
@@ -97,6 +98,9 @@ export default async function EventsPage() {
                       alignItems: "center",
                       boxShadow: "0 4px 24px rgba(26,20,16,0.07)",
                       animation: `fadeIn 0.3s ease ${i * 0.06}s both`,
+                      textDecoration: "none",
+                      cursor: "pointer",
+                      transition: "box-shadow 0.2s, transform 0.2s",
                     }}
                   >
                     {/* Date card */}
@@ -122,21 +126,22 @@ export default async function EventsPage() {
                       )}
                     </div>
 
-                    {/* Action */}
+                    {/* Action — RSVP stops card-link propagation; Details → is card click */}
                     {event.rsvp_url ? (
                       <a
                         href={event.rsvp_url}
                         target="_blank" rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
                         style={{ padding: "0.65rem 1.4rem", borderRadius: "999px", background: accentColor, color: "white", fontFamily: "var(--font-body)", fontSize: "0.78rem", fontWeight: 500, textDecoration: "none", whiteSpace: "nowrap" }}
                       >
                         RSVP →
                       </a>
                     ) : (
                       <div style={{ padding: "0.65rem 1.2rem", borderRadius: "999px", border: "1px solid rgba(26,20,16,0.1)", fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "rgba(26,20,16,0.4)", whiteSpace: "nowrap" }}>
-                        Details TBA
+                        Details →
                       </div>
                     )}
-                  </div>
+                  </Link>
                 );
               })}
             </div>

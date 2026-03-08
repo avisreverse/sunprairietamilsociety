@@ -93,12 +93,12 @@ export default function MarutamEvents({ events }: Props) {
           const { month, day } = parseDateParts(featured.date);
           return (
             <ScrollReveal delay={0.1}>
-              {/* DEF-202603-007: Card is clickable — navigates to /events. RSVP button stops propagation. */}
+              {/* DEF-202603-007: Card is clickable — navigates to /events/[id] detail page. RSVP button stops propagation. */}
               <motion.div
                 style={{ boxShadow: "0 8px 40px rgba(26,20,16,0.12)", borderRadius: "18px", cursor: "pointer" }}
                 whileHover={{ y: -5, boxShadow: "0 20px 64px rgba(26,20,16,0.20)" }}
                 transition={SPRING}
-                onClick={() => router.push("/events")}
+                onClick={() => router.push(`/events/${featured.id}`)}
               >
                 <div style={{ background: "#1A1410", borderRadius: "18px", padding: "2.5rem", marginBottom: "1rem", display: "grid", gridTemplateColumns: "110px 1fr auto", gap: "2rem", alignItems: "center" }}>
                   <div style={{ background: "#7A1515", borderRadius: "12px", padding: "1rem", textAlign: "center" }}>
@@ -161,7 +161,7 @@ export default function MarutamEvents({ events }: Props) {
                     </a>
                   ) : (
                     <Link
-                      href="/events"
+                      href={`/events/${event.id}`}
                       style={{ padding: "0.55rem 1.3rem", borderRadius: "999px", border: "1px solid rgba(26,20,16,0.12)", fontFamily: "var(--font-body)", fontSize: "0.76rem", color: "rgba(26,20,16,0.5)", textDecoration: "none", whiteSpace: "nowrap" }}
                       onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(26,20,16,0.3)"; el.style.color = "#1A1410"; }}
                       onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(26,20,16,0.12)"; el.style.color = "rgba(26,20,16,0.5)"; }}
