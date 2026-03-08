@@ -17,8 +17,8 @@ Items land here when:
 |----|------|---------|------------|-------|
 | PL-002 | Real content from user | Photos (event, board headshots), real board names/bios, real event dates, real org stats | User to supply when ready | 2026-03-07 |
 | PL-004 | Admin auth — share spts-clean Supabase (D-017) | Decision made: Option A — point community site to spts-clean's Supabase project. Add `community_admin` role to existing school admins' `user_roles`. Reuse spts-clean auth pattern (email+password, requireAdminAuth). Implement AFTER rest of site is complete. | Implement when site is feature-complete | 2026-03-09 |
-| PL-007 | ⚠️ Run Migration 004 in Supabase | Adds `website_url` and `website_url_visible` columns to programs table. REQ-202603-008. File: `database/migrations/004_add_program_website_url.up.sql` | User must run SQL in Supabase dashboard before testing program website URL feature | 2026-03-08 |
-| PL-008 | ⚠️ Run Migration 005 in Supabase | Creates `announcements` table with RLS, trigger, and indexes. REQ-202603-009. File: `database/migrations/005_create_announcements.up.sql` | User must run SQL in Supabase dashboard before testing announcement ticker feature | 2026-03-08 |
+<!-- PL-007 resolved: Migration 004 confirmed run 2026-03-09 -->
+<!-- PL-008 resolved: Migration 005 confirmed run 2026-03-09 -->
 
 ---
 
@@ -30,8 +30,8 @@ Items land here when:
 | Mobile responsiveness | Not yet audited | Test all pages at 375px (iPhone SE), 768px (tablet) | Deferred — active feedback cycle in progress |
 | Events detail pages | /events listing exists + DB-driven | Create /events/[slug] individual event pages | Not started |
 | Playwright E2E testing | User requested automated testing to replace manual testing | Set up Playwright test suite for all user flows (programs, events, achievements, board, admin) | Next session priority |
-| REQ-202603-008 Program website URL | Migration 004 created + admin form + public page | User must run Migration 004 in Supabase before feature is active | Pending migration |
-| REQ-202603-009 Announcement ticker | Migration 005 created + admin CRUD + ticker in Nav + detail page | User must run Migration 005 in Supabase before feature is active | Pending migration |
+| REQ-202603-008 Program website URL | Migration 004 run, admin form + public page live, verified | Feature complete and live — no action needed | Done ✅ |
+| REQ-202603-009 Announcement ticker | Migration 005 run, admin CRUD + ticker in Nav + detail page, verified end-to-end | Feature complete and live — no action needed | Done ✅ |
 
 ---
 

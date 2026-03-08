@@ -28,8 +28,8 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 | REQ-202603-005 | P2 | in_progress | Achievement submit + detail pages | DEF-202603-017 fixed — photo_url now fetched and shown on landing page. /achievements/[id] DB-driven. Submit form functional with local photo preview. |
 | REQ-202603-006 | P2 | in_progress | Board management — individual pages + admin headshots | /board and /board/[slug] fully DB-driven. Photos on all 3 surfaces. Tamil role/responsibilities/since admin-editable. |
 | REQ-202603-007 | P2 | backlog | RSVP page — per-event RSVP form + tracking | Not started. rsvp_responses table exists. (DEF-202603-008) |
-| REQ-202603-008 | P2 | in_progress | Program website URL — optional admin-controlled external link | Migration 004 created. Admin form has URL + visibility checkbox. /programs/[slug] shows "Visit website →" in sidebar when visible=true. Pending: user run Migration 004 in Supabase. |
-| REQ-202603-009 | P2 | in_progress | External announcement board — ticker + detail pages | Migration 005 created. /admin/announcements CRUD with poster upload, expiry, publish toggle. AnnouncementTicker inside Nav. /announcements/[id] detail page. Pending: user run Migration 005 in Supabase. |
+| REQ-202603-008 | P2 | in_progress | Program website URL — optional admin-controlled external link | Migration 004 run (confirmed). Admin form has URL + visibility checkbox. /programs/[slug] shows "Visit website →" in sidebar when visible=true. Verified live. |
+| REQ-202603-009 | P2 | in_progress | External announcement board — ticker + detail pages | Migration 005 run (confirmed). /admin/announcements CRUD with poster upload, expiry, publish toggle. AnnouncementTicker inside Nav. /announcements/[id] detail page. Verified end-to-end by user. |
 
 ---
 

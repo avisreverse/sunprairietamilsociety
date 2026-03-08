@@ -6,8 +6,8 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 3 — All public pages fully DB-driven. REQ-202603-008 (program website URL) and REQ-202603-009 (external announcements board) added. Achievement photos fixed. 3 legacy open defects remain (P2/P3). 2 SQL migrations (004, 005) pending user execution in Supabase.
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Announcement ticker live in Nav. Programs now have optional website URL field. /announcements/[id] detail pages live.
+**Phase:** Phase 3 — All public pages fully DB-driven. REQ-202603-008 (program website URL) and REQ-202603-009 (external announcements board) live and verified. Achievement photos confirmed working. 3 legacy open defects remain (P2/P3). Migrations 004 and 005 confirmed run.
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Announcement ticker live and verified. Programs have optional website URL. /announcements/[id] detail pages live.
 **Last Updated:** 2026-03-09
 **Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
@@ -62,9 +62,6 @@ Track session-by-session progress. Always read this at session start.
 - [x] **Inner pages paddingTop** — updated 8 pages from 7rem → 8.5rem to clear Nav + ticker combined height
 
 ### What's Pending (Next Session)
-- [ ] **⚠️ Run Migration 004**: `database/migrations/004_add_program_website_url.up.sql` — adds website_url + website_url_visible to programs
-- [ ] **⚠️ Run Migration 005**: `database/migrations/005_create_announcements.up.sql` — creates announcements table + RLS
-- [ ] **User verification**: achievement photos, program website URL, announcement ticker end-to-end
 - [ ] **DEF-202603-003**: /board page grid tile alignment (P3)
 - [ ] **DEF-202603-008**: RSVP page — /events/[id]/rsvp public form (REQ-202603-007)
 - [ ] **DEF-202603-009**: Achievement category — fixed list, no custom category add (P3)
@@ -89,12 +86,37 @@ Track session-by-session progress. Always read this at session start.
 - REQ-202603-004: in_progress — Admin CMS complete. Announcements admin added.
 - REQ-202603-005: in_progress — Achievement photos fixed on landing page. DEF-202603-017 closed.
 - REQ-202603-006: in_progress — Board fully DB-driven. Photos on all 3 surfaces.
-- REQ-202603-008: in_progress — Program website URL. Migration 004 pending Supabase run.
-- REQ-202603-009: in_progress — Announcements board. Migration 005 pending Supabase run.
+- REQ-202603-008: in_progress — Program website URL live. Migration 004 confirmed run. Verified by user.
+- REQ-202603-009: in_progress — Announcements board live. Migration 005 confirmed run. Ticker + detail page verified by user.
 
 ---
 
 ## Session Log
+
+### Session 14 — 2026-03-09
+
+**Focus:** Post-deploy verification + documentation close-out
+
+**Completed:**
+- Migration 004 (`004_add_program_website_url.up.sql`) — confirmed run by user in Supabase
+- Migration 005 (`005_create_announcements.up.sql`) — confirmed run by user in Supabase
+- Announcement ticker — verified end-to-end (create in admin → ticker scrolls → click → detail page)
+- Achievement photos — confirmed showing on landing page and detail pages
+- Deployment — confirmed pushed and live on Vercel
+
+**New Defects Found:**
+- None
+
+**Deferred / Remaining Open:**
+- DEF-202603-003, 008, 009 still open (P3, P2, P3)
+- Events detail pages /events/[slug] — not started
+- Playwright E2E testing — still pending
+- Mobile responsiveness audit — still pending
+
+**Deployment:**
+- Confirmed live at https://sunprairietamilsociety.vercel.app/en
+
+---
 
 ### Session 13 — 2026-03-09
 
