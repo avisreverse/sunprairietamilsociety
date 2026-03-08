@@ -16,7 +16,6 @@ Items land here when:
 | ID | Item | Context | Waiting for | Added |
 |----|------|---------|------------|-------|
 | PL-002 | Real content from user | Photos (event, board headshots), real board names/bios, real event dates, real org stats | User to supply when ready | 2026-03-07 |
-| PL-003 | Admin CMS priority | REQ-202603-004 — user actively using site and giving feedback. When to start Supabase schema + admin portal? | User to confirm priority | 2026-03-07 |
 | PL-004 | Admin auth — share spts-clean Supabase (D-017) | Decision made: Option A — point community site to spts-clean's Supabase project. Add `community_admin` role to existing school admins' `user_roles`. Reuse spts-clean auth pattern (email+password, requireAdminAuth). Implement AFTER rest of site is complete. | Implement when site is feature-complete | 2026-03-09 |
 
 ---
@@ -35,7 +34,13 @@ Items land here when:
 
 | DEF-### | Title | Severity | Why deferred | Added |
 |---------|-------|----------|-------------|-------|
-| — | — | — | — | — |
+| DEF-202603-003 | Board grid tile alignment — orphaned last card | P3 | Low priority — cosmetic; address in next UI polish session | 2026-03-08 |
+| DEF-202603-004 | Admin board — no photo upload | P2 | Needs Supabase Storage setup; deferred to next session | 2026-03-08 |
+| DEF-202603-005 | Admin programs — no Add New Program form | P2 | UI addition; deferred to next session | 2026-03-08 |
+| DEF-202603-006 | Admin achievements — no photo upload | P2 | Needs Supabase Storage setup; deferred to next session | 2026-03-08 |
+| DEF-202603-007 | Featured event card not clickable | P2 | Needs /events/[slug] detail pages first; deferred | 2026-03-08 |
+| DEF-202603-008 | RSVP page not built | P2 | REQ-202603-007 in backlog; deferred | 2026-03-08 |
+| DEF-202603-009 | Achievement category — no add custom categories | P3 | Low priority; deferred | 2026-03-08 |
 
 ---
 

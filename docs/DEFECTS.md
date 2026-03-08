@@ -21,7 +21,122 @@ All bugs and defects tracked here with `DEF-YYYYMM-NNN` IDs.
 
 | ID | Severity | Status | Title | Linked REQ | Found In |
 |----|----------|--------|-------|-----------|---------|
-| — | — | — | No open defects | — | — |
+| DEF-202603-003 | P3 | open | Board grid tile alignment — orphaned last card | REQ-202603-006 | Session 10 |
+| DEF-202603-004 | P2 | open | Admin board members — no photo upload field | REQ-202603-006 | Session 10 |
+| DEF-202603-005 | P2 | open | Admin programs — no Add New Program form | REQ-202603-002 | Session 10 |
+| DEF-202603-006 | P2 | open | Admin achievements — no photo upload field | REQ-202603-005 | Session 10 |
+| DEF-202603-007 | P2 | open | Public featured event card not clickable | REQ-202603-001 | Session 10 |
+| DEF-202603-008 | P2 | open | RSVP page not built — DB table exists, no public form | REQ-202603-007 | Session 10 |
+| DEF-202603-009 | P3 | open | Achievement category — no option to add custom categories | REQ-202603-005 | Session 10 |
+
+---
+
+## DEF-202603-003: Board Grid Tile Alignment — Orphaned Last Card
+**Severity:** P3
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-006
+**Found In:** Session 10
+
+### Description
+With 7 board member cards in the grid, the last card is orphaned (left-aligned alone on the final row). The layout does not center or fill the pattern when the count doesn't divide evenly.
+
+### Expected Behavior
+Board cards should follow a centered or intentional pattern (e.g., last row centered, or dynamic column count that avoids orphaned cards).
+
+### Steps to Reproduce
+1. Go to `/en/board`
+2. Observe the 7 cards — 6 fill two rows of 3, the 7th sits alone left-aligned on row 3.
+
+---
+
+## DEF-202603-004: Admin Board Members — No Photo Upload Field
+**Severity:** P2
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-006
+**Found In:** Session 10
+
+### Description
+The admin board members form (Add/Edit) has no photo upload input. Board member headshots cannot be uploaded to Supabase Storage from the admin portal.
+
+### Expected Behavior
+Admin form should include a photo upload field that stores the image in Supabase Storage and saves the URL to the `board_members` table.
+
+---
+
+## DEF-202603-005: Admin Programs — No Add New Program Form
+**Severity:** P2
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-002
+**Found In:** Session 10
+
+### Description
+The admin programs page only allows editing existing seeded programs. There is no UI to add a new program (the page text says "add new ones via the form below" but no such form exists).
+
+### Expected Behavior
+An "Add New Program" button and form should appear on the admin programs page, allowing creation of new programs with slug, name_en, name_ta, description, color, display_order, featured, and is_active fields.
+
+---
+
+## DEF-202603-006: Admin Achievements — No Photo Upload Field
+**Severity:** P2
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-005
+**Found In:** Session 10
+
+### Description
+The achievement submit form (`/achievements/submit`) has a local photo preview (client-side only) but no Supabase Storage upload. Submitted achievements have no photo stored.
+
+### Expected Behavior
+Photo selection should upload to Supabase Storage and store the URL in the `achievements` table. Admin achievement edit should also support photo upload.
+
+---
+
+## DEF-202603-007: Public Featured Event Card Not Clickable
+**Severity:** P2
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-001
+**Found In:** Session 10
+
+### Description
+On the public landing page (MarutamEvents section), the featured (large) event card is not wrapped in a link and cannot be clicked. Clicking on it does nothing.
+
+### Expected Behavior
+Featured event card should navigate to the individual event detail page (`/events/[slug]`) when clicked.
+
+---
+
+## DEF-202603-008: RSVP Page Not Built
+**Severity:** P2
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-007
+**Found In:** Session 10
+
+### Description
+The `rsvp_responses` DB table exists and admin can set `rsvp_url` per event, but there is no public RSVP form page. Users cannot RSVP to events through the site.
+
+### Expected Behavior
+A public RSVP form at `/events/[id]/rsvp` or triggered by a button on event detail pages, allowing users to submit their name, email, and headcount. Responses stored in `rsvp_responses` table.
+
+---
+
+## DEF-202603-009: Achievement Category — No Option to Add Custom Categories
+**Severity:** P3
+**Status:** open
+**Created:** 2026-03-08
+**Linked Requirement:** REQ-202603-005
+**Found In:** Session 10
+
+### Description
+Achievement categories are a hardcoded list in the submit form. There is no admin UI to add new categories.
+
+### Expected Behavior
+Admin CMS should include a category management section, or the achievement submit form should allow free-form category input.
 
 ---
 
@@ -63,6 +178,61 @@ All bugs and defects tracked here with `DEF-YYYYMM-NNN` IDs.
 ---
 
 ## Fixed Defects
+
+## DEF-202603-011: Admin Cookie Auth Failure — API Routes Returning 401
+**Severity:** P1
+**Status:** fixed
+**Created:** 2026-03-08
+**Fixed:** 2026-03-08
+**Linked Requirement:** REQ-202603-004
+**Found In:** Session 10
+
+### Description
+Admin client pages (`fetch()` to `/api/admin/*`) silently received 401 responses. Admin pages showed empty content with no error. Supabase session cookies were not being forwarded correctly from client component `fetch()` calls to server-side API route handlers.
+
+### Root Cause
+`createServerClient` in API routes reads cookies from the incoming HTTP request. Client-side `fetch()` does send cookies for same-origin requests, but the session validation was failing due to token expiry or cookie parsing issues in serverless functions.
+
+### Fix Applied
+1. Created `src/lib/fetchAdmin.ts` — reads Supabase session token client-side and injects it as `Authorization: Bearer <token>` header on every admin API call.
+2. Created `src/lib/adminAuth.ts` — `verifyAdminAuth(request)` checks Bearer header first (token-based), falls back to cookie session. Uses service-role admin client to verify token validity.
+3. Updated all 9 admin API routes + all 5 admin client pages to use the new pattern.
+
+### Regression Tests Added
+- TC-DEF-202603-011: Log in as admin, navigate to all admin pages — verify each shows data (not blank).
+
+---
+
+## DEF-202603-010: next-intl Middleware Rewrote /api/* Routes Causing 404
+**Severity:** P1
+**Status:** fixed
+**Created:** 2026-03-08
+**Fixed:** 2026-03-08
+**Linked Requirement:** REQ-202603-004
+**Found In:** Session 10
+
+### Description
+All admin API routes (`/api/admin/*`) returned 404 after the Bearer token fix was applied. Pages showed "HTTP 404" error.
+
+### Root Cause
+`proxy.ts` runs `handleI18nRouting(request)` for all matched paths. next-intl v4 rewrites `/api/admin/programs` → `/en/api/admin/programs`, which does not exist in the App Router file structure. This caused every API call to return 404.
+
+### Fix Applied
+Added an early return in `src/proxy.ts` before the i18n routing call:
+```typescript
+if (pathname.startsWith("/api/")) {
+  return NextResponse.next();
+}
+```
+API routes are locale-agnostic and must bypass next-intl rewriting entirely.
+
+### Regression Tests Added
+- TC-DEF-202603-010: Call `GET /api/admin/programs` with valid Bearer token — verify 200 + JSON array response (not 404 HTML).
+
+### Notes
+This is a common gotcha with next-intl in App Router. The matcher in `proxy.ts` should ideally exclude `/api/*`, but adding an explicit early-return is more explicit and self-documenting.
+
+---
 
 ## DEF-202603-002: Page transition flash with AnimatePresence in App Router shared layout
 **Severity:** P2

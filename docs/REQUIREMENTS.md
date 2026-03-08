@@ -21,12 +21,13 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 
 | ID | Priority | Status | Title | Notes |
 |----|----------|--------|-------|-------|
-| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | All sections + all inner pages live. Individual achievement detail pages (/achievements/[id]) and board member pages (/board/[slug]). Page transitions smooth. Admin page at /admin. User actively reviewing. |
-| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | Bento grid live. All 5 /programs/[slug] detail pages live. /programs listing fixed (was crashing — missing "use client"). |
-| REQ-202603-003 | P1 | in_progress | Thirukkural rotation — standalone section | Live with full 133-chapter lookup. Book + chapter name watermarks working. 3-line wrapping bug fixed. CORS on Vercel still needs real-world verification. |
-| REQ-202603-004 | P1 | backlog | Admin CMS — full landing page customizable | Placeholder at /admin. Supabase tables + admin portal needed. Photo uploads to Supabase Storage (admin-only). Board headshots currently initials until admin CMS ships. |
-| REQ-202603-005 | P2 | in_progress | Achievement submit + detail pages | /achievements/submit has functional local photo preview. /achievements/[id] detail pages live. Supabase Storage integration pending REQ-202603-004. |
-| REQ-202603-006 | P2 | in_progress | Board management — individual pages + admin headshots | /board grid page + /board/[slug] individual pages live. Headshot upload removed from public page — admin-only via CMS. |
+| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | All sections DB-driven. Individual detail pages live. 7 UX defects (DEF-202603-003 through 009) to fix next session. |
+| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | Bento grid DB-driven. All 5 /programs/[slug] detail pages live. Admin edit works. Add New Program form missing (DEF-202603-005). |
+| REQ-202603-003 | P1 | in_progress | Thirukkural rotation — standalone section | Live with full 133-chapter lookup. CORS on Vercel needs real-world verification. |
+| REQ-202603-004 | P1 | in_progress | Admin CMS — full landing page customizable | Admin portal live: login, dashboard, events, achievements, board, programs. Auth working (Bearer token). Photo uploads + Add Program form pending next session. |
+| REQ-202603-005 | P2 | in_progress | Achievement submit + detail pages | /achievements/submit has local photo preview. /achievements/[id] detail pages use hardcoded data — needs DB wire-up. Photo upload to Supabase Storage pending. |
+| REQ-202603-006 | P2 | in_progress | Board management — individual pages + admin headshots | /board grid + /board/[slug] live. Admin board edit works. Photo upload field missing (DEF-202603-004). |
+| REQ-202603-007 | P2 | backlog | RSVP page — per-event RSVP form + tracking | Not started. rsvp_responses table exists in DB. Admin can set rsvp_url per event. Public RSVP form at /events/[id]/rsvp or external link needed. (DEF-202603-008) |
 
 ---
 

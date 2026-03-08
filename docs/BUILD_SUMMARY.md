@@ -6,14 +6,15 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 2 — Design D complete + UX polish iteration. All pages live, individual detail pages for achievements and board members, Thirukkural fully working with chapter names, page transitions smooth.
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. User actively reviewing and providing feedback.
-**Last Updated:** 2026-03-08
-**Release Branch:** `release` — Vercel watches this branch (NOT main). Always push `git push origin main:release`.
+**Phase:** Phase 3 — Admin CMS live. DB-driven landing page. Auth fix deployed. 7 UX defects logged for next session.
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Admin portal functional (programs, events, board, achievements). Content loads from Supabase.
+**Last Updated:** 2026-03-09
+**Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
-**Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel
+**Admin URL:** https://sunprairietamilsociety.vercel.app/en/admin
+**Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel. DB tables created + seeded.
 
-### What's Done (updated 2026-03-08)
+### What's Done (updated 2026-03-09)
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
@@ -48,27 +49,87 @@ Track session-by-session progress. Always read this at session start.
 - [x] **Build passes** — 12 routes, clean TypeScript
 
 ### What's Pending (Next Session)
-- [ ] Admin CMS (REQ-202603-004) — Supabase schema + admin portal (top priority)
-- [ ] Photo upload persistence — currently local preview only; needs Supabase Storage + admin auth
+- [ ] **DEF-202603-003**: Board grid tile alignment — 7th card orphaned in second row, needs centered/patterned layout
+- [ ] **DEF-202603-004**: Admin — no photo upload for board members (headshots)
+- [ ] **DEF-202603-005**: Admin — no "Add New Program" form (only edit existing)
+- [ ] **DEF-202603-006**: Admin — no photo upload for achievements
+- [ ] **DEF-202603-007**: Public site — featured event card not clickable (no link/href)
+- [ ] **DEF-202603-008**: RSVP page not built yet — /rsvp or per-event RSVP form
+- [ ] **DEF-202603-009**: Admin — Achievement category fixed list, no option to add custom categories
+- [ ] Photo upload persistence — Supabase Storage integration (board + achievement photos)
 - [ ] Events detail pages — /events/[slug] individual event pages
 - [ ] Mobile responsiveness audit (375px breakpoints not yet tested)
 - [ ] Real content — photos, board headshots, real event dates (user to supply)
-- [ ] Auth pages (login, signup) — needed for admin CMS, achievement submit backend
 - [ ] Sentry integration
 - [ ] Thirukkural GitHub fetch CORS verification on Vercel network
 
 ### Open Defects
-None.
+- DEF-202603-003: Board grid tile alignment (P3)
+- DEF-202603-004: Admin — no board member photo upload (P2)
+- DEF-202603-005: Admin — no Add New Program form (P2)
+- DEF-202603-006: Admin — no achievement photo upload (P2)
+- DEF-202603-007: Featured event not clickable on public site (P2)
+- DEF-202603-008: RSVP page not built (P2)
+- DEF-202603-009: Achievement category not extensible (P3)
 
 ### Active Requirements
-- REQ-202603-001: in_progress — Design D applied, links fixed, pending user feedback
-- REQ-202603-002: in_progress — Programs bento + all 5 detail pages live
+- REQ-202603-001: in_progress — Design D live, DB-driven. 7 UX defects to fix next session.
+- REQ-202603-002: in_progress — Programs bento DB-driven. Admin edit works. Add new program missing.
 - REQ-202603-003: in_progress — ThirukkuralSection live, needs real-world fetch verification
-- REQ-202603-004: backlog — Admin CMS
+- REQ-202603-004: in_progress — Admin CMS live. Auth, events, board, achievements, programs all working. Photo uploads + add-program form pending.
+- REQ-202603-005: in_progress — Achievement submit form functional. Photo upload local preview only. Detail pages use hardcoded data (need DB wire-up).
+- REQ-202603-006: in_progress — Board pages live. Photo upload pending admin CMS photo feature.
 
 ---
 
 ## Session Log
+
+### Session 10 — 2026-03-09
+
+**Focus:** Admin CMS build (REQ-202603-004) — Supabase schema, admin portal, DB-driven landing page, auth debugging
+
+**Completed:**
+- REQ-202603-004: Supabase DB migration — 5 tables (events, achievements, board_members, programs, rsvp_responses) with RLS policies, indexes, triggers
+- REQ-202603-004: Seed data — 5 programs, 4 board members, 6 achievements, 3 events seeded in Supabase
+- REQ-202603-004: Admin auth guard in proxy.ts — protects `/[locale]/admin/*` (except login)
+- REQ-202603-004: Admin login page — `/en/admin/login` with email+password Supabase auth
+- REQ-202603-004: Admin dashboard — counts for all 4 sections
+- REQ-202603-004: Admin Events — list, add, edit, delete, toggle publish/featured, RSVP URL
+- REQ-202603-004: Admin Achievements — approve/reject, publish/hide, filter tabs (all/pending/approved)
+- REQ-202603-004: Admin Board Members — add, edit, delete, color picker, auto-initials/slug
+- REQ-202603-004: Admin Programs — edit description/color/Tamil name, toggle featured/active
+- REQ-202603-004: Admin RSVP API — `/api/admin/rsvp/[eventId]` list + delete RSVPs
+- REQ-202603-004: `src/lib/supabase/admin.ts` — service role client (server-side only)
+- REQ-202603-001/002/003/005/006: All landing page sections (MullaiPrograms, MarutamEvents, NeytalAchievements, PalaiBoard) now DB-driven via server component props
+- DEF fix: proxy.ts TS strict — added explicit type annotation for `setAll` cookie parameter
+- DEF fix: Vercel env vars missing — added NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+- DEF fix (DEF-202603-010): Admin API routes returning 404 — next-intl middleware was rewriting `/api/*` paths; fixed by adding early return for `/api/` in proxy.ts
+- DEF fix (DEF-202603-011): Admin pages empty — API auth using cookie-based session failed; fixed with `fetchAdmin()` Bearer token utility + `verifyAdminAuth()` in all API routes
+
+**Deferred:**
+- Photo uploads (board + achievement) — needs Supabase Storage setup, next session
+- Add New Program form — admin programs page only has edit, not add; next session
+- Inner pages (achievements/[id], board/[slug]) still use hardcoded data — needs DB wire-up
+- /events/[slug] detail pages — not started
+- Mobile responsiveness audit — deferred
+- Sentry integration — deferred
+
+**New Defects Found:**
+- DEF-202603-003: Board grid tile alignment — orphaned card on 2nd row, P3
+- DEF-202603-004: Admin board — no photo upload field, P2
+- DEF-202603-005: Admin programs — no Add New Program form, P2
+- DEF-202603-006: Admin achievements — no photo upload field, P2
+- DEF-202603-007: Featured event not clickable on public site, P2
+- DEF-202603-008: RSVP page not built, P2
+- DEF-202603-009: Achievement category not extensible, P3
+- DEF-202603-010: Admin API 404 from next-intl rewriting /api/* — fixed this session
+- DEF-202603-011: Admin pages empty due to cookie auth failure — fixed this session
+
+**Deployment:**
+- `release` branch → Vercel production — https://sunprairietamilsociety.vercel.app/en
+- Commits: `453016d` (Admin CMS), `1c4b5a8` (auth fix), `98a52be` (error display), `9d5b333` (proxy fix)
+
+---
 
 ### Session 9 — 2026-03-08
 
