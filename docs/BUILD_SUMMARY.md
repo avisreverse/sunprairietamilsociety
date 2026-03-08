@@ -6,15 +6,15 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 3 — Admin CMS live + DB wire-ups complete. 11 defects fixed across 2 sessions. 3 open defects remaining.
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. All major DB wire-ups done. Events/achievements now fully dynamic. Photo uploads working (Supabase Storage). Programs grid adaptive.
+**Phase:** Phase 3 — All public pages fully DB-driven. Every visible field on public pages is now admin-editable. DEF-016 closed. 3 open defects remaining (all P3/P2 cosmetic or backlog).
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Programs, Board, Events, Achievements all DB-driven. Board photos display on all pages. Admin can edit all program + board detail content. Migration 003 SQL must be run in Supabase before new fields populate.
 **Last Updated:** 2026-03-08
 **Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
 **Admin URL:** https://sunprairietamilsociety.vercel.app/en/admin
 **Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel. DB tables created + seeded.
 
-### What's Done (updated 2026-03-09)
+### What's Done (updated 2026-03-08)
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
@@ -45,16 +45,26 @@ Track session-by-session progress. Always read this at session start.
 - [x] **Page transitions** — smooth fade+slide-up on every navigation (keyed motion.div)
 - [x] **Thirukkural chapter names** — full 133-chapter Tamil lookup table; Book + chapter watermark left side
 - [x] **Thirukkural 3-line fix** — Line1/Line2 rendered as separate divs, no wrapping artifacts
-- [x] **Board headshot upload** — correctly admin-only (removed from public page, will be in Admin CMS)
-- [x] **Build passes** — 12 routes, clean TypeScript
+- [x] **Board headshot upload** — admin uploads photo → shows on /board, /board/[slug], homepage PalaiBoard section
+- [x] **/programs listing** — DB-driven Server Component (was hardcoded)
+- [x] **/programs/[slug] detail** — DB-driven Server Component; tagline/details/schedule/contact all admin-editable
+- [x] **/board listing** — DB-driven Server Component; shows photo or initials; "Since" year admin-editable
+- [x] **/board/[slug] detail** — DB-driven Server Component; Tamil role/responsibilities/since all admin-editable
+- [x] **PalaiBoard homepage** — shows headshot photo if uploaded, initials fallback
+- [x] **Migration 003** — adds tagline/schedule/contact_email/details to programs; role_ta/responsibilities/since_year to board_members; seeds existing records
+- [x] **Admin programs form** — tagline, "What to Expect" bullets, schedule, contact email fields added
+- [x] **Admin board form** — Tamil role, responsibilities bullets, "Since" year fields added
+- [x] **Build passes** — clean TypeScript
 
 ### What's Pending (Next Session)
-- [ ] **DEF-202603-003**: /board page grid tile alignment — 7th card orphaned, needs centered layout
+- [ ] **⚠️ Run Migration 003**: Paste `database/migrations/003_extend_programs_and_board.up.sql` in Supabase SQL editor for new fields to work
+- [ ] **User testing feedback** — user to provide visual feedback from testing session
+- [ ] **DEF-202603-003**: /board page grid tile alignment — centered flex wrap already applied; verify count-specific issue
 - [ ] **DEF-202603-008**: RSVP page — /events/[id]/rsvp public form (REQ-202603-007)
 - [ ] **DEF-202603-009**: Achievement category — fixed list, no custom category add (P3)
 - [ ] Events detail pages — /events/[slug] individual event pages
 - [ ] Mobile responsiveness audit (375px breakpoints not yet tested)
-- [ ] Playwright E2E testing setup (user requested, next session priority)
+- [ ] Playwright E2E testing setup (user requested priority)
 - [ ] Real content — photos, board headshots, real event dates (user to supply)
 - [ ] Sentry integration
 - [ ] Thirukkural GitHub fetch CORS verification on Vercel network
@@ -67,12 +77,12 @@ Track session-by-session progress. Always read this at session start.
 <!-- 3 open defects -->
 
 ### Active Requirements
-- REQ-202603-001: in_progress — Design D live, fully DB-driven. Events + achievements wired up. Featured event clickable. Auto-unfeature enforced.
-- REQ-202603-002: in_progress — Programs bento adaptive grid. Add new program form added. Dynamic heading.
+- REQ-202603-001: in_progress — Design D live, fully DB-driven. All sections working.
+- REQ-202603-002: in_progress — Programs fully DB-driven. All detail fields admin-editable (tagline/details/schedule/contact). Pending Migration 003.
 - REQ-202603-003: in_progress — ThirukkuralSection live, needs real-world fetch verification
-- REQ-202603-004: in_progress — Admin CMS complete. Auth fixed. Photo uploads working (board + achievements). Add program form added.
+- REQ-202603-004: in_progress — Admin CMS complete. All content fields editable. Photo uploads working.
 - REQ-202603-005: in_progress — Achievement detail DB-driven. Photo uploads working. Submit form functional.
-- REQ-202603-006: in_progress — Board pages live. Photo upload works in admin.
+- REQ-202603-006: in_progress — Board fully DB-driven. Photos show on all 3 surfaces. Tamil role/responsibilities/since admin-editable. Pending Migration 003.
 
 ---
 

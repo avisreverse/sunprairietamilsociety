@@ -17,7 +17,7 @@ Items land here when:
 |----|------|---------|------------|-------|
 | PL-002 | Real content from user | Photos (event, board headshots), real board names/bios, real event dates, real org stats | User to supply when ready | 2026-03-07 |
 | PL-004 | Admin auth — share spts-clean Supabase (D-017) | Decision made: Option A — point community site to spts-clean's Supabase project. Add `community_admin` role to existing school admins' `user_roles`. Reuse spts-clean auth pattern (email+password, requireAdminAuth). Implement AFTER rest of site is complete. | Implement when site is feature-complete | 2026-03-09 |
-| PL-005 | ~~Run migration 002 (Supabase Storage)~~ | RESOLVED — user ran SQL 2026-03-08, DEF-202603-015 fixed | Resolved | 2026-03-08 |
+| PL-006 | ⚠️ Run Migration 003 in Supabase | New columns (tagline, schedule, contact_email, details on programs; role_ta, responsibilities, since_year on board_members) will be blank until this SQL runs. File: `database/migrations/003_extend_programs_and_board.up.sql` | User must run SQL in Supabase dashboard before testing | 2026-03-08 |
 
 ---
 
@@ -37,9 +37,7 @@ Items land here when:
 | DEF-### | Title | Severity | Why deferred | Added |
 |---------|-------|----------|-------------|-------|
 | DEF-202603-003 | Board grid tile alignment — orphaned last card | P3 | Low priority — cosmetic; address in next UI polish session | 2026-03-08 |
-| DEF-202603-004 | Admin board — no photo upload | P2 | Needs Supabase Storage setup; deferred to next session | 2026-03-08 |
-| DEF-202603-005 | Admin programs — no Add New Program form | P2 | UI addition; deferred to next session | 2026-03-08 |
-| DEF-202603-006 | Admin achievements — no photo upload | P2 | Needs Supabase Storage setup; deferred to next session | 2026-03-08 |
+| DEF-202603-006 | Admin achievements — no photo upload | P2 | Needs Supabase Storage setup; address after user testing feedback | 2026-03-08 |
 | DEF-202603-007 | Featured event card not clickable | P2 | Needs /events/[slug] detail pages first; deferred | 2026-03-08 |
 | DEF-202603-008 | RSVP page not built | P2 | REQ-202603-007 in backlog; deferred | 2026-03-08 |
 | DEF-202603-009 | Achievement category — no add custom categories | P3 | Low priority; deferred | 2026-03-08 |

@@ -21,12 +21,12 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 
 | ID | Priority | Status | Title | Notes |
 |----|----------|--------|-------|-------|
-| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | All sections DB-driven. Individual detail pages live. 7 UX defects (DEF-202603-003 through 009) to fix next session. |
-| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | Bento grid DB-driven. All 5 /programs/[slug] detail pages live. Admin edit works. Add New Program form missing (DEF-202603-005). |
+| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | All sections DB-driven. PalaiBoard shows headshot photos. 3 open defects (DEF-003, 008, 009). Awaiting user visual feedback. |
+| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | /programs DB-driven Server Component. /programs/[slug] DB-driven with tagline/details/schedule/contact. Admin form has all fields. Add Program form live (DEF-005 fixed). Migration 003 must run in Supabase to populate new fields. |
 | REQ-202603-003 | P1 | in_progress | Thirukkural rotation — standalone section | Live with full 133-chapter lookup. CORS on Vercel needs real-world verification. |
-| REQ-202603-004 | P1 | in_progress | Admin CMS — full landing page customizable | Admin portal live: login, dashboard, events, achievements, board, programs. Auth working (Bearer token). Photo uploads + Add Program form pending next session. |
-| REQ-202603-005 | P2 | in_progress | Achievement submit + detail pages | /achievements/submit has local photo preview. /achievements/[id] detail pages use hardcoded data — needs DB wire-up. Photo upload to Supabase Storage pending. |
-| REQ-202603-006 | P2 | in_progress | Board management — individual pages + admin headshots | /board grid + /board/[slug] live. Admin board edit works. Photo upload field missing (DEF-202603-004). |
+| REQ-202603-004 | P1 | in_progress | Admin CMS — full landing page customizable | Admin portal fully operational: events (CRUD + featured auto-unfeature), achievements, board (photo upload + Tamil role + responsibilities + since year), programs (all detail fields). Every public page field is now admin-editable. Migration 003 must be run in Supabase. |
+| REQ-202603-005 | P2 | in_progress | Achievement submit + detail pages | /achievements/submit has local photo preview. /achievements/[id] detail pages still use hardcoded data — DB wire-up deferred. Photo upload to Supabase Storage pending. |
+| REQ-202603-006 | P2 | in_progress | Board management — individual pages + admin headshots | /board and /board/[slug] fully DB-driven Server Components. Admin photo upload working (DEF-004 fixed). Photos display on /board, /board/[slug], homepage PalaiBoard. Tamil role, responsibilities, since year all admin-editable (DEF-016 closed). |
 | REQ-202603-007 | P2 | backlog | RSVP page — per-event RSVP form + tracking | Not started. rsvp_responses table exists in DB. Admin can set rsvp_url per event. Public RSVP form at /events/[id]/rsvp or external link needed. (DEF-202603-008) |
 
 ---
