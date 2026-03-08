@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import PageTransition from "@/components/layout/PageTransition";
-import AnnouncementTicker from "@/components/ui/AnnouncementTicker";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -81,8 +80,6 @@ export default async function LocaleLayout({
     >
       <body>
         <NextIntlClientProvider messages={messages}>
-          {/* REQ-202603-009: Sticky top ticker — only renders when active announcements exist */}
-          <AnnouncementTicker />
           <PageTransition>
             {children}
           </PageTransition>

@@ -50,7 +50,7 @@ export default async function EventsPage() {
   return (
     <>
       <Nav />
-      <main style={{ paddingTop: "7rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FAF5EB" }}>
+      <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FAF5EB" }}>
         <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 3.5rem" }}>
 
           {/* Breadcrumb */}

@@ -31,7 +31,7 @@ export default async function ProgramsPage() {
   return (
     <>
       <Nav />
-      <main style={{ paddingTop: "7rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FDF8F0" }}>
+      <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FDF8F0" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "0 3.5rem" }}>
 
           <div style={{ marginBottom: "3.5rem" }}>
