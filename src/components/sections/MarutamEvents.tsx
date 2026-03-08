@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 
@@ -44,6 +45,7 @@ function parseDateParts(dateStr: string): { month: string; day: string } {
 const SPRING = { type: "spring", stiffness: 320, damping: 28 } as const;
 
 export default function MarutamEvents({ events }: Props) {
+  const router = useRouter();
   const featured = events.find((e) => e.featured) ?? events[0] ?? null;
   const rest = events.filter((e) => e.id !== featured?.id);
 
@@ -91,10 +93,12 @@ export default function MarutamEvents({ events }: Props) {
           const { month, day } = parseDateParts(featured.date);
           return (
             <ScrollReveal delay={0.1}>
+              {/* DEF-202603-007: Card is clickable — navigates to /events. RSVP button stops propagation. */}
               <motion.div
-                style={{ boxShadow: "0 8px 40px rgba(26,20,16,0.12)", borderRadius: "18px" }}
+                style={{ boxShadow: "0 8px 40px rgba(26,20,16,0.12)", borderRadius: "18px", cursor: "pointer" }}
                 whileHover={{ y: -5, boxShadow: "0 20px 64px rgba(26,20,16,0.20)" }}
                 transition={SPRING}
+                onClick={() => router.push("/events")}
               >
                 <div style={{ background: "#1A1410", borderRadius: "18px", padding: "2.5rem", marginBottom: "1rem", display: "grid", gridTemplateColumns: "110px 1fr auto", gap: "2rem", alignItems: "center" }}>
                   <div style={{ background: "#7A1515", borderRadius: "12px", padding: "1rem", textAlign: "center" }}>
@@ -112,6 +116,7 @@ export default function MarutamEvents({ events }: Props) {
                     <a
                       href={featured.rsvp_url}
                       target="_blank" rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
                       style={{ display: "inline-block", padding: "0.8rem 1.6rem", borderRadius: "999px", background: "#7A1515", color: "white", fontFamily: "var(--font-body)", fontSize: "0.8rem", fontWeight: 500, textDecoration: "none", whiteSpace: "nowrap" }}
                       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#6A1010")}
                       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#7A1515")}

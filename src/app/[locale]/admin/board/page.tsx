@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import AdminNav from "@/components/admin/AdminNav";
 import { fetchAdmin } from "@/lib/fetchAdmin";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * Admin Board Members page — add, edit, remove board members.
@@ -19,6 +20,7 @@ interface BoardMember {
   role: string;
   bio: string | null;
   email: string | null;
+  photo_url: string | null;
   color: string;
   display_order: number;
   is_active: boolean;
@@ -32,7 +34,7 @@ const S = {
 
 const COLOR_OPTIONS = ["#C0392B", "#27AE60", "#E67E22", "#2980B9", "#8E44AD", "#1B5E3B"];
 
-const EMPTY = { slug: "", name: "", initials: "", role: "", bio: "", email: "", color: "#C0392B", display_order: 0, is_active: true };
+const EMPTY = { slug: "", name: "", initials: "", role: "", bio: "", email: "", photo_url: "", color: "#C0392B", display_order: 0, is_active: true };
 
 export default function AdminBoardPage() {
   const [members, setMembers] = useState<BoardMember[]>([]);
@@ -42,6 +44,7 @@ export default function AdminBoardPage() {
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -56,7 +59,7 @@ export default function AdminBoardPage() {
     const nextOrder = members.length + 1;
     setEditing(null); setForm({ ...EMPTY, display_order: nextOrder }); setShowForm(true); setError(null);
   };
-  const openEdit = (m: BoardMember) => { setEditing(m); setForm({ ...m, bio: m.bio || "", email: m.email || "" }); setShowForm(true); setError(null); };
+  const openEdit = (m: BoardMember) => { setEditing(m); setForm({ ...m, bio: m.bio || "", email: m.email || "", photo_url: m.photo_url || "" }); setShowForm(true); setError(null); };
   const cancel = () => { setShowForm(false); setEditing(null); setError(null); };
 
   const save = async () => {
@@ -86,6 +89,25 @@ export default function AdminBoardPage() {
     if (!confirm(`Remove ${m.name} from the board?`)) return;
     await fetchAdmin(`/api/admin/board/${m.id}`, { method: "DELETE" });
     await load();
+  };
+
+  /**
+   * Uploads a photo to Supabase Storage media/board/ folder.
+   * Uses slug as filename so re-upload overwrites the old headshot.
+   * @see DEF-202603-004 — Board photo upload
+   */
+  const uploadPhoto = async (file: File) => {
+    const slug = form.slug || form.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+    if (!slug) { setError("Enter a name or slug before uploading a photo."); return; }
+    setUploading(true);
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `board/${slug}.${ext}`;
+    const supabase = createClient();
+    const { error: upErr } = await supabase.storage.from("media").upload(path, file, { upsert: true });
+    if (upErr) { setError(`Upload failed: ${upErr.message}`); setUploading(false); return; }
+    const { data: { publicUrl } } = supabase.storage.from("media").getPublicUrl(path);
+    setForm((f) => ({ ...f, photo_url: publicUrl }));
+    setUploading(false);
   };
 
   const set = (k: string, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
@@ -136,6 +158,33 @@ export default function AdminBoardPage() {
               <div style={{ gridColumn: "1/-1" }}>
                 <label style={S.label}>Bio</label>
                 <textarea style={{ ...S.input, minHeight: "80px", resize: "vertical" }} value={form.bio} onChange={(e) => set("bio", e.target.value)} />
+              </div>
+              {/* DEF-202603-004: Photo upload field */}
+              <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>Headshot Photo</label>
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                  {form.photo_url && (
+                    <img src={form.photo_url} alt="headshot preview" style={{ width: "56px", height: "56px", borderRadius: "50%", objectFit: "cover", border: `2px solid ${form.color}55` }} />
+                  )}
+                  {!form.photo_url && (
+                    <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `${form.color}25`, border: `2px solid ${form.color}55`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-display)", fontSize: "1.1rem", fontWeight: 700, color: form.color }}>
+                      {form.initials || (form.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()) || "?"}
+                    </div>
+                  )}
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      disabled={uploading}
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadPhoto(f); }}
+                      style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", color: "rgba(255,255,255,0.6)" }}
+                    />
+                    {uploading && <div style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "#D4930A", marginTop: "0.3rem" }}>Uploading…</div>}
+                    {form.photo_url && !uploading && (
+                      <button onClick={() => set("photo_url", "")} style={{ ...S.btn("rgba(255,255,255,0.3)", "transparent"), marginTop: "0.3rem", fontSize: "0.72rem" }}>Remove photo</button>
+                    )}
+                  </div>
+                </div>
               </div>
               <div style={{ gridColumn: "1/-1" }}>
                 <label style={S.label}>Avatar Color</label>

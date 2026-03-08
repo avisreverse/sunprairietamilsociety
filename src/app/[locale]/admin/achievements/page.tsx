@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import AdminNav from "@/components/admin/AdminNav";
 import { fetchAdmin } from "@/lib/fetchAdmin";
+import { createClient } from "@/lib/supabase/client";
 
 /**
  * Admin Achievements page — approve, reject, publish, edit community achievements.
@@ -21,6 +22,7 @@ interface Achievement {
   year: string;
   color: string;
   bio: string | null;
+  photo_url: string | null;
   is_approved: boolean;
   is_published: boolean;
   submitted_by_name: string | null;
@@ -41,7 +43,8 @@ const S = {
   btn: (color: string, bg: string) => ({ background: bg, border: `1px solid ${color}`, borderRadius: "7px", padding: "0.4rem 0.9rem", fontFamily: "var(--font-body)", fontSize: "0.78rem", fontWeight: 600, color, cursor: "pointer" }),
 };
 
-const EMPTY = { name: "", initials: "", category: "Education", achievement: "", year: new Date().getFullYear().toString(), color: "#C0392B", bio: "", is_approved: false, is_published: false };
+/** @see DEF-202603-006 — Achievement photo upload */
+const EMPTY = { name: "", initials: "", category: "Education", achievement: "", year: new Date().getFullYear().toString(), color: "#C0392B", bio: "", photo_url: "", is_approved: false, is_published: false };
 
 export default function AdminAchievementsPage() {
   const [items, setItems] = useState<Achievement[]>([]);
@@ -51,6 +54,8 @@ export default function AdminAchievementsPage() {
   const [editing, setEditing] = useState<Achievement | null>(null);
   const [form, setForm] = useState(EMPTY);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -91,9 +96,9 @@ export default function AdminAchievementsPage() {
     await load();
   };
 
-  const openEdit = (a: Achievement) => { setEditing(a); setForm({ ...a, bio: a.bio || "", color: a.color || "#C0392B" }); setShowForm(true); };
-  const openAdd = () => { setEditing(null); setForm(EMPTY); setShowForm(true); };
-  const cancel = () => { setShowForm(false); setEditing(null); };
+  const openEdit = (a: Achievement) => { setEditing(a); setForm({ ...a, bio: a.bio || "", photo_url: a.photo_url || "", color: a.color || "#C0392B" }); setShowForm(true); setUploadError(null); };
+  const openAdd = () => { setEditing(null); setForm(EMPTY); setShowForm(true); setUploadError(null); };
+  const cancel = () => { setShowForm(false); setEditing(null); setUploadError(null); };
 
   const save = async () => {
     setSaving(true);
@@ -107,6 +112,25 @@ export default function AdminAchievementsPage() {
     const res = await fetchAdmin(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     if (res.ok) { await load(); setShowForm(false); }
     setSaving(false);
+  };
+
+  /**
+   * Uploads an achievement photo to Supabase Storage media/achievements/ folder.
+   * Uses achievement ID (edit) or timestamp (new) as filename.
+   * @see DEF-202603-006 — Achievement photo upload
+   */
+  const uploadPhoto = async (file: File) => {
+    setUploading(true);
+    setUploadError(null);
+    const ext = file.name.split(".").pop() || "jpg";
+    const name = editing ? editing.id : `new-${Date.now()}`;
+    const path = `achievements/${name}.${ext}`;
+    const supabase = createClient();
+    const { error: upErr } = await supabase.storage.from("media").upload(path, file, { upsert: true });
+    if (upErr) { setUploadError(`Upload failed: ${upErr.message}`); setUploading(false); return; }
+    const { data: { publicUrl } } = supabase.storage.from("media").getPublicUrl(path);
+    setForm((f) => ({ ...f, photo_url: publicUrl }));
+    setUploading(false);
   };
 
   const set = (k: string, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
@@ -169,6 +193,33 @@ export default function AdminAchievementsPage() {
               <div style={{ gridColumn: "1/-1" }}>
                 <label style={S.label}>Bio (optional)</label>
                 <textarea style={{ ...S.input, minHeight: "70px", resize: "vertical" }} value={form.bio} onChange={(e) => set("bio", e.target.value)} />
+              </div>
+              {/* DEF-202603-006: Achievement photo upload */}
+              <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>Photo (optional)</label>
+                {uploadError && <div style={{ fontFamily: "var(--font-body)", fontSize: "0.78rem", color: "#e74c3c", marginBottom: "0.4rem" }}>{uploadError}</div>}
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                  {form.photo_url ? (
+                    <img src={form.photo_url} alt="achievement photo preview" style={{ width: "56px", height: "56px", borderRadius: "50%", objectFit: "cover", border: "2px solid rgba(255,255,255,0.2)" }} />
+                  ) : (
+                    <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: "rgba(255,255,255,0.06)", border: "2px solid rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-display)", fontSize: "1.1rem", fontWeight: 700, color: "rgba(255,255,255,0.3)" }}>
+                      {form.initials || "?"}
+                    </div>
+                  )}
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/jpeg,image/png,image/webp"
+                      disabled={uploading}
+                      onChange={(e) => { const f = e.target.files?.[0]; if (f) uploadPhoto(f); }}
+                      style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", color: "rgba(255,255,255,0.6)" }}
+                    />
+                    {uploading && <div style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "#D4930A", marginTop: "0.3rem" }}>Uploading…</div>}
+                    {form.photo_url && !uploading && (
+                      <button onClick={() => set("photo_url", "")} style={{ ...S.btn("rgba(255,255,255,0.3)", "transparent"), marginTop: "0.3rem", fontSize: "0.72rem" }}>Remove photo</button>
+                    )}
+                  </div>
+                </div>
               </div>
               <div style={{ gridColumn: "1/-1", display: "flex", gap: "2rem" }}>
                 <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>

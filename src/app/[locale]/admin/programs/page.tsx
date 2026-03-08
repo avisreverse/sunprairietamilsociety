@@ -31,6 +31,9 @@ const S = {
 
 const COLOR_OPTIONS = ["#C0392B", "#27AE60", "#E67E22", "#2980B9", "#8E44AD", "#1B5E3B"];
 
+/** Default empty state for the Add New Program form. @see REQ-202603-002 — DEF-202603-005 */
+const ADD_EMPTY = { slug: "", name_en: "", name_ta: "", description: "", color: "#C0392B", featured: false, display_order: 0, is_active: true };
+
 export default function AdminProgramsPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +41,10 @@ export default function AdminProgramsPage() {
   const [editing, setEditing] = useState<Program | null>(null);
   const [form, setForm] = useState<Partial<Program>>({});
   const [saving, setSaving] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [addForm, setAddForm] = useState({ ...ADD_EMPTY });
+  const [adding, setAdding] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -83,17 +90,87 @@ export default function AdminProgramsPage() {
   };
 
   const set = (k: string, v: unknown) => setForm((f) => ({ ...f, [k]: v }));
+  const setA = (k: string, v: unknown) => setAddForm((f) => ({ ...f, [k]: v }));
+
+  const addProgram = async () => {
+    if (!addForm.name_en || !addForm.slug) { setAddError("Name (English) and Slug are required."); return; }
+    setAdding(true);
+    setAddError(null);
+    const res = await fetchAdmin("/api/admin/programs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...addForm, name_ta: addForm.name_ta || null, description: addForm.description || null }),
+    });
+    if (!res.ok) { const d = await res.json().catch(() => ({})); setAddError(d.error || "Failed to create program."); }
+    else { await load(); setShowAddForm(false); setAddForm({ ...ADD_EMPTY }); }
+    setAdding(false);
+  };
 
   return (
     <div style={{ minHeight: "100vh", background: "#111010" }}>
       <AdminNav />
 
       <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "2.5rem 2rem" }}>
-        <div style={{ marginBottom: "2rem" }}>
-          <div style={{ fontFamily: "var(--font-body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "#D4930A", marginBottom: "0.25rem" }}>Admin</div>
-          <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.75rem", fontWeight: 700, color: "white", margin: 0 }}>Programs</h1>
-          <p style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", color: "rgba(255,255,255,0.35)", marginTop: "0.5rem" }}>Edit program descriptions, Tamil names, colors, and visibility. Programs are seeded from code — add new ones via the form below.</p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+          <div>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "#D4930A", marginBottom: "0.25rem" }}>Admin</div>
+            <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.75rem", fontWeight: 700, color: "white", margin: 0 }}>Programs</h1>
+            <p style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", color: "rgba(255,255,255,0.35)", marginTop: "0.5rem" }}>Edit program descriptions, Tamil names, colors, and visibility.</p>
+          </div>
+          <button style={S.btn("#D4930A", "rgba(212,147,10,0.15)")} onClick={() => { setShowAddForm(true); setEditing(null); setAddError(null); }}>+ Add Program</button>
         </div>
+
+        {/* Add New Program form — DEF-202603-005 */}
+        {showAddForm && (
+          <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(212,147,10,0.25)", borderRadius: "16px", padding: "2rem", marginBottom: "2rem" }}>
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.05rem", fontWeight: 700, color: "white", marginBottom: "1.5rem" }}>Add New Program</h2>
+            {addError && <div style={{ background: "rgba(192,57,43,0.15)", border: "1px solid rgba(192,57,43,0.3)", borderRadius: "8px", padding: "0.65rem 1rem", marginBottom: "1rem", fontFamily: "var(--font-body)", fontSize: "0.82rem", color: "#e74c3c" }}>{addError}</div>}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+              <div>
+                <label style={S.label}>Name (English) *</label>
+                <input style={S.input} value={addForm.name_en} onChange={(e) => setA("name_en", e.target.value)} placeholder="e.g. Music Club" />
+              </div>
+              <div>
+                <label style={S.label}>Name (Tamil)</label>
+                <input style={S.input} value={addForm.name_ta} onChange={(e) => setA("name_ta", e.target.value)} />
+              </div>
+              <div>
+                <label style={S.label}>Slug (URL) *</label>
+                <input style={S.input} value={addForm.slug} onChange={(e) => setA("slug", e.target.value)} placeholder="e.g. music-club" />
+              </div>
+              <div>
+                <label style={S.label}>Display Order</label>
+                <input type="number" style={S.input} value={addForm.display_order} onChange={(e) => setA("display_order", parseInt(e.target.value) || 0)} />
+              </div>
+              <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>Description</label>
+                <textarea style={{ ...S.input, minHeight: "70px", resize: "vertical" }} value={addForm.description} onChange={(e) => setA("description", e.target.value)} />
+              </div>
+              <div>
+                <label style={S.label}>Color</label>
+                <div style={{ display: "flex", gap: "0.6rem", marginTop: "0.25rem" }}>
+                  {COLOR_OPTIONS.map((c) => (
+                    <button key={c} onClick={() => setA("color", c)} style={{ width: "30px", height: "30px", borderRadius: "50%", background: c, border: addForm.color === c ? "3px solid white" : "3px solid transparent", cursor: "pointer" }} />
+                  ))}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+                <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
+                  <input type="checkbox" checked={addForm.featured} onChange={(e) => setA("featured", e.target.checked)} />
+                  Featured
+                </label>
+                <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
+                  <input type="checkbox" checked={addForm.is_active} onChange={(e) => setA("is_active", e.target.checked)} />
+                  Active
+                </label>
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: "0.75rem", marginTop: "1.5rem" }}>
+              <button style={S.btn("#D4930A", "#D4930A")} onClick={addProgram} disabled={adding}><span style={{ color: "#0D0D0D" }}>{adding ? "Saving…" : "Create Program"}</span></button>
+              <button style={S.btn("rgba(255,255,255,0.3)", "transparent")} onClick={() => { setShowAddForm(false); setAddError(null); }}>Cancel</button>
+            </div>
+          </div>
+        )}
 
         {/* Edit inline form */}
         {editing && (
