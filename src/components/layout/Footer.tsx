@@ -18,7 +18,7 @@ export default function Footer({ foundingYear = "2012" }: { foundingYear?: strin
         background: "#080808",
         padding: "4rem 6rem 2.5rem",
       }}
-      className="px-6 md:px-24"
+      className="spts-footer px-6 md:px-24"
     >
       <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
         {/* Top row */}

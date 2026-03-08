@@ -255,6 +255,17 @@
   .spts-kural-text { font-size: 0.82rem !important; line-height: 1.75 !important; }
   /* KuralStrip Tamil verse on mobile */
   .spts-kural-strip-text { font-size: 0.82rem !important; line-height: 1.75 !important; }
+
+  /* ThirukkuralSection: 20rem watermark number would overflow on mobile — hide it */
+  .spts-kural-number-wm { display: none !important; }
+
+  /* Footer outer horizontal padding override (inline "6rem" overrides Tailwind px-6) */
+  .spts-footer { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+
+  /* Board members grid: auto-fit minmax(280px) can overflow on 350px — force 1 col.
+     Using flex column instead of grid-template-columns override to bypass Tailwind v4
+     CSS cascade interaction that prevents !important from affecting computed grid layout. */
+  .spts-board-grid { display: flex !important; flex-direction: column !important; }
 }
 
 /* Programs listing page — hover lift (event handlers cannot go on Server Component Links) */

@@ -146,6 +146,7 @@ export default function ThirukkuralSection() {
   return (
     <section
       id="kural"
+      className="spts-section"
       style={{
         background: "#7A1515",
         padding: "6rem 3.5rem",
@@ -157,9 +158,10 @@ export default function ThirukkuralSection() {
         justifyContent: "center",
       }}
     >
-      {/* Right watermark — large faded kural number */}
+      {/* Right watermark — large faded kural number (hidden on mobile via .spts-kural-number-wm) */}
       <div
         aria-hidden="true"
+        className="spts-kural-number-wm"
         style={{
           position: "absolute",
           right: "4%",

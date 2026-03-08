@@ -45,7 +45,7 @@ export default async function AnnouncementDetailPage({ params }: Props) {
     <>
       <Nav />
       <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FAF7F0" }}>
-        <div style={{ maxWidth: "720px", margin: "0 auto", padding: "0 2rem" }}>
+        <div className="spts-inner" style={{ maxWidth: "720px", margin: "0 auto", padding: "0 2rem" }}>
 
           {/* Breadcrumb */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "2.5rem" }}>

@@ -31,6 +31,9 @@ export default async function BoardPage() {
 
   return (
     <>
+      {/* DEF: ID overrides force 1-col on mobile; also reset gridColumn on last orphan card
+           since "2 / 3" inline style forces implicit 2nd col even with grid-template-cols:1fr */}
+      <style>{`@media(max-width:640px){#board-members-grid{grid-template-columns:1fr!important}#board-members-grid>*{grid-column:auto!important}}`}</style>
       <Nav />
       <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FDF8F0" }}>
         <div className="spts-inner" style={{ maxWidth: "1100px", margin: "0 auto", padding: "0 3.5rem" }}>
@@ -55,8 +58,12 @@ export default async function BoardPage() {
             </p>
           </div>
 
-          {/* Board members grid — centered flex so orphaned last cards center (DEF-202603-003) */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem", marginBottom: "5rem" }}>
+          {/* Board members grid — single col on mobile, auto-fit on desktop (DEF-202603-003) */}
+          <div
+            id="board-members-grid"
+            className="spts-board-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+            style={{ gap: "1.25rem", marginBottom: "5rem" }}
+          >
             {list.map((member, index) => (
               <Link
                 key={member.id}
