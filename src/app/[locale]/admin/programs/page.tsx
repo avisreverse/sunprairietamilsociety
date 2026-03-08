@@ -34,14 +34,25 @@ const COLOR_OPTIONS = ["#C0392B", "#27AE60", "#E67E22", "#2980B9", "#8E44AD", "#
 export default function AdminProgramsPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [editing, setEditing] = useState<Program | null>(null);
   const [form, setForm] = useState<Partial<Program>>({});
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetchAdmin("/api/admin/programs");
-    if (res.ok) setPrograms(await res.json());
+    setLoadError(null);
+    try {
+      const res = await fetchAdmin("/api/admin/programs");
+      if (res.ok) {
+        setPrograms(await res.json());
+      } else {
+        const body = await res.json().catch(() => ({}));
+        setLoadError(`HTTP ${res.status}: ${body.error || res.statusText}`);
+      }
+    } catch (err) {
+      setLoadError(`Network error: ${err}`);
+    }
     setLoading(false);
   }, []);
 
@@ -132,6 +143,11 @@ export default function AdminProgramsPage() {
         )}
 
         {/* Programs list */}
+        {loadError && (
+          <div style={{ background: "rgba(192,57,43,0.15)", border: "1px solid rgba(192,57,43,0.4)", borderRadius: "10px", padding: "1rem 1.25rem", marginBottom: "1rem", fontFamily: "var(--font-body)", fontSize: "0.85rem", color: "#e74c3c" }}>
+            Error loading programs: {loadError}
+          </div>
+        )}
         {loading ? (
           <div style={{ fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.35)", textAlign: "center", padding: "3rem 0" }}>Loading…</div>
         ) : (
