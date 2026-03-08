@@ -32,6 +32,8 @@ interface HeroContent {
   year: string;
   tagline: string;
   subtext: string;
+  /** Live count from programs table — always reflects actual DB count */
+  programCount: number;
 }
 
 interface Props {
@@ -282,7 +284,7 @@ export default function LandingHero({ heroContent }: Props) {
               {heroContent.year}
             </strong>
             {heroContent.tagline}<br />
-            {heroContent.subtext}
+            {heroContent.programCount} program{heroContent.programCount !== 1 ? "s" : ""} · {heroContent.subtext}
           </div>
         </motion.div>
       </div>

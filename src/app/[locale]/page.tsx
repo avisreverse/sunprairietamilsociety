@@ -70,11 +70,14 @@ export default async function HomePage() {
   const rawSettings = siteSettingsRes.status === "fulfilled" ? (siteSettingsRes.value.data ?? []) : [];
   const settingsMap: Record<string, string> = {};
   rawSettings.forEach((row: { key: string; value: string }) => { settingsMap[row.key] = row.value; });
+  // Programs count is always live from DB — not a site_setting (REQ-202603-010)
+  const programCount = programs.length;
   const heroContent = {
-    story:   settingsMap["hero_story"]   ?? "In 2012, Tamil families in Sun Prairie asked a shared question: how do we give our children the language, culture, and belonging we carry? Today, SPTS is that answer.",
-    year:    settingsMap["hero_year"]    ?? "2012",
-    tagline: settingsMap["hero_tagline"] ?? "Year founded in Sun Prairie",
-    subtext: settingsMap["hero_subtext"] ?? "Five programs · One community",
+    story:        settingsMap["hero_story"]   ?? "In 2012, Tamil families in Sun Prairie asked a shared question: how do we give our children the language, culture, and belonging we carry? Today, SPTS is that answer.",
+    year:         settingsMap["hero_year"]    ?? "2012",
+    tagline:      settingsMap["hero_tagline"] ?? "Year founded in Sun Prairie",
+    subtext:      settingsMap["hero_subtext"] ?? "One community",
+    programCount,
   };
 
   if (eventsRes.status === "rejected") console.error("⚠️ [page] events fetch failed:", eventsRes.reason);

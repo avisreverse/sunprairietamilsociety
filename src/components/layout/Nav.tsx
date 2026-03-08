@@ -225,7 +225,7 @@ export default function Nav() {
                 Sun Prairie Tamil Society
               </div>
               <div style={{ fontFamily: "var(--font-tamil)", fontSize: "0.6rem", color: "rgba(26,20,16,0.4)", marginTop: "1px" }}>
-                சன் ப்ரேரி தமிழ்ச் சமூகம்
+                சன் ப்ரைரி தமிழ்ச் சமூகம்
               </div>
             </div>
           </Link>

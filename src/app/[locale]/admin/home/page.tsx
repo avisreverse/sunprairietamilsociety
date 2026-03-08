@@ -21,6 +21,8 @@ interface Setting {
   updated_at: string;
 }
 
+// hero_subtext is the community label suffix shown after the live programs count
+// e.g. "6 programs · One community" — only "One community" is editable here
 const FIELD_ORDER = ["hero_story", "hero_year", "hero_tagline", "hero_subtext"];
 
 export default function AdminHomePage() {
