@@ -37,13 +37,17 @@ export default function LandingHero() {
         paddingBottom: 0,
         overflow: "hidden",
         position: "relative",
-        minHeight: "100dvh",
+        height: "100dvh",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <div
         style={{
           maxWidth: "1440px",
           margin: "0 auto",
+          flex: 1,
+          overflow: "hidden",
         }}
         className="px-6 md:px-14"
       >

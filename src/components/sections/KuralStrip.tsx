@@ -71,10 +71,32 @@ export default function KuralStrip() {
     <div
       style={{
         background: "#7A1515",
-        padding: "3rem 3.5rem",
+        padding: "1.75rem 3.5rem",
         textAlign: "center",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
+      {/* Faint kural number watermark — right side */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          right: "3%",
+          top: "50%",
+          transform: "translateY(-50%)",
+          fontFamily: "var(--font-tamil)",
+          fontSize: "10rem",
+          fontWeight: 700,
+          color: "rgba(255,255,255,0.04)",
+          lineHeight: 1,
+          pointerEvents: "none",
+          userSelect: "none",
+        }}
+      >
+        {kural?.Number}
+      </div>
+
       {/* Label */}
       <div
         style={{
