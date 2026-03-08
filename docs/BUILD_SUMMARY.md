@@ -6,15 +6,15 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 3 — All public pages fully DB-driven. Every visible field on public pages is now admin-editable. DEF-016 closed. 3 open defects remaining (all P3/P2 cosmetic or backlog).
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Programs, Board, Events, Achievements all DB-driven. Board photos display on all pages. Admin can edit all program + board detail content. Migration 003 SQL must be run in Supabase before new fields populate.
-**Last Updated:** 2026-03-08
+**Phase:** Phase 3 — All public pages fully DB-driven. REQ-202603-008 (program website URL) and REQ-202603-009 (external announcements board) added. Achievement photos fixed. 3 legacy open defects remain (P2/P3). 2 SQL migrations (004, 005) pending user execution in Supabase.
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Announcement ticker live in Nav. Programs now have optional website URL field. /announcements/[id] detail pages live.
+**Last Updated:** 2026-03-09
 **Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
 **Admin URL:** https://sunprairietamilsociety.vercel.app/en/admin
 **Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel. DB tables created + seeded.
 
-### What's Done (updated 2026-03-08)
+### What's Done (updated 2026-03-09)
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
@@ -55,20 +55,26 @@ Track session-by-session progress. Always read this at session start.
 - [x] **Admin programs form** — tagline, "What to Expect" bullets, schedule, contact email fields added
 - [x] **Admin board form** — Tamil role, responsibilities bullets, "Since" year fields added
 - [x] **Build passes** — clean TypeScript
+- [x] **DEF-202603-017** — Achievement photo_url missing from landing page query — fixed
+- [x] **REQ-202603-008** — Program website URL: migration 004, admin form (edit + add), /programs/[slug] sidebar "Visit website →"
+- [x] **REQ-202603-009** — External announcement board: migration 005, /admin/announcements (CRUD + poster upload), ticker in Nav, /announcements/[id] detail page
+- [x] **Announcement ticker** — inside fixed Nav wrapper (no overlap with content), hover-to-pause, click → /announcements/[id]
+- [x] **Inner pages paddingTop** — updated 8 pages from 7rem → 8.5rem to clear Nav + ticker combined height
 
 ### What's Pending (Next Session)
-- [ ] **⚠️ Run Migration 003**: Paste `database/migrations/003_extend_programs_and_board.up.sql` in Supabase SQL editor for new fields to work
-- [ ] **User testing feedback** — user to provide visual feedback from testing session
-- [ ] **DEF-202603-003**: /board page grid tile alignment — centered flex wrap already applied; verify count-specific issue
+- [ ] **⚠️ Run Migration 004**: `database/migrations/004_add_program_website_url.up.sql` — adds website_url + website_url_visible to programs
+- [ ] **⚠️ Run Migration 005**: `database/migrations/005_create_announcements.up.sql` — creates announcements table + RLS
+- [ ] **User verification**: achievement photos, program website URL, announcement ticker end-to-end
+- [ ] **DEF-202603-003**: /board page grid tile alignment (P3)
 - [ ] **DEF-202603-008**: RSVP page — /events/[id]/rsvp public form (REQ-202603-007)
 - [ ] **DEF-202603-009**: Achievement category — fixed list, no custom category add (P3)
 - [ ] Events detail pages — /events/[slug] individual event pages
 - [ ] Mobile responsiveness audit (375px breakpoints not yet tested)
-- [ ] Playwright E2E testing setup (user requested priority)
+- [ ] Playwright E2E testing setup
 - [ ] Real content — photos, board headshots, real event dates (user to supply)
 - [ ] Sentry integration
 - [ ] Thirukkural GitHub fetch CORS verification on Vercel network
-- [ ] Admin auth — PL-004: add community_admin role to spts-clean Supabase (implement after site feature-complete)
+- [ ] Admin auth — PL-004: add community_admin role to spts-clean Supabase (after site feature-complete)
 
 ### Open Defects
 - DEF-202603-003: /board page grid tile alignment (P3)
@@ -78,15 +84,45 @@ Track session-by-session progress. Always read this at session start.
 
 ### Active Requirements
 - REQ-202603-001: in_progress — Design D live, fully DB-driven. All sections working.
-- REQ-202603-002: in_progress — Programs fully DB-driven. All detail fields admin-editable (tagline/details/schedule/contact). Pending Migration 003.
-- REQ-202603-003: in_progress — ThirukkuralSection live, needs real-world fetch verification
-- REQ-202603-004: in_progress — Admin CMS complete. All content fields editable. Photo uploads working.
-- REQ-202603-005: in_progress — Achievement detail DB-driven. Photo uploads working. Submit form functional.
-- REQ-202603-006: in_progress — Board fully DB-driven. Photos show on all 3 surfaces. Tamil role/responsibilities/since admin-editable. Pending Migration 003.
+- REQ-202603-002: in_progress — Programs fully DB-driven. website_url field added (Migration 004 pending).
+- REQ-202603-003: in_progress — ThirukkuralSection live, needs real-world fetch verification.
+- REQ-202603-004: in_progress — Admin CMS complete. Announcements admin added.
+- REQ-202603-005: in_progress — Achievement photos fixed on landing page. DEF-202603-017 closed.
+- REQ-202603-006: in_progress — Board fully DB-driven. Photos on all 3 surfaces.
+- REQ-202603-008: in_progress — Program website URL. Migration 004 pending Supabase run.
+- REQ-202603-009: in_progress — Announcements board. Migration 005 pending Supabase run.
 
 ---
 
 ## Session Log
+
+### Session 13 — 2026-03-09
+
+**Focus:** Bug fixes (achievement photos, featured events UI), REQ-202603-008 program website URL, REQ-202603-009 external announcements board
+
+**Completed:**
+- DEF-202603-017: Achievement photo_url missing from landing page Supabase query and NeytalAchievements interface — fixed; photos now render on landing page and detail page
+- Admin events: added UI note that only 1 event can be featured at a time (API auto-unfeature was already correct)
+- REQ-202603-008: Program website URL — Migration 004 created; admin programs form (edit + add) gets URL input + "Show website link publicly" checkbox; /programs/[slug] sidebar shows "Visit website →" when visible=true
+- REQ-202603-009: External announcements board — Migration 005 created (announcements table + RLS); /admin/announcements full CRUD with poster upload, expiry date, publish toggle; AnnouncementTicker integrated inside fixed Nav wrapper; /announcements/[id] public detail page; ticker items link to detail page (not external URL directly)
+- Ticker placement fix: moved ticker inside Nav's fixed wrapper div so ticker + nav bar form one unit — no more z-index conflicts or overlap with page content
+- All 8 inner pages: paddingTop 7rem → 8.5rem to clear combined Nav + ticker height
+
+**New Defects Found:**
+- DEF-202603-017: Achievement photo_url missing from landing page query — P2 — fixed this session
+
+**Deferred / Remaining Open:**
+- Migration 004 + 005 — user must run in Supabase SQL editor before new features populate
+- DEF-202603-003, 008, 009 still open (P3, P2, P3)
+- Events detail pages /events/[slug] — not started
+- Playwright E2E testing — still pending
+- Mobile responsiveness audit — still pending
+
+**Deployment:**
+- Pushed to `main` and `release` branches → Vercel production
+- Commits: `fc13d47`, `b6d0b90`, `136b468`, `2e06347`
+
+---
 
 ### Session 12 — 2026-03-08
 

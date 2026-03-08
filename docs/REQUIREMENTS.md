@@ -21,13 +21,15 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 
 | ID | Priority | Status | Title | Notes |
 |----|----------|--------|-------|-------|
-| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | All sections DB-driven. PalaiBoard shows headshot photos. 3 open defects (DEF-003, 008, 009). Awaiting user visual feedback. |
-| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | /programs DB-driven Server Component. /programs/[slug] DB-driven with tagline/details/schedule/contact. Admin form has all fields. Add Program form live (DEF-005 fixed). Migration 003 must run in Supabase to populate new fields. |
+| REQ-202603-001 | P1 | in_progress | Landing page — Design D Warm Cultural | All sections DB-driven. Achievement photos now show on landing page (DEF-017 fixed). Announcement ticker in Nav. 3 open defects (DEF-003, 008, 009). |
+| REQ-202603-002 | P1 | in_progress | Programs section — bento grid, 5+ programs, individual pages | /programs/[slug] now has optional website_url (REQ-202603-008). Migration 004 must run in Supabase. |
 | REQ-202603-003 | P1 | in_progress | Thirukkural rotation — standalone section | Live with full 133-chapter lookup. CORS on Vercel needs real-world verification. |
-| REQ-202603-004 | P1 | in_progress | Admin CMS — full landing page customizable | Admin portal fully operational: events (CRUD + featured auto-unfeature), achievements, board (photo upload + Tamil role + responsibilities + since year), programs (all detail fields). Every public page field is now admin-editable. Migration 003 must be run in Supabase. |
-| REQ-202603-005 | P2 | in_progress | Achievement submit + detail pages | /achievements/submit has local photo preview. /achievements/[id] detail pages still use hardcoded data — DB wire-up deferred. Photo upload to Supabase Storage pending. |
-| REQ-202603-006 | P2 | in_progress | Board management — individual pages + admin headshots | /board and /board/[slug] fully DB-driven Server Components. Admin photo upload working (DEF-004 fixed). Photos display on /board, /board/[slug], homepage PalaiBoard. Tamil role, responsibilities, since year all admin-editable (DEF-016 closed). |
-| REQ-202603-007 | P2 | backlog | RSVP page — per-event RSVP form + tracking | Not started. rsvp_responses table exists in DB. Admin can set rsvp_url per event. Public RSVP form at /events/[id]/rsvp or external link needed. (DEF-202603-008) |
+| REQ-202603-004 | P1 | in_progress | Admin CMS — full landing page customizable | Admin portal fully operational. Announcements admin added (/admin/announcements). All content fields editable. |
+| REQ-202603-005 | P2 | in_progress | Achievement submit + detail pages | DEF-202603-017 fixed — photo_url now fetched and shown on landing page. /achievements/[id] DB-driven. Submit form functional with local photo preview. |
+| REQ-202603-006 | P2 | in_progress | Board management — individual pages + admin headshots | /board and /board/[slug] fully DB-driven. Photos on all 3 surfaces. Tamil role/responsibilities/since admin-editable. |
+| REQ-202603-007 | P2 | backlog | RSVP page — per-event RSVP form + tracking | Not started. rsvp_responses table exists. (DEF-202603-008) |
+| REQ-202603-008 | P2 | in_progress | Program website URL — optional admin-controlled external link | Migration 004 created. Admin form has URL + visibility checkbox. /programs/[slug] shows "Visit website →" in sidebar when visible=true. Pending: user run Migration 004 in Supabase. |
+| REQ-202603-009 | P2 | in_progress | External announcement board — ticker + detail pages | Migration 005 created. /admin/announcements CRUD with poster upload, expiry, publish toggle. AnnouncementTicker inside Nav. /announcements/[id] detail page. Pending: user run Migration 005 in Supabase. |
 
 ---
 

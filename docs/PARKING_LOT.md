@@ -17,7 +17,8 @@ Items land here when:
 |----|------|---------|------------|-------|
 | PL-002 | Real content from user | Photos (event, board headshots), real board names/bios, real event dates, real org stats | User to supply when ready | 2026-03-07 |
 | PL-004 | Admin auth — share spts-clean Supabase (D-017) | Decision made: Option A — point community site to spts-clean's Supabase project. Add `community_admin` role to existing school admins' `user_roles`. Reuse spts-clean auth pattern (email+password, requireAdminAuth). Implement AFTER rest of site is complete. | Implement when site is feature-complete | 2026-03-09 |
-| PL-006 | ⚠️ Run Migration 003 in Supabase | New columns (tagline, schedule, contact_email, details on programs; role_ta, responsibilities, since_year on board_members) will be blank until this SQL runs. File: `database/migrations/003_extend_programs_and_board.up.sql` | User must run SQL in Supabase dashboard before testing | 2026-03-08 |
+| PL-007 | ⚠️ Run Migration 004 in Supabase | Adds `website_url` and `website_url_visible` columns to programs table. REQ-202603-008. File: `database/migrations/004_add_program_website_url.up.sql` | User must run SQL in Supabase dashboard before testing program website URL feature | 2026-03-08 |
+| PL-008 | ⚠️ Run Migration 005 in Supabase | Creates `announcements` table with RLS, trigger, and indexes. REQ-202603-009. File: `database/migrations/005_create_announcements.up.sql` | User must run SQL in Supabase dashboard before testing announcement ticker feature | 2026-03-08 |
 
 ---
 
@@ -29,6 +30,8 @@ Items land here when:
 | Mobile responsiveness | Not yet audited | Test all pages at 375px (iPhone SE), 768px (tablet) | Deferred — active feedback cycle in progress |
 | Events detail pages | /events listing exists + DB-driven | Create /events/[slug] individual event pages | Not started |
 | Playwright E2E testing | User requested automated testing to replace manual testing | Set up Playwright test suite for all user flows (programs, events, achievements, board, admin) | Next session priority |
+| REQ-202603-008 Program website URL | Migration 004 created + admin form + public page | User must run Migration 004 in Supabase before feature is active | Pending migration |
+| REQ-202603-009 Announcement ticker | Migration 005 created + admin CRUD + ticker in Nav + detail page | User must run Migration 005 in Supabase before feature is active | Pending migration |
 
 ---
 
@@ -37,7 +40,7 @@ Items land here when:
 | DEF-### | Title | Severity | Why deferred | Added |
 |---------|-------|----------|-------------|-------|
 | DEF-202603-003 | Board grid tile alignment — orphaned last card | P3 | Low priority — cosmetic; address in next UI polish session | 2026-03-08 |
-| DEF-202603-006 | Admin achievements — no photo upload | P2 | Needs Supabase Storage setup; address after user testing feedback | 2026-03-08 |
+| DEF-202603-006 | Admin achievements — no photo upload | P2 | Achievement photo upload in admin not yet implemented; DEF-202603-017 (photos not showing on landing) is now fixed | 2026-03-08 |
 | DEF-202603-007 | Featured event card not clickable | P2 | Needs /events/[slug] detail pages first; deferred | 2026-03-08 |
 | DEF-202603-008 | RSVP page not built | P2 | REQ-202603-007 in backlog; deferred | 2026-03-08 |
 | DEF-202603-009 | Achievement category — no add custom categories | P3 | Low priority; deferred | 2026-03-08 |

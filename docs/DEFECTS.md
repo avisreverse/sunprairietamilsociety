@@ -27,6 +27,32 @@ All bugs and defects tracked here with `DEF-YYYYMM-NNN` IDs.
 
 ---
 
+## DEF-202603-017: Achievement photo_url missing from landing page query
+**Severity:** P2
+**Status:** fixed
+**Created:** 2026-03-09
+**Fixed:** 2026-03-09
+**Linked Requirement:** REQ-202603-005
+**Found In:** Session 13
+
+### Description
+Achievement photos uploaded via admin were not appearing on the landing page NeytalAchievements section. The detail page `/achievements/[id]` showed photos correctly.
+
+### Root Cause
+Two omissions:
+1. `src/app/[locale]/page.tsx` — achievements Supabase query selected `"id,name,initials,category,achievement,year,color"` — `photo_url` was missing.
+2. `src/components/sections/NeytalAchievements.tsx` — `DbAchievement` interface had no `photo_url` field, and the avatar always rendered initials only.
+
+### Fix Applied
+- Added `photo_url` to the achievements select in `page.tsx`
+- Added `photo_url?: string | null` to `DbAchievement` interface
+- Updated avatar rendering to show `<img>` when `photo_url` exists, fallback to initials circle
+
+### Regression Tests Added
+- TC-DEF-202603-017: Upload a photo to an achievement in admin → verify it appears on both the landing page card and the `/achievements/[id]` detail page.
+
+---
+
 ## DEF-202603-003: Board Grid Tile Alignment — Orphaned Last Card
 **Severity:** P3
 **Status:** open
