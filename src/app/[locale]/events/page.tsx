@@ -51,7 +51,7 @@ export default async function EventsPage() {
     <>
       <Nav />
       <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FAF5EB" }}>
-        <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 3.5rem" }}>
+        <div className="spts-inner" style={{ maxWidth: "900px", margin: "0 auto", padding: "0 3.5rem" }}>
 
           {/* Breadcrumb */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "3rem" }}>
@@ -87,6 +87,7 @@ export default async function EventsPage() {
                   <Link
                     key={event.id}
                     href={`/events/${event.id}`}
+                    className="spts-events-card"
                     style={{
                       background: "white",
                       borderRadius: "16px",
@@ -126,18 +127,19 @@ export default async function EventsPage() {
                       )}
                     </div>
 
-                    {/* Action — RSVP stops card-link propagation; Details → is card click */}
+                    {/* Action — hidden on mobile (card itself is clickable via Link) */}
                     {event.rsvp_url ? (
                       <a
                         href={event.rsvp_url}
                         target="_blank" rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
+                        className="spts-events-card-btn"
                         style={{ padding: "0.65rem 1.4rem", borderRadius: "999px", background: accentColor, color: "white", fontFamily: "var(--font-body)", fontSize: "0.78rem", fontWeight: 500, textDecoration: "none", whiteSpace: "nowrap" }}
                       >
                         RSVP →
                       </a>
                     ) : (
-                      <div style={{ padding: "0.65rem 1.2rem", borderRadius: "999px", border: "1px solid rgba(26,20,16,0.1)", fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "rgba(26,20,16,0.4)", whiteSpace: "nowrap" }}>
+                      <div className="spts-events-card-btn" style={{ padding: "0.65rem 1.2rem", borderRadius: "999px", border: "1px solid rgba(26,20,16,0.1)", fontFamily: "var(--font-body)", fontSize: "0.72rem", color: "rgba(26,20,16,0.4)", whiteSpace: "nowrap" }}>
                         Details →
                       </div>
                     )}

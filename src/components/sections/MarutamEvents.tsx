@@ -62,7 +62,7 @@ export default function MarutamEvents({ events }: Props) {
   }
 
   return (
-    <section id="marutam" style={{ background: "#FAF5EB", padding: "6rem 3.5rem" }}>
+    <section id="marutam" className="spts-section" style={{ background: "#FAF5EB", padding: "6rem 3.5rem" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
         {/* Header */}
@@ -100,7 +100,7 @@ export default function MarutamEvents({ events }: Props) {
                 transition={SPRING}
                 onClick={() => router.push(`/events/${featured.id}`)}
               >
-                <div style={{ background: "#1A1410", borderRadius: "18px", padding: "2.5rem", marginBottom: "1rem", display: "grid", gridTemplateColumns: "110px 1fr auto", gap: "2rem", alignItems: "center" }}>
+                <div className="spts-feat-card" style={{ background: "#1A1410", borderRadius: "18px", padding: "2.5rem", marginBottom: "1rem", display: "grid", gridTemplateColumns: "110px 1fr auto", gap: "2rem", alignItems: "center" }}>
                   <div style={{ background: "#7A1515", borderRadius: "12px", padding: "1rem", textAlign: "center" }}>
                     <div style={{ fontFamily: "var(--font-body)", fontSize: "0.56rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: "0.2rem" }}>{month}</div>
                     <div style={{ fontFamily: "var(--font-display)", fontSize: "2.4rem", fontWeight: 700, color: "white", lineHeight: 1 }}>{day}</div>
@@ -117,6 +117,7 @@ export default function MarutamEvents({ events }: Props) {
                       href={featured.rsvp_url}
                       target="_blank" rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
+                      className="spts-feat-card-btn"
                       style={{ display: "inline-block", padding: "0.8rem 1.6rem", borderRadius: "999px", background: "#7A1515", color: "white", fontFamily: "var(--font-body)", fontSize: "0.8rem", fontWeight: 500, textDecoration: "none", whiteSpace: "nowrap" }}
                       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#6A1010")}
                       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#7A1515")}
@@ -124,7 +125,7 @@ export default function MarutamEvents({ events }: Props) {
                       RSVP →
                     </a>
                   ) : (
-                    <div style={{ padding: "0.8rem 1.4rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.12)", fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "rgba(255,255,255,0.35)", whiteSpace: "nowrap" }}>
+                    <div className="spts-feat-card-btn" style={{ padding: "0.8rem 1.4rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.12)", fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "rgba(255,255,255,0.35)", whiteSpace: "nowrap" }}>
                       Details TBA
                     </div>
                   )}
@@ -140,7 +141,7 @@ export default function MarutamEvents({ events }: Props) {
           return (
             <ScrollReveal key={event.id} delay={0.15 + i * 0.08}>
               <motion.div style={{ borderRadius: "12px" }} whileHover={{ x: 4 }} transition={SPRING}>
-                <div style={{ display: "grid", gridTemplateColumns: "90px 1fr auto", gap: "2rem", alignItems: "center", padding: "1.6rem 0", borderBottom: "1px solid rgba(26,20,16,0.08)" }}>
+                <div className="spts-event-row" style={{ display: "grid", gridTemplateColumns: "90px 1fr auto", gap: "2rem", alignItems: "center", padding: "1.6rem 0", borderBottom: "1px solid rgba(26,20,16,0.08)" }}>
                   <div style={{ background: "white", border: "1px solid rgba(26,20,16,0.08)", borderRadius: "10px", padding: "0.7rem", textAlign: "center", boxShadow: "0 2px 12px rgba(26,20,16,0.06)" }}>
                     <div style={{ fontFamily: "var(--font-body)", fontSize: "0.54rem", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase", color: "#7A1515" }}>{month}</div>
                     <div style={{ fontFamily: "var(--font-display)", fontSize: "1.7rem", fontWeight: 700, color: "#1A1410", lineHeight: 1.1 }}>{day}</div>
@@ -153,6 +154,7 @@ export default function MarutamEvents({ events }: Props) {
                     <a
                       href={event.rsvp_url}
                       target="_blank" rel="noopener noreferrer"
+                      className="spts-event-row-btn"
                       style={{ padding: "0.55rem 1.3rem", borderRadius: "999px", border: "1px solid rgba(26,20,16,0.15)", fontFamily: "var(--font-body)", fontSize: "0.76rem", color: "#1A1410", textDecoration: "none", whiteSpace: "nowrap" }}
                       onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.background = "#1A1410"; el.style.color = "white"; }}
                       onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.background = "transparent"; el.style.color = "#1A1410"; }}
@@ -162,6 +164,7 @@ export default function MarutamEvents({ events }: Props) {
                   ) : (
                     <Link
                       href={`/events/${event.id}`}
+                      className="spts-event-row-btn"
                       style={{ padding: "0.55rem 1.3rem", borderRadius: "999px", border: "1px solid rgba(26,20,16,0.12)", fontFamily: "var(--font-body)", fontSize: "0.76rem", color: "rgba(26,20,16,0.5)", textDecoration: "none", whiteSpace: "nowrap" }}
                       onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(26,20,16,0.3)"; el.style.color = "#1A1410"; }}
                       onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(26,20,16,0.12)"; el.style.color = "rgba(26,20,16,0.5)"; }}

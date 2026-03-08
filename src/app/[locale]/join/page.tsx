@@ -24,7 +24,7 @@ export default function JoinPage() {
     <>
       <Nav />
       <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FDF8F0" }}>
-        <div style={{ maxWidth: "960px", margin: "0 auto", padding: "0 3.5rem" }}>
+        <div className="spts-inner" style={{ maxWidth: "960px", margin: "0 auto", padding: "0 3.5rem" }}>
 
           {/* Breadcrumb */}
           <div style={{ marginBottom: "3rem" }}>
@@ -46,7 +46,7 @@ export default function JoinPage() {
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "start" }}>
+          <div className="spts-join-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "3rem", alignItems: "start" }}>
 
             {/* Ways to join */}
             <div>

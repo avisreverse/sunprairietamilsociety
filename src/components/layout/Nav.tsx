@@ -172,6 +172,7 @@ export default function Nav() {
 
         {/* ── Main navigation bar ── */}
         <nav
+          className="spts-nav-bar"
           style={{
             padding: "1.25rem 3.5rem",
             display: "flex",

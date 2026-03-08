@@ -41,7 +41,7 @@ export default async function AchievementDetailPage({ params }: Props) {
     <>
       <Nav />
       <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#111010" }}>
-        <div style={{ maxWidth: "780px", margin: "0 auto", padding: "0 3.5rem" }}>
+        <div className="spts-inner" style={{ maxWidth: "780px", margin: "0 auto", padding: "0 3.5rem" }}>
 
           {/* Breadcrumb */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "3rem" }}>

@@ -33,7 +33,7 @@ const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
 
 export default function PalaiBoard({ board }: Props) {
   return (
-    <section id="palai" style={{ background: "#FDF8F0", padding: "6rem 3.5rem" }}>
+    <section id="palai" className="spts-section" style={{ background: "#FDF8F0", padding: "6rem 3.5rem" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
         {/* Header */}
@@ -105,6 +105,7 @@ export default function PalaiBoard({ board }: Props) {
         {/* CTA row */}
         <ScrollReveal delay={0.3}>
           <div
+            className="spts-cta-grid"
             style={{
               background: "#1A1410",
               borderRadius: "20px",
@@ -124,7 +125,7 @@ export default function PalaiBoard({ board }: Props) {
                 Whether you want to enroll your child in Tamil School, volunteer, or simply belong — SPTS is your home.
               </p>
             </div>
-            <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
+            <div className="spts-cta-btns" style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
               <Link
                 href="/join"
                 style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", background: "#8B1A1A", color: "white", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 500, textDecoration: "none" }}

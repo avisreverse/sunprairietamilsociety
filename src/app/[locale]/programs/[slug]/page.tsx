@@ -40,7 +40,7 @@ export default async function ProgramDetailPage({ params }: Props) {
     <>
       <Nav />
       <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FDF8F0" }}>
-        <div style={{ maxWidth: "860px", margin: "0 auto", padding: "0 3.5rem" }}>
+        <div className="spts-inner" style={{ maxWidth: "860px", margin: "0 auto", padding: "0 3.5rem" }}>
 
           {/* Breadcrumb */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "3rem" }}>
@@ -84,7 +84,7 @@ export default async function ProgramDetailPage({ params }: Props) {
           )}
 
           {/* Details + sidebar grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: "3rem", alignItems: "start" }}>
+          <div className="spts-sidebar-layout" style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: "3rem", alignItems: "start" }}>
 
             {/* Details list */}
             {details.length > 0 && (

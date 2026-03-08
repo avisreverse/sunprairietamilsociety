@@ -198,3 +198,55 @@
   stroke-dashoffset: 905;
   animation: kolam-ring-inner 2.5s cubic-bezier(0.22, 1, 0.36, 1) 2.2s forwards;
 }
+
+/* ─── SPTS Mobile Responsive Overrides ──────────────────────────────────────
+   Components use inline styles for desktop layout. These CSS classes override
+   them on mobile using !important (required to beat inline style specificity).
+   Breakpoint: 768px (tablet/mobile boundary).
+   Rule 6 compliance: mobile-first from day 1.
+*/
+@media (max-width: 768px) {
+  /* Nav bar horizontal padding */
+  .spts-nav-bar { padding-left: 1rem !important; padding-right: 1rem !important; }
+
+  /* Landing page section horizontal padding (sections use "6rem 3.5rem") */
+  .spts-section { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+
+  /* Inner page container padding (detail pages use "0 3.5rem") */
+  .spts-inner { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+
+  /* LandingHero footer: 3-col "1fr auto 1fr" → single column */
+  .spts-hero-footer { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  .spts-hero-footer-right { text-align: left !important; }
+
+  /* MullaiPrograms bento: "1fr 2fr" → single column */
+  .spts-bento { grid-template-columns: 1fr !important; }
+  /* MullaiPrograms sub-grid: "1fr 1fr" → single column */
+  .spts-sub-grid { grid-template-columns: 1fr !important; }
+
+  /* NeytalAchievements: "repeat(3, 1fr)" → single column */
+  .spts-ach-grid { grid-template-columns: 1fr !important; }
+
+  /* MarutamEvents featured card: "110px 1fr auto" → date + content only */
+  .spts-feat-card { grid-template-columns: 88px 1fr !important; }
+  /* Featured card button goes to its own full-width row */
+  .spts-feat-card-btn { grid-column: 1 / -1 !important; }
+
+  /* MarutamEvents list rows: "90px 1fr auto" → date + info, hide action */
+  .spts-event-row { grid-template-columns: 72px 1fr !important; }
+  .spts-event-row-btn { display: none !important; }
+
+  /* PalaiBoard CTA block: "1fr 1fr" → single column */
+  .spts-cta-grid { grid-template-columns: 1fr !important; }
+  .spts-cta-btns { justify-content: flex-start !important; }
+
+  /* Programs/Board detail sidebar layouts: "1fr Npx" → single column */
+  .spts-sidebar-layout { grid-template-columns: 1fr !important; }
+
+  /* Join page: "1fr 1fr" → single column */
+  .spts-join-grid { grid-template-columns: 1fr !important; }
+
+  /* Events list cards: "88px 1fr auto" → date + info, hide action */
+  .spts-events-card { grid-template-columns: 72px 1fr !important; }
+  .spts-events-card-btn { display: none !important; }
+}

@@ -34,7 +34,7 @@ const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
 
 export default function NeytalAchievements({ achievements }: Props) {
   return (
-    <section id="neytal" style={{ background: "#111010", padding: "6rem 3.5rem" }}>
+    <section id="neytal" className="spts-section" style={{ background: "#111010", padding: "6rem 3.5rem" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
         {/* Header */}
@@ -61,7 +61,7 @@ export default function NeytalAchievements({ achievements }: Props) {
         </ScrollReveal>
 
         {/* Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
+        <div className="spts-ach-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
           {achievements.length === 0 && (
             <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "3rem 0", fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.25)" }}>
               Achievements coming soon.

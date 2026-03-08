@@ -42,7 +42,6 @@ export default function LandingHero() {
         style={{
           maxWidth: "1440px",
           margin: "0 auto",
-          padding: "0 3.5rem",
         }}
         className="px-6 md:px-14"
       >
@@ -181,7 +180,7 @@ export default function LandingHero() {
             alignItems: "center",
             padding: "2rem 0 3.5rem",
           }}
-          className="grid-cols-1 md:grid-cols-3"
+          className="spts-hero-footer"
         >
           {/* Left: story text */}
           <p
@@ -249,6 +248,7 @@ export default function LandingHero() {
 
           {/* Right: stats */}
           <div
+            className="spts-hero-footer-right"
             style={{
               textAlign: "right",
               fontFamily: "var(--font-body)",

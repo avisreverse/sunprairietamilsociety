@@ -47,7 +47,7 @@ export default function MullaiPrograms({ programs }: Props) {
   }
 
   return (
-    <section id="mullai" style={{ background: "#111010", padding: "6rem 3.5rem" }}>
+    <section id="mullai" className="spts-section" style={{ background: "#111010", padding: "6rem 3.5rem" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
         {/* Header */}
@@ -73,7 +73,7 @@ export default function MullaiPrograms({ programs }: Props) {
         </div>
 
         {/* Bento grid — DEF-202603-010: 2-col layout so rest cards auto-wrap for any count */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1.25rem", alignItems: "stretch" }}>
+        <div className="spts-bento" style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1.25rem", alignItems: "stretch" }}>
 
           {/* Featured card — left column, full height */}
           <motion.div
@@ -130,7 +130,7 @@ export default function MullaiPrograms({ programs }: Props) {
           </motion.div>
 
           {/* Regular cards — right column sub-grid, 2-col, wraps for any count */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", alignContent: "start" }}>
+          <div className="spts-sub-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", alignContent: "start" }}>
             {rest.map((prog, i) => (
               <motion.div
                 key={prog.slug}

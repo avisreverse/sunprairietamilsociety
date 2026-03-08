@@ -43,7 +43,7 @@ export default async function BoardMemberPage({ params }: Props) {
     <>
       <Nav />
       <main style={{ paddingTop: "8.5rem", paddingBottom: "6rem", minHeight: "100vh", background: "#FDF8F0" }}>
-        <div style={{ maxWidth: "780px", margin: "0 auto", padding: "0 3.5rem" }}>
+        <div className="spts-inner" style={{ maxWidth: "780px", margin: "0 auto", padding: "0 3.5rem" }}>
 
           {/* Breadcrumb */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "3rem" }}>
@@ -120,7 +120,7 @@ export default async function BoardMemberPage({ params }: Props) {
           )}
 
           {/* Responsibilities + sidebar */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 240px", gap: "3rem", alignItems: "start", marginBottom: "4rem" }}>
+          <div className="spts-sidebar-layout" style={{ display: "grid", gridTemplateColumns: "1fr 240px", gap: "3rem", alignItems: "start", marginBottom: "4rem" }}>
             {responsibilities.length > 0 && (
               <div>
                 <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.05rem", fontWeight: 700, color: "#1A1410", marginBottom: "1.25rem" }}>
