@@ -82,7 +82,7 @@ export default function LandingHero({ heroContent }: Props) {
               color: "rgba(26,20,16,0.45)",
             }}
           >
-            Sun Prairie, Wisconsin &nbsp;·&nbsp; Est. 2012
+            Sun Prairie, Wisconsin &nbsp;·&nbsp; Est. {heroContent.year}
           </span>
         </motion.div>
 
@@ -157,7 +157,7 @@ export default function LandingHero({ heroContent }: Props) {
                   color: "rgba(26,20,16,0.45)",
                 }}
               >
-                Sun Prairie · Wisconsin · Est. 2012
+                Sun Prairie · Wisconsin · Est. {heroContent.year}
               </span>
               <div style={{ width: "20px", height: "1px", background: "rgba(26,20,16,0.35)" }} />
             </div>
