@@ -31,7 +31,7 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 | REQ-202603-008 | P2 | in_progress | Program website URL — optional admin-controlled external link | Migration 004 run (confirmed). Admin form has URL + visibility checkbox. /programs/[slug] shows "Visit website →" in sidebar when visible=true. Verified live. |
 | REQ-202603-009 | P2 | in_progress | External announcement board — ticker + detail pages | Migration 005 run (confirmed). /admin/announcements CRUD with poster upload, expiry, publish toggle. AnnouncementTicker inside Nav. /announcements/[id] detail page. Verified end-to-end by user. |
 | REQ-202603-010 | P2 | in_progress | Home page admin editing — hero story, year, tagline, subtext | Migration 006 run (confirmed). /admin/home page with 4 editable fields. site_settings table. heroContent wired in page.tsx. Year propagates to hero (×3 instances) + footer. programCount always live from DB. |
-| REQ-202603-011 | P2 | backlog | Section visibility toggles — admin can hide Events/Achievements homepage sections | Two boolean flags in site_settings. Toggles in /admin/events and /admin/achievements. Submit form always accessible regardless of toggle. |
+| REQ-202603-011 | P2 | in_progress | Section visibility toggles — admin can hide Events/Achievements homepage sections | Implemented + deployed. Upsert fix makes it migration-independent. Playwright E2E pending. |
 
 ---
 
@@ -77,7 +77,7 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 
 ## REQ-202603-011: Section Visibility Toggles
 **Priority:** P2
-**Status:** backlog
+**Status:** in_progress
 **Created:** 2026-03-09
 **Updated:** 2026-03-09
 
@@ -85,11 +85,12 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 Admin can hide the Achievements section and Events section on the homepage when there is no content to show. Controlled by two boolean flags stored in `site_settings` (same table used by REQ-202603-010). Toggles live inside the relevant admin section pages. Achievement submit form (`/achievements/submit`) is always accessible regardless of toggle state.
 
 ### Acceptance Criteria
-- [ ] `events_section_enabled` flag in site_settings defaults to `"true"` — Events section shows by default
-- [ ] `achievements_section_enabled` flag in site_settings defaults to `"true"` — Achievements section shows by default
-- [ ] Admin can toggle each flag in the respective admin section header (on/off checkbox)
-- [ ] When a section is disabled, it does not render on the homepage — no gap, no placeholder
-- [ ] `/achievements/submit` page remains accessible regardless of the achievements toggle
+- [x] `events_section_enabled` flag in site_settings defaults to `"true"` — Events section shows by default
+- [x] `achievements_section_enabled` flag in site_settings defaults to `"true"` — Achievements section shows by default
+- [x] Admin can toggle each flag in the respective admin section header (on/off checkbox)
+- [x] When a section is disabled, it does not render on the homepage — no gap, no placeholder
+- [x] `/achievements/submit` page remains accessible regardless of the achievements toggle
+- [ ] Playwright E2E test validates toggle off/on cycle end-to-end
 
 ### Design Considerations
 - Mobile: toggle is a standard checkbox — no mobile-specific behavior needed

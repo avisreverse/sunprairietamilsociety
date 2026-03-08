@@ -6,15 +6,15 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 3 — All public pages fully DB-driven + full mobile audit complete. Board grid, footer, ThirukkuralSection, announcements all correctly responsive at 375px. 3 legacy open defects remain (P2/P3).
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. CI passing. Mobile responsive audit complete — all pages verified at 390px viewport.
+**Phase:** Phase 3 — All public pages fully DB-driven + full mobile audit complete. REQ-202603-011 (section visibility toggles) implemented and live. 2 legacy open defects remain (P2/P3).
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. CI passing. Admin can now hide/show Events and Achievements sections on homepage.
 **Last Updated:** 2026-03-09
 **Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
 **Admin URL:** https://sunprairietamilsociety.vercel.app/en/admin
 **Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel. DB tables created + seeded.
 
-### What's Done (updated 2026-03-09 Session 16)
+### What's Done (updated 2026-03-09 Session 17)
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
@@ -64,6 +64,7 @@ Track session-by-session progress. Always read this at session start.
 - [x] **DEF-202603-019** — CI Quality Gate failing: all 6 ESLint errors fixed (set-state-in-effect ×6, no-explicit-any, unescaped-entities, no-html-link-for-pages) — CI now passes green
 - [x] **DEF-202603-020** — Footer year hardcoded: Footer now accepts `foundingYear` prop from page.tsx (DB-sourced heroContent.year) so admin year change reflects in footer description
 - [x] **Mobile audit complete (Session 16)** — Full 390px mobile audit: board grid (gridColumn:2/3 orphan card fix via inline <style> + ID selector), footer padding, ThirukkuralSection watermark overflow, announcements page padding. Root cause: last card's gridColumn:"2/3" was creating implicit 2nd column that CSS overrides couldn't prevent; fixed with `#board-members-grid > * { grid-column: auto !important }`.
+- [x] **REQ-202603-011 — Section visibility toggles (Session 17)** — Admin can hide Events and Achievements sections on homepage via checkboxes in /admin/events and /admin/achievements. Flags stored in site_settings (`events_section_enabled`, `achievements_section_enabled`). site-settings PUT route changed to upsert so saves work before migration is run. Migration 007 SQL files created. Homepage conditional rendering wired. PostToolUse hook false-positive fixed.
 
 ### What's Pending (Next Session)
 - [x] **DEF-202603-003**: /board page grid tile alignment — RESOLVED: mobile fix forces 1-col stacked layout
@@ -75,6 +76,7 @@ Track session-by-session progress. Always read this at session start.
 - [ ] Sentry integration
 - [ ] Thirukkural GitHub fetch CORS verification on Vercel network
 - [ ] Admin auth — PL-004: add community_admin role to spts-clean Supabase (after site feature-complete)
+- [ ] Run migration 007 in Supabase SQL editor (optional — upsert creates rows on first toggle click anyway)
 
 ### Open Defects
 - DEF-202603-008: RSVP page not built (P2)
@@ -90,10 +92,40 @@ Track session-by-session progress. Always read this at session start.
 - REQ-202603-006: in_progress — Board fully DB-driven. Photos on all 3 surfaces.
 - REQ-202603-008: in_progress — Program website URL live. Migration 004 confirmed run. Verified by user.
 - REQ-202603-009: in_progress — Announcements board live. Migration 005 confirmed run. Ticker + detail page verified by user.
+- REQ-202603-011: in_progress — Section visibility toggles live. Admin UI in /admin/events and /admin/achievements. Upsert fix deployed. Playwright E2E pending.
 
 ---
 
 ## Session Log
+
+### Session 17 — 2026-03-09
+
+**Focus:** REQ-202603-011 — Admin section visibility toggles for Events and Achievements homepage sections
+
+**Completed:**
+- **REQ-202603-011 — Section visibility toggles**: Admin can now check/uncheck "Show Events section on homepage" and "Show Achievements section on homepage" directly inside /admin/events and /admin/achievements pages. Saves immediately on click with ON/OFF indicator.
+- **`/admin/events/page.tsx`**: Added `sectionEnabled`/`togglingSection` state, modified `load()` to fetch site-settings, added `toggleSection()` + toggle UI checkbox block.
+- **`/admin/achievements/page.tsx`**: Same pattern. Note text clarifies `/achievements/submit` form remains accessible.
+- **`src/app/[locale]/page.tsx`**: Reads `events_section_enabled` and `achievements_section_enabled` from settingsMap; conditionally renders `<MarutamEvents>` and `<NeytalAchievements>` only when flags are not `"false"`.
+- **`src/app/api/admin/site-settings/route.ts`** — Critical fix: changed `.update().eq("key",key)` to `.upsert({ key, value }, { onConflict:"key" })` — previous `.update()` silently did nothing when the row didn't exist yet (migration not run), causing toggles to appear to save but have no effect on the homepage.
+- **`database/migrations/007_add_section_visibility.up.sql`**: Inserts `events_section_enabled=true` and `achievements_section_enabled=true` rows with ON CONFLICT DO NOTHING (safe to run at any time).
+- **`database/migrations/007_add_section_visibility.down.sql`**: Deletes the two rows for clean rollback.
+- **`.claude/settings.json`** PostToolUse hook fix: Tightened prompt to only flag actual function declarations — was incorrectly flagging `const eventsEnabled = ...` variable declarations as "missing JSDoc."
+
+**Root Cause of Toggles Not Working:**
+`.update().eq("key", key)` silently does nothing when the row doesn't exist. Migration 007 had not been run, so the rows were absent. The API returned `PGRST116` (no rows) but the client received the save response and updated UI state — giving false confidence. Fix: `.upsert()` creates the row on the first save if missing.
+
+**New Defects Found:** None
+
+**Deferred / Remaining Open:**
+- Migration 007 can optionally be run in Supabase — upsert makes it non-blocking
+- DEF-202603-008, 009 still open (P2, P3)
+- Events detail pages /events/[id] — not started
+- Playwright E2E testing — still pending
+
+**Deployment:** `git push origin main && git push origin main:release` — commit `6c934bf` live on Vercel
+
+---
 
 ### Session 16 — 2026-03-09
 

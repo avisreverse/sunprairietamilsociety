@@ -29,7 +29,9 @@ Items land here when:
 | REQ-202603-003 Thirukkural | Full chapter lookup, watermarks, 3-line fix | Verify GitHub raw fetch works on Vercel (CORS) — test from live URL in incognito | Needs verification |
 | Events detail pages | /events listing exists + DB-driven | Create /events/[id] individual event pages | Not started |
 | Playwright E2E testing | User requested automated testing to replace manual testing | Set up Playwright test suite for all user flows (programs, events, achievements, board, admin) | Next session priority |
+| Migration 007 (section visibility rows) | SQL files created (007_add_section_visibility.up/down.sql) | Optional: run in Supabase SQL editor — upsert in API makes this non-blocking | Low priority — upsert handles it |
 <!-- Mobile responsiveness audit COMPLETE — Session 16. All pages verified at 390px. -->
+<!-- REQ-202603-011 IMPLEMENTED — Session 17. All code deployed. Playwright E2E only item remaining. -->
 
 ---
 
