@@ -39,10 +39,11 @@ export async function PUT(request: NextRequest) {
   }
 
   const admin = createAdminClient();
+  // Upsert: creates the row if it doesn't exist (e.g. migration not yet run),
+  // or updates value if it does. onConflict:"key" matches the PRIMARY KEY.
   const { data, error } = await admin
     .from("site_settings")
-    .update({ value, updated_at: new Date().toISOString() })
-    .eq("key", key)
+    .upsert({ key, value, updated_at: new Date().toISOString() }, { onConflict: "key" })
     .select()
     .single();
 
@@ -51,6 +52,6 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  console.log(`✅ [API/admin/site-settings] Updated key="${key}"`);
+  console.log(`✅ [API/admin/site-settings] Upserted key="${key}"`);
   return NextResponse.json(data);
 }
