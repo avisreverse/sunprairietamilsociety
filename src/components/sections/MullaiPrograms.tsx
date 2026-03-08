@@ -57,8 +57,9 @@ export default function MullaiPrograms({ programs }: Props) {
               <div style={{ width: "20px", height: "1px", background: "#D4930A" }} />
               What We Offer
             </div>
+            {/* DEF-202603-011: dynamic count instead of hardcoded "Five" */}
             <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem, 3vw, 2.8rem)", fontWeight: 700, color: "white", lineHeight: 1.15 }}>
-              Five ways to belong
+              {programs.length} way{programs.length !== 1 ? "s" : ""} to belong
             </h2>
           </div>
           <Link
@@ -71,13 +72,12 @@ export default function MullaiPrograms({ programs }: Props) {
           </Link>
         </div>
 
-        {/* Bento grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gridTemplateRows: "auto auto", gap: "1.25rem" }}>
+        {/* Bento grid — DEF-202603-010: 2-col layout so rest cards auto-wrap for any count */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "1.25rem", alignItems: "stretch" }}>
 
-          {/* Featured card — spans 2 rows */}
+          {/* Featured card — left column, full height */}
           <motion.div
             style={{
-              gridColumn: "1", gridRow: "1 / 3",
               boxShadow: "0 8px 40px rgba(0,0,0,0.55)",
               borderRadius: "18px",
             }}
@@ -129,46 +129,48 @@ export default function MullaiPrograms({ programs }: Props) {
             </Link>
           </motion.div>
 
-          {/* Regular cards */}
-          {rest.map((prog, i) => (
-            <motion.div
-              key={prog.slug}
-              style={{ boxShadow: "0 6px 28px rgba(0,0,0,0.5)", borderRadius: "16px" }}
-              whileHover={{ y: -8, boxShadow: "0 22px 60px rgba(0,0,0,0.7)" }}
-              transition={{ ...SPRING, delay: i * 0.02 }}
-            >
-              <Link
-                href={`/programs/${prog.slug}`}
-                style={{
-                  display: "flex", flexDirection: "column",
-                  height: "100%", minHeight: "200px",
-                  padding: "2rem",
-                  borderRadius: "16px",
-                  border: `1px solid ${prog.color}30`,
-                  background: `linear-gradient(135deg, ${prog.color}20 0%, #1E1A18 70%)`,
-                  textDecoration: "none",
-                }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${prog.color}60`)}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${prog.color}30`)}
+          {/* Regular cards — right column sub-grid, 2-col, wraps for any count */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", alignContent: "start" }}>
+            {rest.map((prog, i) => (
+              <motion.div
+                key={prog.slug}
+                style={{ boxShadow: "0 6px 28px rgba(0,0,0,0.5)", borderRadius: "16px" }}
+                whileHover={{ y: -8, boxShadow: "0 22px 60px rgba(0,0,0,0.7)" }}
+                transition={{ ...SPRING, delay: i * 0.02 }}
               >
-                <div style={{ width: "24px", height: "3px", borderRadius: "2px", background: prog.color, marginBottom: "1rem" }} />
-                {prog.name_ta && (
-                  <div style={{ fontFamily: "var(--font-tamil)", fontSize: "0.8rem", color: `${prog.color}aa`, marginBottom: "0.35rem" }}>
-                    {prog.name_ta}
-                  </div>
-                )}
-                <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem", fontWeight: 700, color: "white", marginBottom: "0.6rem", lineHeight: 1.2, flex: 1 }}>
-                  {prog.name_en}
-                </h3>
-                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", fontWeight: 300, lineHeight: 1.65, color: "rgba(255,255,255,0.5)" }}>
-                  {prog.description}
-                </p>
-                <span style={{ display: "block", marginTop: "1rem", fontFamily: "var(--font-body)", fontSize: "0.72rem", fontWeight: 500, color: `${prog.color}cc` }}>
-                  Explore →
-                </span>
-              </Link>
-            </motion.div>
-          ))}
+                <Link
+                  href={`/programs/${prog.slug}`}
+                  style={{
+                    display: "flex", flexDirection: "column",
+                    height: "100%", minHeight: "200px",
+                    padding: "2rem",
+                    borderRadius: "16px",
+                    border: `1px solid ${prog.color}30`,
+                    background: `linear-gradient(135deg, ${prog.color}20 0%, #1E1A18 70%)`,
+                    textDecoration: "none",
+                  }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${prog.color}60`)}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${prog.color}30`)}
+                >
+                  <div style={{ width: "24px", height: "3px", borderRadius: "2px", background: prog.color, marginBottom: "1rem" }} />
+                  {prog.name_ta && (
+                    <div style={{ fontFamily: "var(--font-tamil)", fontSize: "0.8rem", color: `${prog.color}aa`, marginBottom: "0.35rem" }}>
+                      {prog.name_ta}
+                    </div>
+                  )}
+                  <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.15rem", fontWeight: 700, color: "white", marginBottom: "0.6rem", lineHeight: 1.2, flex: 1 }}>
+                    {prog.name_en}
+                  </h3>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: "0.8rem", fontWeight: 300, lineHeight: 1.65, color: "rgba(255,255,255,0.5)" }}>
+                    {prog.description}
+                  </p>
+                  <span style={{ display: "block", marginTop: "1rem", fontFamily: "var(--font-body)", fontSize: "0.72rem", fontWeight: 500, color: `${prog.color}cc` }}>
+                    Explore →
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -22,6 +22,13 @@ export async function PATCH(
   const body = await request.json();
 
   const admin = createAdminClient();
+
+  // DEF-202603-012: When featuring an event, auto-unfeature all others so only one is featured
+  if (body.featured === true) {
+    await admin.from("events").update({ featured: false }).neq("id", id);
+    console.log(`✅ [API/admin/events/${id}] PATCH — unfeatured all other events`);
+  }
+
   const { data, error } = await admin
     .from("events")
     .update(body)
