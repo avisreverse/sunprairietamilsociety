@@ -33,6 +33,18 @@ interface Props {
 const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
 
 export default function NeytalAchievements({ achievements }: Props) {
+  /**
+   * Dynamic adaptive grid — fills the section width uniformly for any card count.
+   * Uses a double-column inner grid so orphan items can span wider without gaps.
+   * cols: ideal column count | gridInner: actual CSS columns (cols × 2)
+   * Normal items span 2 inner cols; orphans span gridInner/orphans to fill the row.
+   * @see REQ-202603-001 — uniform card grid
+   */
+  const count = achievements.length;
+  const cols = count <= 2 ? Math.max(count, 1) : count === 4 ? 2 : 3;
+  const orphans = count % cols;
+  const gridInner = cols * 2; // double-col grid enables flexible orphan spanning
+
   return (
     <section id="neytal" className="spts-section" style={{ background: "#111010", padding: "6rem 3.5rem", minHeight: "100dvh" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
@@ -60,15 +72,20 @@ export default function NeytalAchievements({ achievements }: Props) {
           </div>
         </ScrollReveal>
 
-        {/* Grid */}
-        <div className="spts-ach-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+        {/* Grid — gridInner columns, each card spans 2 (orphans span wider to fill row) */}
+        <div className="spts-ach-grid" style={{ display: "grid", gridTemplateColumns: `repeat(${gridInner}, 1fr)`, gap: "1.25rem" }}>
           {achievements.length === 0 && (
             <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "3rem 0", fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.25)" }}>
               Achievements coming soon.
             </div>
           )}
-          {achievements.map((item, i) => (
-            <ScrollReveal key={item.id} delay={i * 0.07}>
+          {achievements.map((item, i) => {
+            // Orphan items are in the last incomplete row — spread them evenly
+            const isOrphan = orphans > 0 && i >= count - orphans;
+            const span = isOrphan ? Math.floor(gridInner / orphans) : 2;
+            return (
+            <div key={item.id} className="spts-ach-item" style={{ gridColumn: `span ${span}` }}>
+            <ScrollReveal delay={i * 0.07}>
               <motion.a
                 href={`/achievements/${item.id}`}
                 style={{
@@ -139,7 +156,9 @@ export default function NeytalAchievements({ achievements }: Props) {
                 </p>
               </motion.a>
             </ScrollReveal>
-          ))}
+            </div>
+            );
+          })}
         </div>
       </div>
     </section>
