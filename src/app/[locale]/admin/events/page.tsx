@@ -116,7 +116,12 @@ export default function AdminEventsPage() {
             <div style={{ fontFamily: "var(--font-body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.2em", textTransform: "uppercase", color: "#D4930A", marginBottom: "0.25rem" }}>Admin</div>
             <h1 style={{ fontFamily: "var(--font-display)", fontSize: "1.75rem", fontWeight: 700, color: "white", margin: 0 }}>Events</h1>
           </div>
-          <button style={S.btn("#D4930A", "rgba(212,147,10,0.15)")} onClick={openAdd}>+ Add Event</button>
+          <div style={{ textAlign: "right" }}>
+            <button style={S.btn("#D4930A", "rgba(212,147,10,0.15)")} onClick={openAdd}>+ Add Event</button>
+            <div style={{ fontFamily: "var(--font-body)", fontSize: "0.68rem", color: "rgba(255,255,255,0.3)", marginTop: "0.35rem" }}>
+              Only 1 event can be featured. Featuring a new one auto-unfeatures the current.
+            </div>
+          </div>
         </div>
 
         {/* Form modal */}

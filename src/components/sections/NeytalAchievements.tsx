@@ -22,6 +22,8 @@ interface DbAchievement {
   achievement: string;
   year: string;
   color: string;
+  /** DEF-202603-017: photo_url was missing from landing page query + interface */
+  photo_url?: string | null;
 }
 
 interface Props {
@@ -85,19 +87,33 @@ export default function NeytalAchievements({ achievements }: Props) {
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${item.color}25`)}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.25rem" }}>
-                  <div
-                    style={{
-                      width: "48px", height: "48px", borderRadius: "50%",
-                      background: `${item.color}30`,
-                      border: `2px solid ${item.color}70`,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontFamily: "var(--font-display)",
-                      fontSize: "1rem", fontWeight: 700, color: item.color,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {item.initials}
-                  </div>
+                  {/* DEF-202603-017: Show photo if uploaded, else initials avatar */}
+                  {item.photo_url ? (
+                    <img
+                      src={item.photo_url}
+                      alt={item.name}
+                      style={{
+                        width: "48px", height: "48px", borderRadius: "50%",
+                        objectFit: "cover",
+                        border: `2px solid ${item.color}70`,
+                        flexShrink: 0,
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: "48px", height: "48px", borderRadius: "50%",
+                        background: `${item.color}30`,
+                        border: `2px solid ${item.color}70`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontFamily: "var(--font-display)",
+                        fontSize: "1rem", fontWeight: 700, color: item.color,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {item.initials}
+                    </div>
+                  )}
                   <div>
                     <div style={{ fontFamily: "var(--font-body)", fontSize: "0.9rem", fontWeight: 600, color: "white", lineHeight: 1.2 }}>{item.name}</div>
                     <div style={{ fontFamily: "var(--font-body)", fontSize: "0.68rem", fontWeight: 400, color: "rgba(255,255,255,0.35)", marginTop: "0.2rem" }}>{item.year}</div>

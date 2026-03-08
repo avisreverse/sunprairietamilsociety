@@ -6,6 +6,7 @@ import ThirukkuralSection from "@/components/sections/ThirukkuralSection";
 import MarutamEvents from "@/components/sections/MarutamEvents";
 import NeytalAchievements from "@/components/sections/NeytalAchievements";
 import PalaiBoard from "@/components/sections/PalaiBoard";
+import AnnouncementBar from "@/components/ui/AnnouncementBar";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -38,7 +39,7 @@ export default async function HomePage() {
 
     supabase
       .from("achievements")
-      .select("id,name,initials,category,achievement,year,color")
+      .select("id,name,initials,category,achievement,year,color,photo_url")
       .eq("is_approved", true)
       .eq("is_published", true)
       .order("year", { ascending: false })
@@ -91,6 +92,9 @@ export default async function HomePage() {
       <PalaiBoard board={board} />
 
       <Footer />
+
+      {/* REQ-202603-009: Floating dismissible announcement cards (bottom-right) */}
+      <AnnouncementBar />
     </>
   );
 }

@@ -25,6 +25,10 @@ interface Program {
   featured: boolean;
   display_order: number;
   is_active: boolean;
+  /** REQ-202603-008: Optional external website link */
+  website_url: string | null;
+  /** REQ-202603-008: Admin-controlled visibility of website link on public page */
+  website_url_visible: boolean;
 }
 
 const S = {
@@ -36,7 +40,7 @@ const S = {
 const COLOR_OPTIONS = ["#C0392B", "#27AE60", "#E67E22", "#2980B9", "#8E44AD", "#1B5E3B"];
 
 /** Default empty state for the Add New Program form. @see REQ-202603-002 — DEF-202603-005 */
-const ADD_EMPTY = { slug: "", name_en: "", name_ta: "", description: "", tagline: "", schedule: "", contact_email: "", details: "", color: "#C0392B", featured: false, display_order: 0, is_active: true };
+const ADD_EMPTY = { slug: "", name_en: "", name_ta: "", description: "", tagline: "", schedule: "", contact_email: "", details: "", color: "#C0392B", featured: false, display_order: 0, is_active: true, website_url: "", website_url_visible: false };
 
 export default function AdminProgramsPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -119,6 +123,7 @@ export default function AdminProgramsPage() {
         tagline: addForm.tagline || null,
         schedule: addForm.schedule || null,
         contact_email: addForm.contact_email || null,
+        website_url: addForm.website_url || null,
         details: addForm.details ? addForm.details.split("\n").map((s: string) => s.trim()).filter(Boolean) : [],
       }),
     });
@@ -183,6 +188,11 @@ export default function AdminProgramsPage() {
                 <label style={S.label}>Contact Email</label>
                 <input type="email" style={S.input} value={addForm.contact_email} onChange={(e) => setA("contact_email", e.target.value)} placeholder="e.g. programs@sunprairietamil.org" />
               </div>
+              {/* REQ-202603-008: Website URL */}
+              <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>Website URL (optional)</label>
+                <input type="url" style={S.input} value={addForm.website_url} onChange={(e) => setA("website_url", e.target.value)} placeholder="https://example.com/music-club" />
+              </div>
               <div>
                 <label style={S.label}>Color</label>
                 <div style={{ display: "flex", gap: "0.6rem", marginTop: "0.25rem" }}>
@@ -191,7 +201,7 @@ export default function AdminProgramsPage() {
                   ))}
                 </div>
               </div>
-              <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+              <div style={{ display: "flex", gap: "2rem", alignItems: "center", flexWrap: "wrap" }}>
                 <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
                   <input type="checkbox" checked={addForm.featured} onChange={(e) => setA("featured", e.target.checked)} />
                   Featured
@@ -199,6 +209,10 @@ export default function AdminProgramsPage() {
                 <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
                   <input type="checkbox" checked={addForm.is_active} onChange={(e) => setA("is_active", e.target.checked)} />
                   Active
+                </label>
+                <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
+                  <input type="checkbox" checked={addForm.website_url_visible} onChange={(e) => setA("website_url_visible", e.target.checked)} />
+                  Show website link publicly
                 </label>
               </div>
             </div>
@@ -242,6 +256,11 @@ export default function AdminProgramsPage() {
                 <label style={S.label}>Contact Email</label>
                 <input type="email" style={S.input} value={(form as unknown as { contact_email: string }).contact_email || ""} onChange={(e) => set("contact_email", e.target.value)} />
               </div>
+              {/* REQ-202603-008: Website URL — optional, admin-controlled visibility */}
+              <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>Website URL (optional)</label>
+                <input type="url" style={S.input} value={(form as unknown as { website_url: string }).website_url || ""} onChange={(e) => set("website_url", e.target.value)} placeholder="https://example.com/music-club" />
+              </div>
               <div>
                 <label style={S.label}>Display Order</label>
                 <input type="number" style={S.input} value={form.display_order ?? 0} onChange={(e) => set("display_order", parseInt(e.target.value) || 0)} />
@@ -254,7 +273,7 @@ export default function AdminProgramsPage() {
                   ))}
                 </div>
               </div>
-              <div style={{ gridColumn: "1/-1", display: "flex", gap: "2rem" }}>
+              <div style={{ gridColumn: "1/-1", display: "flex", gap: "2rem", flexWrap: "wrap" }}>
                 <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
                   <input type="checkbox" checked={form.featured ?? false} onChange={(e) => set("featured", e.target.checked)} />
                   Featured (large bento card)
@@ -262,6 +281,11 @@ export default function AdminProgramsPage() {
                 <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
                   <input type="checkbox" checked={form.is_active ?? true} onChange={(e) => set("is_active", e.target.checked)} />
                   Active (visible on site)
+                </label>
+                {/* REQ-202603-008: Show website link on public page only if this is checked */}
+                <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
+                  <input type="checkbox" checked={(form as unknown as { website_url_visible: boolean }).website_url_visible ?? false} onChange={(e) => set("website_url_visible", e.target.checked)} />
+                  Show website link publicly
                 </label>
               </div>
             </div>

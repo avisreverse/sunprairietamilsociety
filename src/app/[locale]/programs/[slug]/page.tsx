@@ -24,7 +24,7 @@ export default async function ProgramDetailPage({ params }: Props) {
   const supabase = await createClient();
   const { data: program, error } = await supabase
     .from("programs")
-    .select("id,slug,name_en,name_ta,description,tagline,schedule,contact_email,details,color,is_active")
+    .select("id,slug,name_en,name_ta,description,tagline,schedule,contact_email,details,color,is_active,website_url,website_url_visible")
     .eq("slug", slug)
     .eq("is_active", true)
     .single();
@@ -142,6 +142,29 @@ export default async function ProgramDetailPage({ params }: Props) {
                   </a>
                 </div>
               )}
+
+              {/* REQ-202603-008: Website URL — show only if admin marked it visible */}
+              {program.website_url && program.website_url_visible && (
+                <>
+                  {program.contact_email && (
+                    <div style={{ height: "1px", background: "rgba(26,20,16,0.07)", marginBottom: "1.5rem" }} />
+                  )}
+                  <div style={{ marginBottom: "1.75rem" }}>
+                    <div style={{ fontFamily: "var(--font-body)", fontSize: "0.6rem", fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "#B8750A", marginBottom: "0.4rem" }}>
+                      Website
+                    </div>
+                    <a
+                      href={program.website_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", color: program.color, textDecoration: "none" }}
+                    >
+                      Visit website →
+                    </a>
+                  </div>
+                </>
+              )}
+
               <Link
                 href="/join"
                 style={{
