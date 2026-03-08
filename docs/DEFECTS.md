@@ -21,7 +21,6 @@ All bugs and defects tracked here with `DEF-YYYYMM-NNN` IDs.
 
 | ID | Severity | Status | Title | Linked REQ | Found In |
 |----|----------|--------|-------|-----------|---------|
-| DEF-202603-003 | P3 | open | Board grid tile alignment — orphaned last card on /board page | REQ-202603-006 | Session 10 |
 | DEF-202603-008 | P2 | open | RSVP page not built — DB table exists, no public form | REQ-202603-007 | Session 10 |
 | DEF-202603-009 | P3 | open | Achievement category — no option to add custom categories | REQ-202603-005 | Session 10 |
 
@@ -134,22 +133,29 @@ Two omissions:
 
 ---
 
-## DEF-202603-003: Board Grid Tile Alignment — Orphaned Last Card
+## DEF-202603-003: Board Grid Tile Alignment — Orphaned Last Card / Mobile 2-Column Overflow
 **Severity:** P3
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-09
 **Linked Requirement:** REQ-202603-006
 **Found In:** Session 10
 
 ### Description
-With 7 board member cards in the grid, the last card is orphaned (left-aligned alone on the final row). The layout does not center or fill the pattern when the count doesn't divide evenly.
+Two issues: (1) With 7 board member cards, the last card was orphaned (left-aligned alone on the final row on desktop). (2) On mobile (390px), the grid rendered 2 columns causing horizontal overflow.
 
-### Expected Behavior
-Board cards should follow a centered or intentional pattern (e.g., last row centered, or dynamic column count that avoids orphaned cards).
+### Root Cause
+The last card had `gridColumn: "2 / 3"` (React inline style) to center the orphaned card in a 3-column desktop grid. On mobile, this explicit column placement forced an implicit 2nd grid column to be created regardless of `grid-template-columns: 1fr !important` overrides. CSS `!important` rules, ID selectors, and even Playwright-injected styles could not override this because the implicit column is created by the grid algorithm in response to the child's `gridColumn` value, not by the container's template definition.
 
-### Steps to Reproduce
-1. Go to `/en/board`
-2. Observe the 7 cards — 6 fill two rows of 3, the 7th sits alone left-aligned on row 3.
+### Fix Applied
+- `board/page.tsx`: Added inline `<style>` tag: `@media(max-width:640px){#board-members-grid{grid-template-columns:1fr!important}#board-members-grid>*{grid-column:auto!important}}`
+- The `grid-column: auto !important` on all children resets explicit column placement on mobile, allowing 1fr single-column to work correctly.
+- Changed grid classes to `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3` (Tailwind responsive).
+- Desktop orphan centering (`gridColumn: "2 / 3"`) preserved for ≥640px viewport.
+
+### Regression Tests Added
+- TC-DEF-202603-003: View /en/board at 390px → verify cards are single-column stacked, no horizontal overflow.
+- TC-DEF-202603-003b: View /en/board at 1280px with 7 cards → verify last card is centered in column 2.
 
 ---
 

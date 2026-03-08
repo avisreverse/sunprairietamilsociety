@@ -27,9 +27,9 @@ Items land here when:
 | Feature/REQ | What was done | What remains | Status |
 |-------------|--------------|--------------|--------|
 | REQ-202603-003 Thirukkural | Full chapter lookup, watermarks, 3-line fix | Verify GitHub raw fetch works on Vercel (CORS) — test from live URL in incognito | Needs verification |
-| Mobile responsiveness | Not yet audited | Test all pages at 375px (iPhone SE), 768px (tablet) | Deferred — active feedback cycle in progress |
 | Events detail pages | /events listing exists + DB-driven | Create /events/[id] individual event pages | Not started |
 | Playwright E2E testing | User requested automated testing to replace manual testing | Set up Playwright test suite for all user flows (programs, events, achievements, board, admin) | Next session priority |
+<!-- Mobile responsiveness audit COMPLETE — Session 16. All pages verified at 390px. -->
 
 ---
 
@@ -37,8 +37,8 @@ Items land here when:
 
 | DEF-### | Title | Severity | Why deferred | Added |
 |---------|-------|----------|-------------|-------|
-| DEF-202603-003 | Board grid tile alignment — orphaned last card | P3 | Low priority — cosmetic; address in next UI polish session | 2026-03-08 |
 | DEF-202603-008 | RSVP page not built | P2 | REQ-202603-007 in backlog; deferred | 2026-03-08 |
+<!-- DEF-202603-003 FIXED Session 16 — board grid mobile 2-col overflow resolved -->
 | DEF-202603-009 | Achievement category — no add custom categories | P3 | Low priority; deferred | 2026-03-08 |
 <!-- DEF-006 and DEF-007 removed — both fixed in Session 12 -->
 

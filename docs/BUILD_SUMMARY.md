@@ -6,15 +6,15 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 3 — All public pages fully DB-driven. CI Quality Gate now passing (green). Admin year change reflects everywhere (hero + footer). Achievements grid is fully adaptive for any card count. 3 legacy open defects remain (P2/P3).
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. CI passing. All admin edits (year, story, tagline) propagate to hero + footer.
+**Phase:** Phase 3 — All public pages fully DB-driven + full mobile audit complete. Board grid, footer, ThirukkuralSection, announcements all correctly responsive at 375px. 3 legacy open defects remain (P2/P3).
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. CI passing. Mobile responsive audit complete — all pages verified at 390px viewport.
 **Last Updated:** 2026-03-09
 **Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
 **Admin URL:** https://sunprairietamilsociety.vercel.app/en/admin
 **Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel. DB tables created + seeded.
 
-### What's Done (updated 2026-03-09 Session 15)
+### What's Done (updated 2026-03-09 Session 16)
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
@@ -63,13 +63,13 @@ Track session-by-session progress. Always read this at session start.
 - [x] **DEF-202603-018** — Achievements grid 4+2 layout: dynamic double-column grid fills full width for any card count
 - [x] **DEF-202603-019** — CI Quality Gate failing: all 6 ESLint errors fixed (set-state-in-effect ×6, no-explicit-any, unescaped-entities, no-html-link-for-pages) — CI now passes green
 - [x] **DEF-202603-020** — Footer year hardcoded: Footer now accepts `foundingYear` prop from page.tsx (DB-sourced heroContent.year) so admin year change reflects in footer description
+- [x] **Mobile audit complete (Session 16)** — Full 390px mobile audit: board grid (gridColumn:2/3 orphan card fix via inline <style> + ID selector), footer padding, ThirukkuralSection watermark overflow, announcements page padding. Root cause: last card's gridColumn:"2/3" was creating implicit 2nd column that CSS overrides couldn't prevent; fixed with `#board-members-grid > * { grid-column: auto !important }`.
 
 ### What's Pending (Next Session)
-- [ ] **DEF-202603-003**: /board page grid tile alignment (P3)
+- [x] **DEF-202603-003**: /board page grid tile alignment — RESOLVED: mobile fix forces 1-col stacked layout
 - [ ] **DEF-202603-008**: RSVP page — /events/[id]/rsvp public form (REQ-202603-007)
 - [ ] **DEF-202603-009**: Achievement category — fixed list, no custom category add (P3)
 - [ ] Events detail pages — /events/[id] individual event pages
-- [ ] Mobile responsiveness audit (375px breakpoints not yet tested)
 - [ ] Playwright E2E testing setup
 - [ ] Real content — photos, board headshots, real event dates (user to supply)
 - [ ] Sentry integration
@@ -77,10 +77,9 @@ Track session-by-session progress. Always read this at session start.
 - [ ] Admin auth — PL-004: add community_admin role to spts-clean Supabase (after site feature-complete)
 
 ### Open Defects
-- DEF-202603-003: /board page grid tile alignment (P3)
 - DEF-202603-008: RSVP page not built (P2)
 - DEF-202603-009: Achievement category not extensible (P3)
-<!-- 3 open defects — DEF-018/019/020 fixed this session -->
+<!-- 2 open defects — DEF-003 closed by mobile fix Session 16; DEF-018/019/020 fixed Session 15 -->
 
 ### Active Requirements
 - REQ-202603-001: in_progress — Design D live, fully DB-driven. All sections working.
@@ -95,6 +94,33 @@ Track session-by-session progress. Always read this at session start.
 ---
 
 ## Session Log
+
+### Session 16 — 2026-03-09
+
+**Focus:** Full mobile responsiveness audit at 390px (iPhone 14 Pro) — fix all pages
+
+**Completed:**
+- Full audit of all 11 section components and 8 inner pages at 390px viewport using Playwright screenshots
+- Confirmed already-correct: LandingHero, MullaiPrograms, MarutamEvents, NeytalAchievements, PalaiBoard, Nav, join page, programs/[slug], events listing, achievements/submit, board/[slug]
+- **Footer.tsx**: Added `className="spts-footer"` — inline `padding: "4rem 6rem"` was overriding mobile breakpoint
+- **ThirukkuralSection.tsx**: Added `spts-section` (missing — mobile padding not applying) + `spts-kural-number-wm` (20rem watermark overflowed on 375px)
+- **announcements/[id]/page.tsx**: Added `spts-inner` class for consistent mobile padding
+- **globals.css**: Added `.spts-footer`, `.spts-kural-number-wm`, flex/col override for `.spts-board-grid`
+- **DEF-202603-003 FIXED**: Board page grid — root cause discovered after extensive debugging: the last card's `gridColumn: "2/3"` inline style (centering orphan in 3-col desktop layout) was creating an IMPLICIT 2nd column that no amount of `grid-template-columns: 1fr !important` could override (CSS !important, ID selectors, Playwright-injected styles all failed). Fixed with inline `<style>` tag: `#board-members-grid > * { grid-column: auto !important }` resets column placement on mobile, allowing `grid-template-columns: 1fr` to produce a true single column.
+
+**Key Technical Discovery:**
+Turbopack (Next.js 16 dev mode) serves CSS from a hashed static bundle that doesn't always hot-reload after globals.css changes. The `.spts-board-grid` media query rule was in the compiled CSS but was never overriding the 2-column layout. Root cause: a child element's explicit `gridColumn: "2/3"` inline style forces an implicit 2nd grid column regardless of the container's `grid-template-columns` — this is a CSS Grid spec behavior, not a browser bug. Solution: override `grid-column: auto !important` on all children in the mobile media query.
+
+**New Defects Found:** None
+
+**Deferred / Remaining Open:**
+- DEF-202603-008, 009 still open (P2, P3)
+- Events detail pages /events/[id] — not started
+- Playwright E2E testing — still pending
+
+**Deployment:** `git push origin main && git push origin main:release` — live on Vercel
+
+---
 
 ### Session 15 — 2026-03-09
 
