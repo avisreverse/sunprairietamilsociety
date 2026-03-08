@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Top navigation bar — Design D: Warm Cultural.
@@ -29,6 +30,16 @@ export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [paused, setPaused] = useState(false);
+  const pathname = usePathname();
+
+  // On home page use hash anchors (smooth scroll); on inner pages use full routes
+  const isHome = pathname === "/en" || pathname === "/ta" || pathname === "/" || pathname === "";
+  const NAV_LINKS = [
+    { href: isHome ? "#mullai"   : "/programs",  label: "Programs" },
+    { href: isHome ? "#marutam" : "/events",     label: "Events" },
+    { href: isHome ? "#neytal"  : "/#neytal",    label: "Achievements" },
+    { href: isHome ? "#palai"   : "/board",      label: "About" },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -190,8 +201,8 @@ export default function Nav() {
           }}
           aria-label="Main navigation"
         >
-          {/* Brand — Tamil crest + name */}
-          <Link href="#hero" style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
+          {/* Brand — Tamil crest + name → always links to home */}
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
             <div
               style={{
                 width: "34px", height: "34px", borderRadius: "50%",
@@ -214,23 +225,18 @@ export default function Nav() {
             </div>
           </Link>
 
-          {/* Nav links */}
+          {/* Nav links — hash anchors on home, full routes on inner pages */}
           <ul className="hidden md:flex" style={{ gap: "2rem", listStyle: "none", margin: 0, padding: 0 }}>
-            {[
-              { href: "#mullai",   label: "Programs" },
-              { href: "#marutam", label: "Events" },
-              { href: "#neytal",  label: "Achievements" },
-              { href: "#palai",   label: "About" },
-            ].map(({ href, label }) => (
+            {NAV_LINKS.map(({ href, label }) => (
               <li key={href}>
-                <a
+                <Link
                   href={href}
                   style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", fontWeight: 400, color: "rgba(26,20,16,0.55)", textDecoration: "none", transition: "color 0.2s" }}
-                  onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#1A1410")}
-                  onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "rgba(26,20,16,0.55)")}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#1A1410")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(26,20,16,0.55)")}
                 >
                   {label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>

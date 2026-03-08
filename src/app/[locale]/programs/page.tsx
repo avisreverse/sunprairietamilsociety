@@ -51,14 +51,15 @@ export default async function ProgramsPage() {
               No programs at this time. Check back soon.
             </div>
           ) : (
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.25rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "1.25rem", alignItems: "stretch" }}>
               {list.map((prog) => (
                 <Link
                   key={prog.slug}
                   href={`/programs/${prog.slug}`}
                   className="spts-prog-card"
                   style={{
-                    display: "block", padding: "2.25rem",
+                    display: "flex", flexDirection: "column",
+                    padding: "2.25rem", height: "100%",
                     borderRadius: "16px", border: "1px solid rgba(26,20,16,0.08)",
                     background: "white", textDecoration: "none",
                   }}
@@ -68,9 +69,10 @@ export default async function ProgramsPage() {
                     <div style={{ fontFamily: "var(--font-tamil)", fontSize: "0.8rem", color: `${prog.color}88`, marginBottom: "0.3rem" }}>{prog.name_ta}</div>
                   )}
                   <h2 style={{ fontFamily: "var(--font-display)", fontSize: "1.3rem", fontWeight: 700, color: "#1A1410", marginBottom: "0.6rem" }}>{prog.name_en}</h2>
-                  {prog.description && (
-                    <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", fontWeight: 300, color: "#4A3828", lineHeight: 1.7 }}>{prog.description}</p>
-                  )}
+                  {/* flex: 1 pushes "Learn more" to the card bottom — uniform alignment regardless of description length */}
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", fontWeight: 300, color: "#4A3828", lineHeight: 1.7, flex: 1 }}>
+                    {prog.description ?? ""}
+                  </p>
                   <span style={{ display: "block", marginTop: "1.25rem", fontFamily: "var(--font-body)", fontSize: "0.78rem", fontWeight: 500, color: prog.color }}>Learn more →</span>
                 </Link>
               ))}

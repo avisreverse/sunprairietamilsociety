@@ -27,7 +27,18 @@ import KuralStrip from "./KuralStrip";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-export default function LandingHero() {
+interface HeroContent {
+  story: string;
+  year: string;
+  tagline: string;
+  subtext: string;
+}
+
+interface Props {
+  heroContent: HeroContent;
+}
+
+export default function LandingHero({ heroContent }: Props) {
   return (
     <section
       id="hero"
@@ -188,7 +199,7 @@ export default function LandingHero() {
           }}
           className="spts-hero-footer"
         >
-          {/* Left: story text */}
+          {/* Left: story text — editable from /admin/home */}
           <p
             style={{
               fontFamily: "var(--font-body)",
@@ -197,11 +208,7 @@ export default function LandingHero() {
               maxWidth: "380px",
             }}
           >
-            In 2012, Tamil families in Sun Prairie asked a shared question:{" "}
-            <strong style={{ fontWeight: 500, color: "#1A1410" }}>
-              how do we give our children the language, culture, and belonging we carry?
-            </strong>{" "}
-            Today, SPTS is that answer.
+            {heroContent.story}
           </p>
 
           {/* Center: CTAs */}
@@ -252,7 +259,7 @@ export default function LandingHero() {
             </a>
           </div>
 
-          {/* Right: stats */}
+          {/* Right: stats — editable from /admin/home */}
           <div
             className="spts-hero-footer-right"
             style={{
@@ -272,10 +279,10 @@ export default function LandingHero() {
                 marginBottom: "0.25rem",
               }}
             >
-              2012
+              {heroContent.year}
             </strong>
-            Year founded in Sun Prairie<br />
-            Five programs · One community
+            {heroContent.tagline}<br />
+            {heroContent.subtext}
           </div>
         </motion.div>
       </div>

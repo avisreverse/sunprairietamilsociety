@@ -17,6 +17,7 @@ interface Stats {
   pendingAchievements: number;
   board: number;
   programs: number;
+  announcements: number;
 }
 
 export default function AdminDashboard() {
@@ -26,18 +27,20 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function loadStats() {
       try {
-        const [eventsRes, achievementsRes, boardRes, programsRes] = await Promise.all([
+        const [eventsRes, achievementsRes, boardRes, programsRes, announcementsRes] = await Promise.all([
           fetchAdmin("/api/admin/events"),
           fetchAdmin("/api/admin/achievements"),
           fetchAdmin("/api/admin/board"),
           fetchAdmin("/api/admin/programs"),
+          fetchAdmin("/api/admin/announcements"),
         ]);
 
-        const [events, achievements, board, programs] = await Promise.all([
+        const [events, achievements, board, programs, announcements] = await Promise.all([
           eventsRes.json(),
           achievementsRes.json(),
           boardRes.json(),
           programsRes.json(),
+          announcementsRes.json(),
         ]);
 
         setStats({
@@ -46,6 +49,7 @@ export default function AdminDashboard() {
           pendingAchievements: Array.isArray(achievements) ? achievements.filter((a: any) => !a.is_approved).length : 0,
           board: Array.isArray(board) ? board.filter((b: any) => b.is_active).length : 0,
           programs: Array.isArray(programs) ? programs.filter((p: any) => p.is_active).length : 0,
+          announcements: Array.isArray(announcements) ? announcements.length : 0,
         });
       } catch (err) {
         console.error("❌ [AdminDashboard] Failed to load stats:", err);
@@ -86,6 +90,20 @@ export default function AdminDashboard() {
       desc: "Edit program descriptions and visibility.",
       count: stats?.programs,
       color: "#27AE60",
+    },
+    {
+      href: "/en/admin/announcements",
+      label: "Announcements",
+      desc: "Publish ticker announcements shown on all pages.",
+      count: stats?.announcements,
+      color: "#16A085",
+    },
+    {
+      href: "/en/admin/home",
+      label: "Home Page",
+      desc: "Edit hero story, tagline, and founding details.",
+      count: null,
+      color: "#B8750A",
     },
   ];
 

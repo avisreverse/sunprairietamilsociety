@@ -19,6 +19,7 @@ const NAV_LINKS = [
   { href: "/en/admin/board", label: "Board" },
   { href: "/en/admin/programs", label: "Programs" },
   { href: "/en/admin/announcements", label: "Announcements" },
+  { href: "/en/admin/home", label: "Home Page" },
 ];
 
 export default function AdminNav() {
