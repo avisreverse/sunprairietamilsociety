@@ -46,7 +46,7 @@ export default async function HomePage() {
 
     supabase
       .from("board_members")
-      .select("id,slug,name,initials,role,color")
+      .select("id,slug,name,initials,role,color,photo_url")
       .eq("is_active", true)
       .order("display_order", { ascending: true }),
 

@@ -18,10 +18,13 @@ interface BoardMember {
   name: string;
   initials: string;
   role: string;
+  role_ta: string | null;
   bio: string | null;
   email: string | null;
   photo_url: string | null;
   color: string;
+  responsibilities: string[];
+  since_year: number | null;
   display_order: number;
   is_active: boolean;
 }
@@ -34,14 +37,15 @@ const S = {
 
 const COLOR_OPTIONS = ["#C0392B", "#27AE60", "#E67E22", "#2980B9", "#8E44AD", "#1B5E3B"];
 
-const EMPTY = { slug: "", name: "", initials: "", role: "", bio: "", email: "", photo_url: "", color: "#C0392B", display_order: 0, is_active: true };
+/** Default empty state for board member form. @see REQ-202603-006 */
+const EMPTY: Record<string, unknown> = { slug: "", name: "", initials: "", role: "", role_ta: "", bio: "", email: "", photo_url: "", color: "#C0392B", responsibilities: "", since_year: "", display_order: 0, is_active: true };
 
 export default function AdminBoardPage() {
   const [members, setMembers] = useState<BoardMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<BoardMember | null>(null);
-  const [form, setForm] = useState(EMPTY);
+  const [form, setForm] = useState<Record<string, unknown>>(EMPTY);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -59,21 +63,47 @@ export default function AdminBoardPage() {
     const nextOrder = members.length + 1;
     setEditing(null); setForm({ ...EMPTY, display_order: nextOrder }); setShowForm(true); setError(null);
   };
-  const openEdit = (m: BoardMember) => { setEditing(m); setForm({ ...m, bio: m.bio || "", email: m.email || "", photo_url: m.photo_url || "" }); setShowForm(true); setError(null); };
+  const openEdit = (m: BoardMember) => {
+    setEditing(m);
+    setForm({
+      ...m,
+      bio: m.bio || "",
+      email: m.email || "",
+      photo_url: m.photo_url || "",
+      role_ta: m.role_ta || "",
+      // Convert responsibilities array → newline-joined string for textarea
+      responsibilities: Array.isArray(m.responsibilities) ? (m.responsibilities as unknown as string[]).join("\n") : "",
+      since_year: m.since_year ?? "",
+    });
+    setShowForm(true);
+    setError(null);
+  };
   const cancel = () => { setShowForm(false); setEditing(null); setError(null); };
 
   const save = async () => {
     setSaving(true);
     setError(null);
     // Auto-generate slug from name if empty
-    const slug = form.slug || form.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
-    const initials = form.initials || form.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+    const nameStr = String(form.name || "");
+    const slug = String(form.slug || nameStr.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""));
+    const initials = String(form.initials || nameStr.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase());
     const url = editing ? `/api/admin/board/${editing.id}` : "/api/admin/board";
     const method = editing ? "PATCH" : "POST";
     const res = await fetchAdmin(url, {
       method,
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, slug, initials, bio: form.bio || null, email: form.email || null }),
+      body: JSON.stringify({
+        ...form,
+        slug,
+        initials,
+        bio: form.bio || null,
+        email: form.email || null,
+        role_ta: form.role_ta || null,
+        since_year: form.since_year ? parseInt(String(form.since_year)) : null,
+        responsibilities: typeof form.responsibilities === "string"
+          ? (form.responsibilities as string).split("\n").map((s: string) => s.trim()).filter(Boolean)
+          : (form.responsibilities ?? []),
+      }),
     });
     if (!res.ok) { const d = await res.json(); setError(d.error || "Save failed"); }
     else { await load(); setShowForm(false); }
@@ -97,7 +127,8 @@ export default function AdminBoardPage() {
    * @see DEF-202603-004 — Board photo upload
    */
   const uploadPhoto = async (file: File) => {
-    const slug = form.slug || form.name.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+    const nameStr = String(form.name || "");
+    const slug = String(form.slug || nameStr.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, ""));
     if (!slug) { setError("Enter a name or slug before uploading a photo."); return; }
     setUploading(true);
     const ext = file.name.split(".").pop() || "jpg";
@@ -133,42 +164,53 @@ export default function AdminBoardPage() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
               <div>
                 <label style={S.label}>Full Name *</label>
-                <input style={S.input} value={form.name} onChange={(e) => set("name", e.target.value)} />
+                <input style={S.input} value={String(form.name ?? "")} onChange={(e) => set("name", e.target.value)} />
               </div>
               <div>
                 <label style={S.label}>Role / Title *</label>
-                <input style={S.input} value={form.role} onChange={(e) => set("role", e.target.value)} placeholder="President, Secretary..." />
+                <input style={S.input} value={String(form.role ?? "")} onChange={(e) => set("role", e.target.value)} placeholder="President, Secretary..." />
+              </div>
+              <div>
+                <label style={S.label}>Role in Tamil (தமிழ்)</label>
+                <input style={{ ...S.input, fontFamily: "'Noto Serif Tamil', serif" }} value={String(form.role_ta ?? "")} onChange={(e) => set("role_ta", e.target.value)} placeholder="தலைவர், செயலர்..." />
               </div>
               <div>
                 <label style={S.label}>Slug (URL) — auto if blank</label>
-                <input style={S.input} value={form.slug} onChange={(e) => set("slug", e.target.value)} placeholder="e.g. sivasankar" />
+                <input style={S.input} value={String(form.slug ?? "")} onChange={(e) => set("slug", e.target.value)} placeholder="e.g. sivasankar" />
               </div>
               <div>
                 <label style={S.label}>Initials (2 chars) — auto</label>
-                <input style={S.input} maxLength={2} value={form.initials} onChange={(e) => set("initials", e.target.value.toUpperCase())} placeholder="Auto" />
+                <input style={S.input} maxLength={2} value={String(form.initials ?? "")} onChange={(e) => set("initials", e.target.value.toUpperCase())} placeholder="Auto" />
               </div>
               <div>
                 <label style={S.label}>Email</label>
-                <input type="email" style={S.input} value={form.email} onChange={(e) => set("email", e.target.value)} />
+                <input type="email" style={S.input} value={String(form.email ?? "")} onChange={(e) => set("email", e.target.value)} />
+              </div>
+              <div>
+                <label style={S.label}>Member Since (Year)</label>
+                <input type="number" style={S.input} value={String(form.since_year ?? "")} onChange={(e) => set("since_year", e.target.value)} placeholder="e.g. 2018" />
               </div>
               <div>
                 <label style={S.label}>Display Order</label>
-                <input type="number" style={S.input} value={form.display_order} onChange={(e) => set("display_order", parseInt(e.target.value) || 0)} />
+                <input type="number" style={S.input} value={Number(form.display_order ?? 0)} onChange={(e) => set("display_order", parseInt(e.target.value) || 0)} />
               </div>
               <div style={{ gridColumn: "1/-1" }}>
                 <label style={S.label}>Bio</label>
-                <textarea style={{ ...S.input, minHeight: "80px", resize: "vertical" }} value={form.bio} onChange={(e) => set("bio", e.target.value)} />
+                <textarea style={{ ...S.input, minHeight: "80px", resize: "vertical" }} value={String(form.bio ?? "")} onChange={(e) => set("bio", e.target.value)} />
+              </div>
+              <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>Responsibilities (one per line)</label>
+                <textarea style={{ ...S.input, minHeight: "90px", resize: "vertical" }} value={String(form.responsibilities ?? "")} onChange={(e) => set("responsibilities", e.target.value)} placeholder={"Overall leadership of SPTS\nExternal partnerships"} />
               </div>
               {/* DEF-202603-004: Photo upload field */}
               <div style={{ gridColumn: "1/-1" }}>
                 <label style={S.label}>Headshot Photo</label>
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                  {form.photo_url && (
-                    <img src={form.photo_url} alt="headshot preview" style={{ width: "56px", height: "56px", borderRadius: "50%", objectFit: "cover", border: `2px solid ${form.color}55` }} />
-                  )}
-                  {!form.photo_url && (
-                    <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `${form.color}25`, border: `2px solid ${form.color}55`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-display)", fontSize: "1.1rem", fontWeight: 700, color: form.color }}>
-                      {form.initials || (form.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase()) || "?"}
+                  {form.photo_url ? (
+                    <img src={String(form.photo_url)} alt="headshot preview" style={{ width: "56px", height: "56px", borderRadius: "50%", objectFit: "cover", border: `2px solid ${String(form.color)}55` }} />
+                  ) : (
+                    <div style={{ width: "56px", height: "56px", borderRadius: "50%", background: `${String(form.color)}25`, border: `2px solid ${String(form.color)}55`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--font-display)", fontSize: "1.1rem", fontWeight: 700, color: String(form.color) }}>
+                      {String(form.initials || String(form.name || "").split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase() || "?")}
                     </div>
                   )}
                   <div>
@@ -180,7 +222,7 @@ export default function AdminBoardPage() {
                       style={{ fontFamily: "var(--font-body)", fontSize: "0.82rem", color: "rgba(255,255,255,0.6)" }}
                     />
                     {uploading && <div style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "#D4930A", marginTop: "0.3rem" }}>Uploading…</div>}
-                    {form.photo_url && !uploading && (
+                    {Boolean(form.photo_url) && !uploading && (
                       <button onClick={() => set("photo_url", "")} style={{ ...S.btn("rgba(255,255,255,0.3)", "transparent"), marginTop: "0.3rem", fontSize: "0.72rem" }}>Remove photo</button>
                     )}
                   </div>
@@ -190,13 +232,13 @@ export default function AdminBoardPage() {
                 <label style={S.label}>Avatar Color</label>
                 <div style={{ display: "flex", gap: "0.6rem" }}>
                   {COLOR_OPTIONS.map((c) => (
-                    <button key={c} onClick={() => set("color", c)} style={{ width: "32px", height: "32px", borderRadius: "50%", background: c, border: form.color === c ? "3px solid white" : "3px solid transparent", cursor: "pointer" }} />
+                    <button key={c} onClick={() => set("color", c)} style={{ width: "32px", height: "32px", borderRadius: "50%", background: c, border: String(form.color) === c ? "3px solid white" : "3px solid transparent", cursor: "pointer" }} />
                   ))}
                 </div>
               </div>
               <div style={{ gridColumn: "1/-1" }}>
                 <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", cursor: "pointer", fontFamily: "var(--font-body)", fontSize: "0.88rem", color: "rgba(255,255,255,0.7)" }}>
-                  <input type="checkbox" checked={form.is_active} onChange={(e) => set("is_active", e.target.checked)} />
+                  <input type="checkbox" checked={Boolean(form.is_active)} onChange={(e) => set("is_active", e.target.checked)} />
                   Active (shown on site)
                 </label>
               </div>

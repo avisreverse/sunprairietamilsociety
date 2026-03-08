@@ -22,6 +22,7 @@ interface DbBoardMember {
   initials: string;
   role: string;
   color: string;
+  photo_url: string | null;
 }
 
 interface Props {
@@ -73,19 +74,27 @@ export default function PalaiBoard({ board }: Props) {
                 onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${member.color}45`)}
                 onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = `${member.color}20`)}
               >
-                <div
-                  style={{
-                    width: "68px", height: "68px", borderRadius: "50%",
-                    background: `${member.color}18`,
-                    border: `2px solid ${member.color}55`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    margin: "0 auto 1.25rem",
-                    fontFamily: "var(--font-display)",
-                    fontSize: "1.3rem", fontWeight: 700, color: member.color,
-                  }}
-                >
-                  {member.initials}
-                </div>
+                {member.photo_url ? (
+                  <img
+                    src={member.photo_url}
+                    alt={member.name}
+                    style={{ width: "68px", height: "68px", borderRadius: "50%", objectFit: "cover", border: `2px solid ${member.color}55`, margin: "0 auto 1.25rem", display: "block" }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "68px", height: "68px", borderRadius: "50%",
+                      background: `${member.color}18`,
+                      border: `2px solid ${member.color}55`,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      margin: "0 auto 1.25rem",
+                      fontFamily: "var(--font-display)",
+                      fontSize: "1.3rem", fontWeight: 700, color: member.color,
+                    }}
+                  >
+                    {member.initials}
+                  </div>
+                )}
                 <div style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem", fontWeight: 600, color: "#1A1410", marginBottom: "0.3rem" }}>{member.name}</div>
                 <div style={{ fontFamily: "var(--font-body)", fontSize: "0.7rem", fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: member.color }}>{member.role}</div>
               </motion.div>

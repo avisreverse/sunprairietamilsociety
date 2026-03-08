@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { slug, name_en, name_ta, description, color, featured, display_order, is_active } = body;
+  const { slug, name_en, name_ta, description, tagline, schedule, contact_email, details, color, featured, display_order, is_active } = body;
 
   if (!slug || !name_en) {
     return NextResponse.json({ error: "slug and name_en are required" }, { status: 400 });
@@ -48,6 +48,10 @@ export async function POST(request: NextRequest) {
     .insert({
       slug, name_en, name_ta: name_ta || null,
       description: description || null,
+      tagline: tagline || null,
+      schedule: schedule || null,
+      contact_email: contact_email || null,
+      details: Array.isArray(details) ? details : [],
       color: color || "#C0392B",
       featured: featured ?? false,
       display_order: display_order ?? 0,

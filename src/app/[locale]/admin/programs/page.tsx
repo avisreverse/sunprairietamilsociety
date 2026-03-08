@@ -17,6 +17,10 @@ interface Program {
   name_en: string;
   name_ta: string | null;
   description: string | null;
+  tagline: string | null;
+  schedule: string | null;
+  contact_email: string | null;
+  details: string[];
   color: string;
   featured: boolean;
   display_order: number;
@@ -32,7 +36,7 @@ const S = {
 const COLOR_OPTIONS = ["#C0392B", "#27AE60", "#E67E22", "#2980B9", "#8E44AD", "#1B5E3B"];
 
 /** Default empty state for the Add New Program form. @see REQ-202603-002 — DEF-202603-005 */
-const ADD_EMPTY = { slug: "", name_en: "", name_ta: "", description: "", color: "#C0392B", featured: false, display_order: 0, is_active: true };
+const ADD_EMPTY = { slug: "", name_en: "", name_ta: "", description: "", tagline: "", schedule: "", contact_email: "", details: "", color: "#C0392B", featured: false, display_order: 0, is_active: true };
 
 export default function AdminProgramsPage() {
   const [programs, setPrograms] = useState<Program[]>([]);
@@ -65,16 +69,25 @@ export default function AdminProgramsPage() {
 
   useEffect(() => { load(); }, [load]);
 
-  const openEdit = (p: Program) => { setEditing(p); setForm({ ...p }); };
+  const openEdit = (p: Program) => {
+    setEditing(p);
+    // Convert details array → newline-joined string for textarea
+    setForm({ ...p, details: Array.isArray(p.details) ? (p.details as unknown as string[]).join("\n") : "" } as unknown as Partial<Program>);
+  };
   const cancel = () => { setEditing(null); setForm({}); };
 
   const save = async () => {
     if (!editing) return;
     setSaving(true);
+    // Convert details string (textarea) → array before sending to API
+    const detailsRaw = (form as unknown as { details: string }).details;
+    const detailsArr = typeof detailsRaw === "string"
+      ? detailsRaw.split("\n").map((s) => s.trim()).filter(Boolean)
+      : (detailsRaw ?? []);
     const res = await fetchAdmin(`/api/admin/programs/${editing.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({ ...form, details: detailsArr }),
     });
     if (res.ok) { await load(); setEditing(null); }
     setSaving(false);
@@ -99,7 +112,15 @@ export default function AdminProgramsPage() {
     const res = await fetchAdmin("/api/admin/programs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...addForm, name_ta: addForm.name_ta || null, description: addForm.description || null }),
+      body: JSON.stringify({
+        ...addForm,
+        name_ta: addForm.name_ta || null,
+        description: addForm.description || null,
+        tagline: addForm.tagline || null,
+        schedule: addForm.schedule || null,
+        contact_email: addForm.contact_email || null,
+        details: addForm.details ? addForm.details.split("\n").map((s: string) => s.trim()).filter(Boolean) : [],
+      }),
     });
     if (!res.ok) { const d = await res.json().catch(() => ({})); setAddError(d.error || "Failed to create program."); }
     else { await load(); setShowAddForm(false); setAddForm({ ...ADD_EMPTY }); }
@@ -143,8 +164,24 @@ export default function AdminProgramsPage() {
                 <input type="number" style={S.input} value={addForm.display_order} onChange={(e) => setA("display_order", parseInt(e.target.value) || 0)} />
               </div>
               <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>Tagline (short phrase shown on detail page)</label>
+                <input style={S.input} value={addForm.tagline} onChange={(e) => setA("tagline", e.target.value)} placeholder="e.g. Language, culture, and identity." />
+              </div>
+              <div style={{ gridColumn: "1/-1" }}>
                 <label style={S.label}>Description</label>
                 <textarea style={{ ...S.input, minHeight: "70px", resize: "vertical" }} value={addForm.description} onChange={(e) => setA("description", e.target.value)} />
+              </div>
+              <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>What to Expect (one bullet point per line)</label>
+                <textarea style={{ ...S.input, minHeight: "80px", resize: "vertical" }} value={addForm.details} onChange={(e) => setA("details", e.target.value)} placeholder={"Weekly classes for ages 5–16\nLevels from beginner to advanced"} />
+              </div>
+              <div>
+                <label style={S.label}>Schedule</label>
+                <input style={S.input} value={addForm.schedule} onChange={(e) => setA("schedule", e.target.value)} placeholder="e.g. Saturdays, 10 AM – 12 PM" />
+              </div>
+              <div>
+                <label style={S.label}>Contact Email</label>
+                <input type="email" style={S.input} value={addForm.contact_email} onChange={(e) => setA("contact_email", e.target.value)} placeholder="e.g. programs@sunprairietamil.org" />
               </div>
               <div>
                 <label style={S.label}>Color</label>
@@ -186,8 +223,24 @@ export default function AdminProgramsPage() {
                 <input style={S.input} value={form.name_ta || ""} onChange={(e) => set("name_ta", e.target.value)} />
               </div>
               <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>Tagline</label>
+                <input style={S.input} value={(form as unknown as { tagline: string }).tagline || ""} onChange={(e) => set("tagline", e.target.value)} placeholder="Short phrase shown on detail page" />
+              </div>
+              <div style={{ gridColumn: "1/-1" }}>
                 <label style={S.label}>Description</label>
                 <textarea style={{ ...S.input, minHeight: "70px", resize: "vertical" }} value={form.description || ""} onChange={(e) => set("description", e.target.value)} />
+              </div>
+              <div style={{ gridColumn: "1/-1" }}>
+                <label style={S.label}>What to Expect (one bullet per line)</label>
+                <textarea style={{ ...S.input, minHeight: "80px", resize: "vertical" }} value={(form as unknown as { details: string }).details || ""} onChange={(e) => set("details", e.target.value)} placeholder={"Weekly classes\nLevels from beginner to advanced"} />
+              </div>
+              <div>
+                <label style={S.label}>Schedule</label>
+                <input style={S.input} value={(form as unknown as { schedule: string }).schedule || ""} onChange={(e) => set("schedule", e.target.value)} placeholder="e.g. Saturdays, 10 AM – 12 PM" />
+              </div>
+              <div>
+                <label style={S.label}>Contact Email</label>
+                <input type="email" style={S.input} value={(form as unknown as { contact_email: string }).contact_email || ""} onChange={(e) => set("contact_email", e.target.value)} />
               </div>
               <div>
                 <label style={S.label}>Display Order</label>

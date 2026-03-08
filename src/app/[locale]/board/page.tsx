@@ -1,27 +1,34 @@
-"use client";
-
 import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
 
 /**
- * Board of Directors page.
- * Full details for each board member — role, bio, photo.
- * Photos and bios served from Supabase (Admin CMS REQ-202603-004).
- * Static placeholder until admin panel ships.
+ * Board of Directors listing page — Server Component.
+ * Fetches from Supabase board_members table (active only, ordered by display_order).
+ * Shows uploaded headshot photo if available, else initials avatar.
+ * Replaced hardcoded BOARD array (DEF-202603-016).
  *
- * @see REQ-202603-001 — Landing page
- * @see REQ-202603-004 — Admin CMS (backlog)
+ * @see REQ-202603-006 — Board management
+ * @see REQ-202603-004 — Admin CMS
+ * @see DEF-202603-016 — Programs/board pages not DB-driven
  */
 
-const BOARD = [
-  { slug: "sivasankar", initials: "SA", name: "Sivasankar A.", role: "President", color: "#C0392B", since: "2012", contact: "president@sunprairietamil.org", bio: "Sivasankar has led SPTS since its founding, championing Tamil language education and cultural programs across Sun Prairie." },
-  { slug: "kavitha", initials: "KV", name: "Kavitha V.", role: "Secretary", color: "#27AE60", since: "2014", contact: "secretary@sunprairietamil.org", bio: "Kavitha manages SPTS communications, member records, and coordinates between all program directors." },
-  { slug: "murali", initials: "MG", name: "Murali G.", role: "Treasurer", color: "#E67E22", since: "2016", contact: "treasurer@sunprairietamil.org", bio: "Murali oversees SPTS finances, event budgets, and grant applications." },
-  { slug: "divya", initials: "DK", name: "Divya K.", role: "Programs Director", color: "#2980B9", since: "2018", contact: "programs@sunprairietamil.org", bio: "Divya designs and coordinates all SPTS cultural programs — Tamil School, Music Club, and Tamil Pattarai." },
-];
+export default async function BoardPage() {
+  const supabase = await createClient();
 
-export default function BoardPage() {
+  const { data: members, error } = await supabase
+    .from("board_members")
+    .select("id,slug,name,initials,role,bio,color,photo_url,since_year")
+    .eq("is_active", true)
+    .order("display_order", { ascending: true });
+
+  if (error) {
+    console.error("⚠️ [BoardPage] DB fetch failed:", error.message);
+  }
+
+  const list = members ?? [];
+
   return (
     <>
       <Nav />
@@ -48,39 +55,51 @@ export default function BoardPage() {
             </p>
           </div>
 
-          {/* Board members — responsive grid, each card links to individual page */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.25rem", marginBottom: "5rem" }}>
-            {BOARD.map((member) => (
+          {/* Board members grid — centered flex so orphaned last cards center (DEF-202603-003) */}
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.25rem", marginBottom: "5rem" }}>
+            {list.map((member) => (
               <Link
-                key={member.initials}
+                key={member.id}
                 href={`/board/${member.slug}`}
                 style={{
                   display: "block",
+                  width: "320px",
                   background: "white",
                   borderRadius: "20px",
                   border: `1px solid ${member.color}20`,
                   padding: "2rem",
                   textDecoration: "none",
                   boxShadow: "0 4px 28px rgba(26,20,16,0.07)",
-                  transition: "transform 0.2s, box-shadow 0.2s, border-color 0.2s",
                 }}
-                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "translateY(-4px)"; el.style.boxShadow = "0 12px 48px rgba(26,20,16,0.13)"; el.style.borderColor = `${member.color}40`; }}
-                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.transform = "none"; el.style.boxShadow = "0 4px 28px rgba(26,20,16,0.07)"; el.style.borderColor = `${member.color}20`; }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.25rem" }}>
-                  <div
-                    style={{
-                      width: "64px", height: "64px", borderRadius: "50%",
-                      background: `${member.color}18`,
-                      border: `2px solid ${member.color}55`,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      fontFamily: "var(--font-display)",
-                      fontSize: "1.3rem", fontWeight: 700, color: member.color,
-                      flexShrink: 0,
-                    }}
-                  >
-                    {member.initials}
-                  </div>
+                  {/* Photo or initials avatar */}
+                  {member.photo_url ? (
+                    <img
+                      src={member.photo_url}
+                      alt={member.name}
+                      style={{
+                        width: "64px", height: "64px", borderRadius: "50%",
+                        objectFit: "cover",
+                        border: `2px solid ${member.color}55`,
+                        flexShrink: 0,
+                      }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: "64px", height: "64px", borderRadius: "50%",
+                        background: `${member.color}18`,
+                        border: `2px solid ${member.color}55`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontFamily: "var(--font-display)",
+                        fontSize: "1.3rem", fontWeight: 700, color: member.color,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {member.initials}
+                    </div>
+                  )}
                   <div>
                     <div style={{ fontFamily: "var(--font-body)", fontSize: "0.6rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: member.color, marginBottom: "0.3rem" }}>
                       {member.role}
@@ -88,14 +107,18 @@ export default function BoardPage() {
                     <div style={{ fontFamily: "var(--font-display)", fontSize: "1.05rem", fontWeight: 700, color: "#1A1410" }}>
                       {member.name}
                     </div>
-                    <div style={{ fontFamily: "var(--font-body)", fontSize: "0.62rem", color: "rgba(26,20,16,0.4)", marginTop: "0.15rem" }}>
-                      Since {member.since}
-                    </div>
+                    {member.since_year && (
+                      <div style={{ fontFamily: "var(--font-body)", fontSize: "0.62rem", color: "rgba(26,20,16,0.4)", marginTop: "0.15rem" }}>
+                        Since {member.since_year}
+                      </div>
+                    )}
                   </div>
                 </div>
-                <p style={{ fontFamily: "var(--font-body)", fontSize: "0.83rem", fontWeight: 300, color: "#4A3828", lineHeight: 1.7, marginBottom: "1rem" }}>
-                  {member.bio}
-                </p>
+                {member.bio && (
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: "0.83rem", fontWeight: 300, color: "#4A3828", lineHeight: 1.7, marginBottom: "1rem" }}>
+                    {member.bio}
+                  </p>
+                )}
                 <span style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", fontWeight: 500, color: member.color }}>
                   View profile →
                 </span>
@@ -123,16 +146,12 @@ export default function BoardPage() {
               <Link
                 href="/join"
                 style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", background: "#8B1A1A", color: "white", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 500, textDecoration: "none" }}
-                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = "#6A1010")}
-                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = "#8B1A1A")}
               >
                 Join the Society
               </Link>
               <a
                 href="mailto:president@sunprairietamil.org"
                 style={{ display: "inline-block", padding: "0.9rem 2rem", borderRadius: "999px", border: "1px solid rgba(255,255,255,0.18)", color: "rgba(255,255,255,0.75)", fontFamily: "var(--font-body)", fontSize: "0.85rem", fontWeight: 400, textDecoration: "none" }}
-                onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(255,255,255,0.45)"; el.style.color = "white"; }}
-                onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = "rgba(255,255,255,0.18)"; el.style.color = "rgba(255,255,255,0.75)"; }}
               >
                 Contact the Board →
               </a>

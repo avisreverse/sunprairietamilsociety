@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { slug, name, initials, role, bio, email, color, display_order, is_active } = body;
+  const { slug, name, initials, role, role_ta, bio, email, photo_url, color, responsibilities, since_year, display_order, is_active } = body;
 
   if (!slug || !name || !role) {
     return NextResponse.json(
@@ -53,9 +53,13 @@ export async function POST(request: NextRequest) {
       name,
       initials: initials || name.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase(),
       role,
+      role_ta: role_ta || null,
       bio: bio || null,
       email: email || null,
+      photo_url: photo_url || null,
       color: color || "#C0392B",
+      responsibilities: Array.isArray(responsibilities) ? responsibilities : [],
+      since_year: since_year ? parseInt(since_year) : null,
       display_order: display_order ?? 0,
       is_active: is_active ?? true,
     })
