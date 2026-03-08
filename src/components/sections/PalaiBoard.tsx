@@ -33,7 +33,7 @@ const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
 
 export default function PalaiBoard({ board }: Props) {
   return (
-    <section id="palai" className="spts-section" style={{ background: "#FDF8F0", padding: "6rem 3.5rem" }}>
+    <section id="palai" className="spts-section" style={{ background: "#FDF8F0", padding: "6rem 3.5rem", minHeight: "100dvh" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
         {/* Header */}

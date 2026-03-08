@@ -51,7 +51,7 @@ export default function MarutamEvents({ events }: Props) {
 
   if (events.length === 0) {
     return (
-      <section id="marutam" style={{ background: "#FAF5EB", padding: "6rem 3.5rem" }}>
+      <section id="marutam" style={{ background: "#FAF5EB", padding: "6rem 3.5rem", minHeight: "100dvh" }}>
         <div style={{ maxWidth: "1440px", margin: "0 auto", textAlign: "center" }}>
           <div style={{ fontFamily: "var(--font-body)", fontSize: "0.65rem", fontWeight: 500, letterSpacing: "0.22em", textTransform: "uppercase", color: "#B8750A", marginBottom: "0.6rem" }}>Coming Up</div>
           <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem,3vw,2.8rem)", fontWeight: 700, color: "#1A1410", marginBottom: "1rem" }}>Upcoming Events</h2>
@@ -62,7 +62,7 @@ export default function MarutamEvents({ events }: Props) {
   }
 
   return (
-    <section id="marutam" className="spts-section" style={{ background: "#FAF5EB", padding: "6rem 3.5rem" }}>
+    <section id="marutam" className="spts-section" style={{ background: "#FAF5EB", padding: "6rem 3.5rem", minHeight: "100dvh" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
         {/* Header */}

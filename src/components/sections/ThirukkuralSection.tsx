@@ -151,6 +151,10 @@ export default function ThirukkuralSection() {
         padding: "6rem 3.5rem",
         position: "relative",
         overflow: "hidden",
+        minHeight: "100dvh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
       }}
     >
       {/* Right watermark — large faded kural number */}
@@ -269,6 +273,7 @@ export default function ThirukkuralSection() {
           >
             {/* Tamil text — Line1 and Line2 as separate elements to prevent 3-line wrap issues */}
             <div
+              className="spts-kural-text"
               style={{
                 fontFamily: "var(--font-tamil)",
                 fontSize: "clamp(1.1rem, 2.2vw, 1.7rem)",

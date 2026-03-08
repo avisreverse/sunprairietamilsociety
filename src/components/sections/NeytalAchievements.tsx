@@ -34,7 +34,7 @@ const SPRING = { type: "spring", stiffness: 300, damping: 26 } as const;
 
 export default function NeytalAchievements({ achievements }: Props) {
   return (
-    <section id="neytal" className="spts-section" style={{ background: "#111010", padding: "6rem 3.5rem" }}>
+    <section id="neytal" className="spts-section" style={{ background: "#111010", padding: "6rem 3.5rem", minHeight: "100dvh" }}>
       <div style={{ maxWidth: "1440px", margin: "0 auto" }}>
 
         {/* Header */}

@@ -36,6 +36,7 @@ export default function LandingHero() {
         paddingBottom: 0,
         overflow: "hidden",
         position: "relative",
+        minHeight: "100dvh",
       }}
     >
       <div

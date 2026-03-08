@@ -59,7 +59,7 @@ export default function Nav() {
       <span key={`${item.id}-${keySuffix}-${i}`} style={{ display: "inline-flex", alignItems: "center" }}>
         <a
           href={`/announcements/${item.id}`}
-          style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "rgba(255,255,255,0.88)", textDecoration: "none", cursor: "pointer", transition: "color 0.15s" }}
+          style={{ fontFamily: "var(--font-body)", fontSize: "0.85rem", color: "rgba(255,255,255,0.88)", textDecoration: "none", cursor: "pointer", transition: "color 0.15s" }}
           onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "#D4930A")}
           onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.88)")}
         >
@@ -103,7 +103,7 @@ export default function Nav() {
         {announcements.length > 0 && (
           <div
             style={{
-              height: "34px",
+              height: "38px",
               background: "rgba(15,6,6,0.97)",
               borderBottom: "1px solid rgba(212,147,10,0.2)",
               display: "flex",
@@ -122,7 +122,7 @@ export default function Nav() {
                 background: "#8B1A1A",
                 borderRight: "1px solid rgba(212,147,10,0.25)",
                 fontFamily: "var(--font-body)",
-                fontSize: "0.55rem",
+                fontSize: "0.65rem",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
                 textTransform: "uppercase",
