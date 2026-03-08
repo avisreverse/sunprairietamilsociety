@@ -28,10 +28,8 @@ Items land here when:
 |-------------|--------------|--------------|--------|
 | REQ-202603-003 Thirukkural | Full chapter lookup, watermarks, 3-line fix | Verify GitHub raw fetch works on Vercel (CORS) — test from live URL in incognito | Needs verification |
 | Mobile responsiveness | Not yet audited | Test all pages at 375px (iPhone SE), 768px (tablet) | Deferred — active feedback cycle in progress |
-| Events detail pages | /events listing exists + DB-driven | Create /events/[slug] individual event pages | Not started |
+| Events detail pages | /events listing exists + DB-driven | Create /events/[id] individual event pages | Not started |
 | Playwright E2E testing | User requested automated testing to replace manual testing | Set up Playwright test suite for all user flows (programs, events, achievements, board, admin) | Next session priority |
-| REQ-202603-008 Program website URL | Migration 004 run, admin form + public page live, verified | Feature complete and live — no action needed | Done ✅ |
-| REQ-202603-009 Announcement ticker | Migration 005 run, admin CRUD + ticker in Nav + detail page, verified end-to-end | Feature complete and live — no action needed | Done ✅ |
 
 ---
 
@@ -40,10 +38,9 @@ Items land here when:
 | DEF-### | Title | Severity | Why deferred | Added |
 |---------|-------|----------|-------------|-------|
 | DEF-202603-003 | Board grid tile alignment — orphaned last card | P3 | Low priority — cosmetic; address in next UI polish session | 2026-03-08 |
-| DEF-202603-006 | Admin achievements — no photo upload | P2 | Achievement photo upload in admin not yet implemented; DEF-202603-017 (photos not showing on landing) is now fixed | 2026-03-08 |
-| DEF-202603-007 | Featured event card not clickable | P2 | Needs /events/[slug] detail pages first; deferred | 2026-03-08 |
 | DEF-202603-008 | RSVP page not built | P2 | REQ-202603-007 in backlog; deferred | 2026-03-08 |
 | DEF-202603-009 | Achievement category — no add custom categories | P3 | Low priority; deferred | 2026-03-08 |
+<!-- DEF-006 and DEF-007 removed — both fixed in Session 12 -->
 
 ---
 

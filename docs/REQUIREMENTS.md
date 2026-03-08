@@ -30,6 +30,7 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 | REQ-202603-007 | P2 | backlog | RSVP page — per-event RSVP form + tracking | Not started. rsvp_responses table exists. (DEF-202603-008) |
 | REQ-202603-008 | P2 | in_progress | Program website URL — optional admin-controlled external link | Migration 004 run (confirmed). Admin form has URL + visibility checkbox. /programs/[slug] shows "Visit website →" in sidebar when visible=true. Verified live. |
 | REQ-202603-009 | P2 | in_progress | External announcement board — ticker + detail pages | Migration 005 run (confirmed). /admin/announcements CRUD with poster upload, expiry, publish toggle. AnnouncementTicker inside Nav. /announcements/[id] detail page. Verified end-to-end by user. |
+| REQ-202603-010 | P2 | in_progress | Home page admin editing — hero story, year, tagline, subtext | Migration 006 run (confirmed). /admin/home page with 4 editable fields. site_settings table. heroContent wired in page.tsx. Year propagates to hero (×3 instances) + footer. programCount always live from DB. |
 
 ---
 

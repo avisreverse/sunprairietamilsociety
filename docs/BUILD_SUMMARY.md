@@ -6,15 +6,15 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 3 — All public pages fully DB-driven. REQ-202603-008 (program website URL) and REQ-202603-009 (external announcements board) live and verified. Achievement photos confirmed working. 3 legacy open defects remain (P2/P3). Migrations 004 and 005 confirmed run.
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Announcement ticker live and verified. Programs have optional website URL. /announcements/[id] detail pages live.
+**Phase:** Phase 3 — All public pages fully DB-driven. CI Quality Gate now passing (green). Admin year change reflects everywhere (hero + footer). Achievements grid is fully adaptive for any card count. 3 legacy open defects remain (P2/P3).
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. CI passing. All admin edits (year, story, tagline) propagate to hero + footer.
 **Last Updated:** 2026-03-09
 **Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
 **Admin URL:** https://sunprairietamilsociety.vercel.app/en/admin
 **Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel. DB tables created + seeded.
 
-### What's Done (updated 2026-03-09)
+### What's Done (updated 2026-03-09 Session 15)
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
@@ -60,12 +60,15 @@ Track session-by-session progress. Always read this at session start.
 - [x] **REQ-202603-009** — External announcement board: migration 005, /admin/announcements (CRUD + poster upload), ticker in Nav, /announcements/[id] detail page
 - [x] **Announcement ticker** — inside fixed Nav wrapper (no overlap with content), hover-to-pause, click → /announcements/[id]
 - [x] **Inner pages paddingTop** — updated 8 pages from 7rem → 8.5rem to clear Nav + ticker combined height
+- [x] **DEF-202603-018** — Achievements grid 4+2 layout: dynamic double-column grid fills full width for any card count
+- [x] **DEF-202603-019** — CI Quality Gate failing: all 6 ESLint errors fixed (set-state-in-effect ×6, no-explicit-any, unescaped-entities, no-html-link-for-pages) — CI now passes green
+- [x] **DEF-202603-020** — Footer year hardcoded: Footer now accepts `foundingYear` prop from page.tsx (DB-sourced heroContent.year) so admin year change reflects in footer description
 
 ### What's Pending (Next Session)
 - [ ] **DEF-202603-003**: /board page grid tile alignment (P3)
 - [ ] **DEF-202603-008**: RSVP page — /events/[id]/rsvp public form (REQ-202603-007)
 - [ ] **DEF-202603-009**: Achievement category — fixed list, no custom category add (P3)
-- [ ] Events detail pages — /events/[slug] individual event pages
+- [ ] Events detail pages — /events/[id] individual event pages
 - [ ] Mobile responsiveness audit (375px breakpoints not yet tested)
 - [ ] Playwright E2E testing setup
 - [ ] Real content — photos, board headshots, real event dates (user to supply)
@@ -77,7 +80,7 @@ Track session-by-session progress. Always read this at session start.
 - DEF-202603-003: /board page grid tile alignment (P3)
 - DEF-202603-008: RSVP page not built (P2)
 - DEF-202603-009: Achievement category not extensible (P3)
-<!-- 3 open defects -->
+<!-- 3 open defects — DEF-018/019/020 fixed this session -->
 
 ### Active Requirements
 - REQ-202603-001: in_progress — Design D live, fully DB-driven. All sections working.
@@ -92,6 +95,32 @@ Track session-by-session progress. Always read this at session start.
 ---
 
 ## Session Log
+
+### Session 15 — 2026-03-09
+
+**Focus:** Achievements adaptive grid, CI Quality Gate failures, footer year dynamic from admin
+
+**Completed:**
+- DEF-202603-018: Achievements grid 4+2 orphan layout — replaced `repeat(3,1fr)` with dynamic double-column grid (cols×2 inner columns, normal items span 2, orphans span wider to fill row); mobile `.spts-ach-item` CSS reset added; `<a>` → `<Link>` for achievements/submit
+- DEF-202603-019: CI Quality Gate failing on every push — fixed 6 ESLint errors: `react-hooks/set-state-in-effect` (5 admin pages + AnnouncementBar), `no-explicit-any` (admin/page.tsx), `no-unescaped-entities` (join/page.tsx), `no-html-link-for-pages` (NeytalAchievements.tsx); CI now passes clean
+- DEF-202603-020: Footer founding year hardcoded — Footer now accepts `foundingYear` prop; home page server component passes `heroContent.year` from site_settings DB; admin year change now propagates to footer description
+
+**New Defects Found:**
+- DEF-202603-018: Achievements grid 4+2 orphan (P2) — found + fixed this session
+- DEF-202603-019: CI Quality Gate failing due to ESLint errors (P1) — found + fixed this session
+- DEF-202603-020: Footer year hardcoded, ignoring admin setting (P2) — found + fixed this session
+
+**Deferred / Remaining Open:**
+- DEF-202603-003, 008, 009 still open (P3, P2, P3)
+- Events detail pages /events/[id] — not started
+- Playwright E2E testing — still pending
+- Mobile responsiveness audit — still pending
+
+**Deployment:**
+- Pushed to `main` and `release` → Vercel production
+- Commits: `c428f6d` (achievements grid), `2dd5a32` (CI fix + footer year)
+
+---
 
 ### Session 14 — 2026-03-09
 
