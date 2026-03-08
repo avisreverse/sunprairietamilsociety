@@ -19,10 +19,48 @@ All bugs and defects tracked here with `DEF-YYYYMM-NNN` IDs.
 
 ## Open Defects
 
-| ID | Severity | Status | Title | Linked REQ | Found In |
-|----|----------|--------|-------|-----------|---------|
-| DEF-202603-008 | P2 | open | RSVP page not built — DB table exists, no public form | REQ-202603-007 | Session 10 |
-| DEF-202603-009 | P3 | open | Achievement category — no option to add custom categories | REQ-202603-005 | Session 10 |
+None — all defects resolved.
+<!-- DEF-008/009 fixed Session 18; DEF-003 fixed Session 16; DEF-017/018/019/020 fixed Session 13/15 -->
+
+---
+
+## DEF-202603-009: Achievement Category — No Option to Add Custom Categories
+**Severity:** P3
+**Status:** fixed
+**Created:** 2026-03-08
+**Fixed:** 2026-03-09
+**Linked Requirement:** REQ-202603-005
+**Found In:** Session 10
+
+### Description
+Achievement categories were a hardcoded select list. No way for admin or submitter to specify a category outside the preset list (Education, Arts, Music, Community, Sports, Professional).
+
+### Fix Applied
+Added "Other" as a select option in `/achievements/submit/page.tsx`. When "Other" is selected, a free-form text input appears for the custom category. The backend `POST /api/achievements/submit` resolves the custom value before inserting into the DB.
+
+### Regression Tests Added
+- TC-DEF-202603-009: Select "Other" in submit form → verify free-form input appears → verify submitted category stores the custom value.
+
+---
+
+## DEF-202603-008: RSVP Page Not Built
+**Severity:** P2
+**Status:** fixed
+**Created:** 2026-03-08
+**Fixed:** 2026-03-09
+**Linked Requirement:** REQ-202603-007
+**Found In:** Session 10
+
+### Description
+The `rsvp_responses` DB table and RLS policies existed, but there was no public RSVP form. Users clicking "RSVP required" events had no way to submit.
+
+### Fix Applied
+- `POST /api/rsvp/[eventId]` — public route, no auth. Validates name/email/guest_count (1–20)/notes. Verifies event is published and rsvp_required=true before inserting.
+- `/events/[id]/rsvp/page.tsx` — server component fetches event, renders `<RsvpForm>` client component (name, email, attendees 1–10, notes, submit). Shows success state after submission.
+- `/events/[id]/page.tsx` — updated RSVP button priority: `rsvp_required=true` → internal form link; `rsvp_url` set → external link; neither → "coming soon" placeholder.
+
+### Regression Tests Added
+- TC-DEF-202603-008: Navigate to event with rsvp_required=true → verify RSVP button links to /rsvp page. Fill form → verify success state renders. Unknown event ID → verify 404.
 
 ---
 

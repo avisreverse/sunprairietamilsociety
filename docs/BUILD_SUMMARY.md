@@ -6,15 +6,15 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 3 — All public pages fully DB-driven + full mobile audit complete. REQ-202603-011 (section visibility toggles) implemented and live. 2 legacy open defects remain (P2/P3).
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. CI passing. Admin can now hide/show Events and Achievements sections on homepage.
+**Phase:** Phase 3 — Feature-complete for initial launch. All public pages DB-driven, mobile audited, RSVP live, achievement submit wired, Playwright E2E setup done. 0 open P1/P2 defects.
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. CI passing. Only remaining items: Sentry DSN, real content from user, and admin auth migration (PL-004).
 **Last Updated:** 2026-03-09
 **Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
 **Admin URL:** https://sunprairietamilsociety.vercel.app/en/admin
 **Supabase:** Connected (project ID: gzdndcytxpmhjuxwnsxv) — env vars in .env.local and Vercel. DB tables created + seeded.
 
-### What's Done (updated 2026-03-09 Session 17)
+### What's Done (updated 2026-03-09 Session 18)
 - [x] CLAUDE.md with ground rules, tech stack, standards
 - [x] `.claude/` directory with hooks, agents, commands
 - [x] `docs/` directory with all tracking templates
@@ -65,38 +65,69 @@ Track session-by-session progress. Always read this at session start.
 - [x] **DEF-202603-020** — Footer year hardcoded: Footer now accepts `foundingYear` prop from page.tsx (DB-sourced heroContent.year) so admin year change reflects in footer description
 - [x] **Mobile audit complete (Session 16)** — Full 390px mobile audit: board grid (gridColumn:2/3 orphan card fix via inline <style> + ID selector), footer padding, ThirukkuralSection watermark overflow, announcements page padding. Root cause: last card's gridColumn:"2/3" was creating implicit 2nd column that CSS overrides couldn't prevent; fixed with `#board-members-grid > * { grid-column: auto !important }`.
 - [x] **REQ-202603-011 — Section visibility toggles (Session 17)** — Admin can hide Events and Achievements sections on homepage via checkboxes in /admin/events and /admin/achievements. Flags stored in site_settings (`events_section_enabled`, `achievements_section_enabled`). site-settings PUT route changed to upsert so saves work before migration is run. Migration 007 SQL files created. Homepage conditional rendering wired. PostToolUse hook false-positive fixed.
+- [x] **DEF-202603-008 — RSVP page (Session 18)** — `/events/[id]/rsvp` page built. `POST /api/rsvp/[eventId]` public API validates name/email/guests and inserts into rsvp_responses. Event detail page links to internal RSVP form when `rsvp_required=true`, external URL when `rsvp_url` set, "coming soon" otherwise.
+- [x] **DEF-202603-009 — Achievement category extensible (Session 18)** — "Other" added to category select. Free-form text input appears when "Other" is selected. Backend resolves custom category value.
+- [x] **Achievement submit form wired (Session 18)** — `POST /api/achievements/submit` created. Form now POSTs to API with success state. Admin reviews at `/admin/achievements`. Initials auto-computed from name.
+- [x] **Playwright E2E setup (Session 18)** — `playwright.config.ts` created (Desktop Chrome + Mobile Safari, webServer auto-start). 4 spec files: homepage.spec.ts, events.spec.ts, achievements.spec.ts, admin-toggles.spec.ts. Run with `npm run test:e2e`.
+- [x] **Thirukkural CORS verified (Session 18)** — ThirukkuralSection uses client-side useEffect fetch. GitHub raw content serves `Access-Control-Allow-Origin: *`. 4-kural fallback handles any network failure. No fix needed — verified.
+- [x] **Migration 007 run (Session 18)** — User ran 007_add_section_visibility.up.sql in Supabase SQL editor. Both visibility flags seeded.
 
 ### What's Pending (Next Session)
 - [x] **DEF-202603-003**: /board page grid tile alignment — RESOLVED: mobile fix forces 1-col stacked layout
-- [ ] **DEF-202603-008**: RSVP page — /events/[id]/rsvp public form (REQ-202603-007)
-- [ ] **DEF-202603-009**: Achievement category — fixed list, no custom category add (P3)
-- [ ] Events detail pages — /events/[id] individual event pages
-- [ ] Playwright E2E testing setup
+- [x] **DEF-202603-008**: RSVP page — FIXED Session 18
+- [x] **DEF-202603-009**: Achievement category — FIXED Session 18
+- [x] Events detail pages — /events/[id] — existed and complete
+- [x] Playwright E2E testing setup — DONE Session 18
+- [x] Thirukkural CORS verification — VERIFIED Session 18
+- [x] Migration 007 — RUN Session 18
 - [ ] Real content — photos, board headshots, real event dates (user to supply)
-- [ ] Sentry integration
-- [ ] Thirukkural GitHub fetch CORS verification on Vercel network
+- [ ] Sentry integration — needs NEXT_PUBLIC_SENTRY_DSN from user
 - [ ] Admin auth — PL-004: add community_admin role to spts-clean Supabase (after site feature-complete)
-- [ ] Run migration 007 in Supabase SQL editor (optional — upsert creates rows on first toggle click anyway)
 
 ### Open Defects
-- DEF-202603-008: RSVP page not built (P2)
-- DEF-202603-009: Achievement category not extensible (P3)
-<!-- 2 open defects — DEF-003 closed by mobile fix Session 16; DEF-018/019/020 fixed Session 15 -->
+None — all P2/P3 defects resolved.
+<!-- DEF-008/009 fixed Session 18; DEF-003 fixed Session 16; DEF-018/019/020 fixed Session 15 -->
 
 ### Active Requirements
 - REQ-202603-001: in_progress — Design D live, fully DB-driven. All sections working.
-- REQ-202603-002: in_progress — Programs fully DB-driven. website_url field added (Migration 004 pending).
-- REQ-202603-003: in_progress — ThirukkuralSection live, needs real-world fetch verification.
+- REQ-202603-002: in_progress — Programs fully DB-driven. website_url field added.
+- REQ-202603-003: done — ThirukkuralSection live, CORS verified, 4-kural fallback confirmed.
 - REQ-202603-004: in_progress — Admin CMS complete. Announcements admin added.
-- REQ-202603-005: in_progress — Achievement photos fixed on landing page. DEF-202603-017 closed.
+- REQ-202603-005: in_progress — Submit form wired to API. Photo upload to Supabase on submit pending.
 - REQ-202603-006: in_progress — Board fully DB-driven. Photos on all 3 surfaces.
+- REQ-202603-007: in_progress — RSVP page + API built. Pending user verification.
 - REQ-202603-008: in_progress — Program website URL live. Migration 004 confirmed run. Verified by user.
 - REQ-202603-009: in_progress — Announcements board live. Migration 005 confirmed run. Ticker + detail page verified by user.
-- REQ-202603-011: in_progress — Section visibility toggles live. Admin UI in /admin/events and /admin/achievements. Upsert fix deployed. Playwright E2E pending.
+- REQ-202603-010: in_progress — Home page admin editing live. Migration 006 run. Verified by user.
+- REQ-202603-011: done — Section visibility toggles live, migration 007 run, E2E spec written.
 
 ---
 
 ## Session Log
+
+### Session 18 — 2026-03-09
+
+**Focus:** Close all pending items — RSVP page, achievement submit wire-up, Playwright E2E, DEF-202603-008/009, CORS verification, migration 007
+
+**Completed:**
+- **DEF-202603-008 FIXED** — `POST /api/rsvp/[eventId]` public API (validates name/email/guest_count 1–20, verifies event exists + rsvp_required=true, inserts into rsvp_responses via anonymous RLS policy). `/events/[id]/rsvp/page.tsx` server component fetches event, renders `<RsvpForm>` client component with success state. `/events/[id]` detail page updated: shows internal RSVP link (rsvp_required), external link (rsvp_url), or "coming soon" placeholder.
+- **DEF-202603-009 FIXED** — "Other" added to achievement submit category select. Free-form text input appears when "Other" selected. Backend resolves custom value before inserting.
+- **Achievement submit form wired** — `POST /api/achievements/submit` route created. Form POSTs with name/category/achievement/bio/email. Initials auto-computed (first+last word initial). Success state shows nomination confirmation. Admin reviews at /admin/achievements.
+- **Playwright E2E setup** — `playwright.config.ts` (Desktop Chrome 1280px + Mobile Safari 375px, webServer auto-start, CI retries). 4 spec files created: homepage.spec.ts (loads, Thirukkural, nav, no overflow), events.spec.ts (listing, detail, RSVP 404), achievements.spec.ts (submit accessible, Other field, 404), admin-toggles.spec.ts (skipped until TEST_ADMIN_EMAIL/PASSWORD env vars set).
+- **Thirukkural CORS verified** — Client-side useEffect fetch with 4-kural fallback. GitHub raw content serves `Access-Control-Allow-Origin: *`. No code change needed. REQ-202603-003 marked done.
+- **Migration 007 run** — User ran `007_add_section_visibility.up.sql` in Supabase SQL editor. Both `events_section_enabled` and `achievements_section_enabled` rows seeded.
+- **REQ-202603-011 closed** — All 5 code criteria met + E2E spec written. Marked done.
+
+**New Defects Found:** None
+
+**Deferred / Remaining Open:**
+- Real content (photos, names, events) — user to supply
+- Sentry integration — needs NEXT_PUBLIC_SENTRY_DSN from user
+- PL-004 admin auth migration — intentionally deferred until feature-complete
+
+**Deployment:** `git push origin main && git push origin main:release` — commit `5063879` live on Vercel. 29 routes.
+
+---
 
 ### Session 17 — 2026-03-09
 

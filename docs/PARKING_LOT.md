@@ -26,23 +26,20 @@ Items land here when:
 
 | Feature/REQ | What was done | What remains | Status |
 |-------------|--------------|--------------|--------|
-| REQ-202603-003 Thirukkural | Full chapter lookup, watermarks, 3-line fix | Verify GitHub raw fetch works on Vercel (CORS) — test from live URL in incognito | Needs verification |
-| Events detail pages | /events listing exists + DB-driven | Create /events/[id] individual event pages | Not started |
-| Playwright E2E testing | User requested automated testing to replace manual testing | Set up Playwright test suite for all user flows (programs, events, achievements, board, admin) | Next session priority |
-| Migration 007 (section visibility rows) | SQL files created (007_add_section_visibility.up/down.sql) | Optional: run in Supabase SQL editor — upsert in API makes this non-blocking | Low priority — upsert handles it |
+| Sentry integration | Nothing yet | Wire NEXT_PUBLIC_SENTRY_DSN — needs DSN from user | Awaiting user DSN |
+
+<!-- RESOLVED Session 18: Thirukkural CORS verified (client-side, GitHub *), Events detail page (existed), Playwright E2E setup done, Migration 007 run by user, DEF-008 RSVP built, DEF-009 Other category added -->
 <!-- Mobile responsiveness audit COMPLETE — Session 16. All pages verified at 390px. -->
-<!-- REQ-202603-011 IMPLEMENTED — Session 17. All code deployed. Playwright E2E only item remaining. -->
+<!-- REQ-202603-011 DONE — Session 18. All criteria met. -->
 
 ---
 
 ## Deferred Defects (Needs Priority Decision)
 
-| DEF-### | Title | Severity | Why deferred | Added |
-|---------|-------|----------|-------------|-------|
-| DEF-202603-008 | RSVP page not built | P2 | REQ-202603-007 in backlog; deferred | 2026-03-08 |
-<!-- DEF-202603-003 FIXED Session 16 — board grid mobile 2-col overflow resolved -->
-| DEF-202603-009 | Achievement category — no add custom categories | P3 | Low priority; deferred | 2026-03-08 |
-<!-- DEF-006 and DEF-007 removed — both fixed in Session 12 -->
+None — all defects resolved.
+<!-- DEF-008 FIXED Session 18 — RSVP page built -->
+<!-- DEF-009 FIXED Session 18 — Other category added -->
+<!-- DEF-003 FIXED Session 16 — board grid mobile 2-col overflow resolved -->
 
 ---
 
