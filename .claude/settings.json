@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "prompt",
-            "prompt": "Output nothing unless a check fails. If file path does NOT contain /src/ or /tests/ or /database/ — output nothing. If it does, check: (1) new functions have JSDoc, (2) console logs use emoji prefix, (3) new env vars are in .env.example. If a check fails: one line only — '⚠️ [what failed] in [file]'. If all pass: output nothing."
+            "prompt": "Output nothing unless a check fails. If file path does NOT contain /src/ or /tests/ or /database/ — output nothing. If it does, check: (1) new FUNCTION declarations (lines starting with 'export function', 'export async function', 'export default function', or 'const X = (' where X is the exported name of a function component or hook) are missing JSDoc — variable declarations like 'const x = value' do NOT require JSDoc, (2) console logs use emoji prefix, (3) new env vars are in .env.example. If a check fails: one line only — '⚠️ [what failed] in [file]'. If all pass: output nothing."
           }
         ]
       }

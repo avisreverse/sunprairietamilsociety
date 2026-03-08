@@ -31,6 +31,7 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 | REQ-202603-008 | P2 | in_progress | Program website URL — optional admin-controlled external link | Migration 004 run (confirmed). Admin form has URL + visibility checkbox. /programs/[slug] shows "Visit website →" in sidebar when visible=true. Verified live. |
 | REQ-202603-009 | P2 | in_progress | External announcement board — ticker + detail pages | Migration 005 run (confirmed). /admin/announcements CRUD with poster upload, expiry, publish toggle. AnnouncementTicker inside Nav. /announcements/[id] detail page. Verified end-to-end by user. |
 | REQ-202603-010 | P2 | in_progress | Home page admin editing — hero story, year, tagline, subtext | Migration 006 run (confirmed). /admin/home page with 4 editable fields. site_settings table. heroContent wired in page.tsx. Year propagates to hero (×3 instances) + footer. programCount always live from DB. |
+| REQ-202603-011 | P2 | backlog | Section visibility toggles — admin can hide Events/Achievements homepage sections | Two boolean flags in site_settings. Toggles in /admin/events and /admin/achievements. Submit form always accessible regardless of toggle. |
 
 ---
 
@@ -71,6 +72,48 @@ All requirements tracked here with `REQ-YYYYMM-NNN` IDs.
 ### Test Cases
 - TC-REQ-YYYYMM-NNN: [test case description]
 ```
+
+---
+
+## REQ-202603-011: Section Visibility Toggles
+**Priority:** P2
+**Status:** backlog
+**Created:** 2026-03-09
+**Updated:** 2026-03-09
+
+### Description
+Admin can hide the Achievements section and Events section on the homepage when there is no content to show. Controlled by two boolean flags stored in `site_settings` (same table used by REQ-202603-010). Toggles live inside the relevant admin section pages. Achievement submit form (`/achievements/submit`) is always accessible regardless of toggle state.
+
+### Acceptance Criteria
+- [ ] `events_section_enabled` flag in site_settings defaults to `"true"` — Events section shows by default
+- [ ] `achievements_section_enabled` flag in site_settings defaults to `"true"` — Achievements section shows by default
+- [ ] Admin can toggle each flag in the respective admin section header (on/off checkbox)
+- [ ] When a section is disabled, it does not render on the homepage — no gap, no placeholder
+- [ ] `/achievements/submit` page remains accessible regardless of the achievements toggle
+
+### Design Considerations
+- Mobile: toggle is a standard checkbox — no mobile-specific behavior needed
+- Tamil/English: no Tamil text needed for admin UI
+- Accessibility: checkbox must have a visible label
+
+### Security/Privacy Considerations
+- Write is admin-only (existing `site_settings_admin_write` RLS policy covers this)
+- Read is public (existing `site_settings_public_read` RLS policy covers this — homepage needs it)
+
+### Dependencies
+- Requires: REQ-202603-010 (site_settings table + API already exist)
+- Blocks: none
+- Conflicts: none
+
+### Decisions
+- D-004: Supabase — site_settings already uses key-value store pattern; boolean stored as string "true"/"false"
+
+### Test Cases
+- TC-REQ-202603-011-a: Disable events section in admin → reload homepage → verify events section not rendered
+- TC-REQ-202603-011-b: Re-enable events section → reload homepage → verify events section renders
+- TC-REQ-202603-011-c: Disable achievements section → verify NeytalAchievements not rendered on homepage
+- TC-REQ-202603-011-d: Disable achievements → navigate to /achievements/submit → verify form still accessible (200)
+- TC-REQ-202603-011-e: Toggle defaults to "on" for both sections on fresh install
 
 ---
 

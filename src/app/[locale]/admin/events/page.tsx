@@ -45,16 +45,45 @@ export default function AdminEventsPage() {
   const [form, setForm] = useState<Omit<Event, "id">>(EMPTY);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // REQ-202603-011: section visibility toggle
+  const [sectionEnabled, setSectionEnabled] = useState(true);
+  const [togglingSection, setTogglingSection] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetchAdmin("/api/admin/events");
-    if (res.ok) setEvents(await res.json());
+    const [eventsRes, settingsRes] = await Promise.all([
+      fetchAdmin("/api/admin/events"),
+      fetchAdmin("/api/admin/site-settings"),
+    ]);
+    if (eventsRes.ok) setEvents(await eventsRes.json());
+    if (settingsRes.ok) {
+      const settings: { key: string; value: string }[] = await settingsRes.json();
+      const flag = settings.find((s) => s.key === "events_section_enabled");
+      setSectionEnabled(flag ? flag.value !== "false" : true);
+    }
     setLoading(false);
   }, []);
 
   // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
   useEffect(() => { void load(); }, []); // load is stable (useCallback with no deps)
+
+  /**
+   * Toggles the events_section_enabled flag in site_settings.
+   * Saves immediately on click — no separate Save button needed.
+   * @see REQ-202603-011
+   */
+  const toggleSection = async () => {
+    setTogglingSection(true);
+    const next = !sectionEnabled;
+    await fetchAdmin("/api/admin/site-settings", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ key: "events_section_enabled", value: next ? "true" : "false" }),
+    });
+    setSectionEnabled(next);
+    console.log(`✅ [AdminEvents] events_section_enabled → ${next}`);
+    setTogglingSection(false);
+  };
 
   const openAdd = () => { setEditing(null); setForm(EMPTY); setShowForm(true); setError(null); };
   const openEdit = (ev: Event) => { setEditing(ev); setForm({ ...ev }); setShowForm(true); setError(null); };
@@ -122,6 +151,30 @@ export default function AdminEventsPage() {
             <div style={{ fontFamily: "var(--font-body)", fontSize: "0.68rem", color: "rgba(255,255,255,0.3)", marginTop: "0.35rem" }}>
               Only 1 event can be featured. Featuring a new one auto-unfeatures the current.
             </div>
+          </div>
+        </div>
+
+        {/* Section visibility toggle — REQ-202603-011 */}
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem", background: "rgba(255,255,255,0.04)", border: `1px solid ${sectionEnabled ? "rgba(29,209,161,0.25)" : "rgba(231,76,60,0.25)"}`, borderRadius: "12px", padding: "1rem 1.25rem", marginBottom: "2rem" }}>
+          <label style={{ display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer", flex: 1 }}>
+            <input
+              type="checkbox"
+              checked={sectionEnabled}
+              onChange={toggleSection}
+              disabled={togglingSection}
+              style={{ width: "18px", height: "18px", cursor: "pointer", accentColor: "#1dd1a1" }}
+            />
+            <div>
+              <div style={{ fontFamily: "var(--font-body)", fontSize: "0.88rem", fontWeight: 600, color: "white" }}>
+                Show Events section on homepage
+              </div>
+              <div style={{ fontFamily: "var(--font-body)", fontSize: "0.75rem", color: "rgba(255,255,255,0.45)", marginTop: "0.2rem" }}>
+                {sectionEnabled ? "Events section is visible on the public homepage." : "Events section is hidden from the public homepage."}
+              </div>
+            </div>
+          </label>
+          <div style={{ fontFamily: "var(--font-body)", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: sectionEnabled ? "#1dd1a1" : "#e74c3c", flexShrink: 0 }}>
+            {togglingSection ? "Saving…" : sectionEnabled ? "ON" : "OFF"}
           </div>
         </div>
 

@@ -80,6 +80,10 @@ export default async function HomePage() {
     programCount,
   };
 
+  // REQ-202603-011: Section visibility flags — default true so sections show before admin toggles them
+  const eventsEnabled      = settingsMap["events_section_enabled"]       !== "false";
+  const achievementsEnabled = settingsMap["achievements_section_enabled"] !== "false";
+
   if (eventsRes.status === "rejected") console.error("⚠️ [page] events fetch failed:", eventsRes.reason);
   if (achievementsRes.status === "rejected") console.error("⚠️ [page] achievements fetch failed:", achievementsRes.reason);
   if (boardRes.status === "rejected") console.error("⚠️ [page] board fetch failed:", boardRes.reason);
@@ -96,11 +100,11 @@ export default async function HomePage() {
       {/* Programs — dark ink, bento grid, spring physics */}
       <MullaiPrograms programs={programs} />
 
-      {/* Events — parchment, featured + list rows */}
-      <MarutamEvents events={events} />
+      {/* Events — parchment, featured + list rows (REQ-202603-011: hidden when admin disables) */}
+      {eventsEnabled && <MarutamEvents events={events} />}
 
-      {/* Achievements — dark ink, initials avatars */}
-      <NeytalAchievements achievements={achievements} />
+      {/* Achievements — dark ink, initials avatars (REQ-202603-011: hidden when admin disables) */}
+      {achievementsEnabled && <NeytalAchievements achievements={achievements} />}
 
       {/* Board / About — parchment, join CTA */}
       <PalaiBoard board={board} />
