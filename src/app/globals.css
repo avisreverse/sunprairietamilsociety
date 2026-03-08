@@ -252,4 +252,6 @@
 
   /* Thirukkural Tamil verse: clamp min (1.1rem) is too large on 375px → force smaller */
   .spts-kural-text { font-size: 0.82rem !important; line-height: 1.75 !important; }
+  /* KuralStrip Tamil verse on mobile */
+  .spts-kural-strip-text { font-size: 0.82rem !important; line-height: 1.75 !important; }
 }

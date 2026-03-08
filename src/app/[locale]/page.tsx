@@ -2,7 +2,6 @@ import Nav from "@/components/layout/Nav";
 import Footer from "@/components/layout/Footer";
 import LandingHero from "@/components/sections/LandingHero";
 import MullaiPrograms from "@/components/sections/MullaiPrograms";
-import ThirukkuralSection from "@/components/sections/ThirukkuralSection";
 import MarutamEvents from "@/components/sections/MarutamEvents";
 import NeytalAchievements from "@/components/sections/NeytalAchievements";
 import PalaiBoard from "@/components/sections/PalaiBoard";
@@ -14,7 +13,7 @@ import { createClient } from "@/lib/supabase/server";
  * passes as props to client section components.
  *
  * Section order:
- *   Nav → Hero → Programs (dark) → Thirukkural (crimson) →
+ *   Nav → Hero+KuralStrip (parchment→crimson) → Programs (dark) →
  *   Events (parchment) → Achievements (dark) → Board (parchment) → Footer
  *
  * Falls back gracefully if DB is unavailable (empty arrays → sections show nothing).
@@ -77,9 +76,6 @@ export default async function HomePage() {
 
       {/* Programs — dark ink, bento grid, spring physics */}
       <MullaiPrograms programs={programs} />
-
-      {/* Thirukkural — crimson, rotating all 1330 */}
-      <ThirukkuralSection />
 
       {/* Events — parchment, featured + list rows */}
       <MarutamEvents events={events} />

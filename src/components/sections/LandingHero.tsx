@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
+import KuralStrip from "./KuralStrip";
 
 /**
  * Section 0: Landing Hero — Design D: Warm Cultural.
@@ -81,9 +82,9 @@ export default function LandingHero() {
             aria-hidden="true"
             style={{
               fontFamily: "var(--font-tamil)",
-              fontSize: "clamp(4.5rem, 13vw, 13rem)",
+              fontSize: "clamp(3.5rem, 10vw, 10rem)",
               fontWeight: 700,
-              lineHeight: 1.05,
+              lineHeight: 1.18,
               letterSpacing: "0.04em",
               background: "linear-gradient(180deg, rgba(184,117,10,0.88) 0%, rgba(184,117,10,0.28) 100%)",
               WebkitBackgroundClip: "text",
@@ -274,6 +275,9 @@ export default function LandingHero() {
           </div>
         </motion.div>
       </div>
+
+      {/* Thirukkural strip — compact rotating verse, embedded at hero bottom */}
+      <KuralStrip />
     </section>
   );
 }
