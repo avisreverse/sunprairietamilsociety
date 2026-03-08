@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
 import Link from "next/link";
+import { fetchAdmin } from "@/lib/fetchAdmin";
 
 /**
  * Admin dashboard — shows counts and quick links for all content sections.
@@ -26,10 +27,10 @@ export default function AdminDashboard() {
     async function loadStats() {
       try {
         const [eventsRes, achievementsRes, boardRes, programsRes] = await Promise.all([
-          fetch("/api/admin/events"),
-          fetch("/api/admin/achievements"),
-          fetch("/api/admin/board"),
-          fetch("/api/admin/programs"),
+          fetchAdmin("/api/admin/events"),
+          fetchAdmin("/api/admin/achievements"),
+          fetchAdmin("/api/admin/board"),
+          fetchAdmin("/api/admin/programs"),
         ]);
 
         const [events, achievements, board, programs] = await Promise.all([

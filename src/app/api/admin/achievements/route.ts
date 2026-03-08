@@ -1,5 +1,5 @@
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { verifyAdminAuth } from "@/lib/adminAuth";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
@@ -9,16 +9,8 @@ import { NextRequest, NextResponse } from "next/server";
  * @see REQ-202603-004 — Admin CMS
  */
 
-async function verifyAuth(): Promise<string | null> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user?.id ?? null;
-}
-
-export async function GET() {
-  const userId = await verifyAuth();
+export async function GET(request: NextRequest) {
+  const userId = await verifyAdminAuth(request);
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -38,7 +30,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const userId = await verifyAuth();
+  const userId = await verifyAdminAuth(request);
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

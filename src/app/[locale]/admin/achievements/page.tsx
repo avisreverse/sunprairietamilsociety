@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import AdminNav from "@/components/admin/AdminNav";
+import { fetchAdmin } from "@/lib/fetchAdmin";
 
 /**
  * Admin Achievements page — approve, reject, publish, edit community achievements.
@@ -53,7 +54,7 @@ export default function AdminAchievementsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/achievements");
+    const res = await fetchAdmin("/api/admin/achievements");
     if (res.ok) setItems(await res.json());
     setLoading(false);
   }, []);
@@ -67,7 +68,7 @@ export default function AdminAchievementsPage() {
   });
 
   const approve = async (a: Achievement) => {
-    await fetch(`/api/admin/achievements/${a.id}`, {
+    await fetchAdmin(`/api/admin/achievements/${a.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_approved: true, is_published: true }),
@@ -76,7 +77,7 @@ export default function AdminAchievementsPage() {
   };
 
   const togglePublish = async (a: Achievement) => {
-    await fetch(`/api/admin/achievements/${a.id}`, {
+    await fetchAdmin(`/api/admin/achievements/${a.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_published: !a.is_published }),
@@ -86,7 +87,7 @@ export default function AdminAchievementsPage() {
 
   const del = async (a: Achievement) => {
     if (!confirm(`Delete "${a.achievement}" by ${a.name}?`)) return;
-    await fetch(`/api/admin/achievements/${a.id}`, { method: "DELETE" });
+    await fetchAdmin(`/api/admin/achievements/${a.id}`, { method: "DELETE" });
     await load();
   };
 
@@ -103,7 +104,7 @@ export default function AdminAchievementsPage() {
       initials: form.initials || form.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase(),
       color: CATEGORY_COLORS[form.category] || form.color,
     };
-    const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const res = await fetchAdmin(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     if (res.ok) { await load(); setShowForm(false); }
     setSaving(false);
   };

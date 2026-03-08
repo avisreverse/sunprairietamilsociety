@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import AdminNav from "@/components/admin/AdminNav";
+import { fetchAdmin } from "@/lib/fetchAdmin";
 
 /**
  * Admin Programs page — edit program descriptions, visibility, display order.
@@ -39,7 +40,7 @@ export default function AdminProgramsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/programs");
+    const res = await fetchAdmin("/api/admin/programs");
     if (res.ok) setPrograms(await res.json());
     setLoading(false);
   }, []);
@@ -52,7 +53,7 @@ export default function AdminProgramsPage() {
   const save = async () => {
     if (!editing) return;
     setSaving(true);
-    const res = await fetch(`/api/admin/programs/${editing.id}`, {
+    const res = await fetchAdmin(`/api/admin/programs/${editing.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -62,7 +63,7 @@ export default function AdminProgramsPage() {
   };
 
   const toggle = async (p: Program, field: "is_active" | "featured") => {
-    await fetch(`/api/admin/programs/${p.id}`, {
+    await fetchAdmin(`/api/admin/programs/${p.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [field]: !p[field] }),

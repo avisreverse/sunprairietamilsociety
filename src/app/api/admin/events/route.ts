@@ -1,28 +1,20 @@
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { verifyAdminAuth } from "@/lib/adminAuth";
 import { NextRequest, NextResponse } from "next/server";
 
 /**
  * GET /api/admin/events — list all events (admin, unpublished included)
  * POST /api/admin/events — create a new event
  *
- * Protected: requires authenticated Supabase session.
+ * Protected: requires authenticated Supabase session (Bearer token or cookie).
  * Uses service role client to bypass RLS for admin reads.
  *
  * @see REQ-202603-004 — Admin CMS
  * @see D-005 — Supabase Auth with RLS from day 1
  */
 
-async function verifyAuth(): Promise<string | null> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  return user?.id ?? null;
-}
-
-export async function GET() {
-  const userId = await verifyAuth();
+export async function GET(request: NextRequest) {
+  const userId = await verifyAdminAuth(request);
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -43,7 +35,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const userId = await verifyAuth();
+  const userId = await verifyAdminAuth(request);
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }

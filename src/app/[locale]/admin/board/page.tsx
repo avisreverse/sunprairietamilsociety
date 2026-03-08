@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import AdminNav from "@/components/admin/AdminNav";
+import { fetchAdmin } from "@/lib/fetchAdmin";
 
 /**
  * Admin Board Members page — add, edit, remove board members.
@@ -44,7 +45,7 @@ export default function AdminBoardPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/board");
+    const res = await fetchAdmin("/api/admin/board");
     if (res.ok) setMembers(await res.json());
     setLoading(false);
   }, []);
@@ -66,7 +67,7 @@ export default function AdminBoardPage() {
     const initials = form.initials || form.name.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
     const url = editing ? `/api/admin/board/${editing.id}` : "/api/admin/board";
     const method = editing ? "PATCH" : "POST";
-    const res = await fetch(url, {
+    const res = await fetchAdmin(url, {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...form, slug, initials, bio: form.bio || null, email: form.email || null }),
@@ -77,13 +78,13 @@ export default function AdminBoardPage() {
   };
 
   const toggleActive = async (m: BoardMember) => {
-    await fetch(`/api/admin/board/${m.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ is_active: !m.is_active }) });
+    await fetchAdmin(`/api/admin/board/${m.id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ is_active: !m.is_active }) });
     await load();
   };
 
   const del = async (m: BoardMember) => {
     if (!confirm(`Remove ${m.name} from the board?`)) return;
-    await fetch(`/api/admin/board/${m.id}`, { method: "DELETE" });
+    await fetchAdmin(`/api/admin/board/${m.id}`, { method: "DELETE" });
     await load();
   };
 

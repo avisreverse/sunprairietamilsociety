@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import AdminNav from "@/components/admin/AdminNav";
+import { fetchAdmin } from "@/lib/fetchAdmin";
 
 /**
  * Admin Events page — list, add, edit, delete events. Set RSVP.
@@ -47,7 +48,7 @@ export default function AdminEventsPage() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    const res = await fetch("/api/admin/events");
+    const res = await fetchAdmin("/api/admin/events");
     if (res.ok) setEvents(await res.json());
     setLoading(false);
   }, []);
@@ -63,7 +64,7 @@ export default function AdminEventsPage() {
     setError(null);
     const url = editing ? `/api/admin/events/${editing.id}` : "/api/admin/events";
     const method = editing ? "PATCH" : "POST";
-    const res = await fetch(url, {
+    const res = await fetchAdmin(url, {
       method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...form, rsvp_url: form.rsvp_url || null }),
@@ -79,7 +80,7 @@ export default function AdminEventsPage() {
   };
 
   const togglePublish = async (ev: Event) => {
-    await fetch(`/api/admin/events/${ev.id}`, {
+    await fetchAdmin(`/api/admin/events/${ev.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_published: !ev.is_published }),
@@ -88,7 +89,7 @@ export default function AdminEventsPage() {
   };
 
   const toggleFeatured = async (ev: Event) => {
-    await fetch(`/api/admin/events/${ev.id}`, {
+    await fetchAdmin(`/api/admin/events/${ev.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ featured: !ev.featured }),
@@ -98,7 +99,7 @@ export default function AdminEventsPage() {
 
   const del = async (ev: Event) => {
     if (!confirm(`Delete "${ev.title}"? This cannot be undone.`)) return;
-    await fetch(`/api/admin/events/${ev.id}`, { method: "DELETE" });
+    await fetchAdmin(`/api/admin/events/${ev.id}`, { method: "DELETE" });
     await load();
   };
 
