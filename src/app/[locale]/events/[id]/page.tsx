@@ -146,9 +146,29 @@ export default async function EventDetailPage({ params }: Props) {
             </div>
           )}
 
-          {/* RSVP / action */}
+          {/* RSVP / action — D-016: rsvp_url = external link; rsvp_required = internal form at /rsvp */}
           <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", alignItems: "center" }}>
-            {event.rsvp_url ? (
+            {event.rsvp_required ? (
+              // Internal RSVP form — REQ-202603-007 / DEF-202603-008
+              <Link
+                href={`/events/${id}/rsvp`}
+                style={{
+                  display: "inline-block",
+                  padding: "0.9rem 2rem",
+                  borderRadius: "999px",
+                  background: accentColor,
+                  color: "white",
+                  fontFamily: "var(--font-body)",
+                  fontSize: "0.88rem",
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  letterSpacing: "0.01em",
+                }}
+              >
+                RSVP for this event →
+              </Link>
+            ) : event.rsvp_url ? (
+              // External RSVP link set by admin
               <a
                 href={event.rsvp_url}
                 target="_blank"
