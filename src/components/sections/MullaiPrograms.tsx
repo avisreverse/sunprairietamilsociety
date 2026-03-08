@@ -130,11 +130,15 @@ export default function MullaiPrograms({ programs }: Props) {
           </motion.div>
 
           {/* Regular cards — right column sub-grid, 2-col, wraps for any count */}
-          <div className="spts-sub-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", alignContent: "start" }}>
+          <div className="spts-sub-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem", alignItems: "stretch" }}>
             {rest.map((prog, i) => (
               <motion.div
                 key={prog.slug}
-                style={{ boxShadow: "0 6px 28px rgba(0,0,0,0.5)", borderRadius: "16px" }}
+                style={{
+                  boxShadow: "0 6px 28px rgba(0,0,0,0.5)", borderRadius: "16px",
+                  // Span full width when it's the lone card in the last row
+                  gridColumn: i === rest.length - 1 && rest.length % 2 !== 0 ? "1 / -1" : undefined,
+                }}
                 whileHover={{ y: -8, boxShadow: "0 22px 60px rgba(0,0,0,0.7)" }}
                 transition={{ ...SPRING, delay: i * 0.02 }}
               >

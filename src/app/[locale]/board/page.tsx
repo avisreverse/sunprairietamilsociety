@@ -56,14 +56,13 @@ export default async function BoardPage() {
           </div>
 
           {/* Board members grid — centered flex so orphaned last cards center (DEF-202603-003) */}
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.25rem", marginBottom: "5rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem", marginBottom: "5rem" }}>
             {list.map((member) => (
               <Link
                 key={member.id}
                 href={`/board/${member.slug}`}
                 style={{
                   display: "block",
-                  width: "320px",
                   background: "white",
                   borderRadius: "20px",
                   border: `1px solid ${member.color}20`,

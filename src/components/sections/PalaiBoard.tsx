@@ -54,12 +54,12 @@ export default function PalaiBoard({ board }: Props) {
         </ScrollReveal>
 
         {/* Board grid — DEF-202603-003: flex+center so orphaned last cards are centered, not left-aligned */}
-        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem", marginBottom: "4rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.5rem", marginBottom: "4rem" }}>
           {board.map((member, i) => (
-            <ScrollReveal key={member.initials} delay={i * 0.08}>
+            <ScrollReveal key={member.initials} delay={i * 0.08} style={{ width: "100%" }}>
               <motion.div
                 style={{
-                  width: "220px",
+                  width: "100%",
                   padding: "2.5rem 2rem",
                   borderRadius: "18px",
                   background: "white",

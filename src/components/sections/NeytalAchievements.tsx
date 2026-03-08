@@ -61,7 +61,7 @@ export default function NeytalAchievements({ achievements }: Props) {
         </ScrollReveal>
 
         {/* Grid */}
-        <div className="spts-ach-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.25rem" }}>
+        <div className="spts-ach-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
           {achievements.length === 0 && (
             <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "3rem 0", fontFamily: "var(--font-body)", color: "rgba(255,255,255,0.25)" }}>
               Achievements coming soon.
