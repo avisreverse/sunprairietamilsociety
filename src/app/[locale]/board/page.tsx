@@ -57,7 +57,7 @@ export default async function BoardPage() {
 
           {/* Board members grid — centered flex so orphaned last cards center (DEF-202603-003) */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem", marginBottom: "5rem" }}>
-            {list.map((member) => (
+            {list.map((member, index) => (
               <Link
                 key={member.id}
                 href={`/board/${member.slug}`}
@@ -69,6 +69,10 @@ export default async function BoardPage() {
                   padding: "2rem",
                   textDecoration: "none",
                   boxShadow: "0 4px 28px rgba(26,20,16,0.07)",
+                  /* DEF: last orphaned card spans full width when count%3===1 */
+                  gridColumn: index === list.length - 1 && list.length % 3 === 1 ? "1 / -1" : undefined,
+                  maxWidth: index === list.length - 1 && list.length % 3 === 1 ? "380px" : undefined,
+                  justifySelf: index === list.length - 1 && list.length % 3 === 1 ? "center" : undefined,
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "1.25rem", marginBottom: "1.25rem" }}>

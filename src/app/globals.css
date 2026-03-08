@@ -255,3 +255,12 @@
   /* KuralStrip Tamil verse on mobile */
   .spts-kural-strip-text { font-size: 0.82rem !important; line-height: 1.75 !important; }
 }
+
+/* Programs listing page — hover lift (event handlers cannot go on Server Component Links) */
+.spts-prog-card {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.spts-prog-card:hover {
+  box-shadow: 0 8px 32px rgba(26,20,16,0.10);
+  transform: translateY(-3px);
+}

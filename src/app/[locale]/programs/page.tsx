@@ -56,13 +56,12 @@ export default async function ProgramsPage() {
                 <Link
                   key={prog.slug}
                   href={`/programs/${prog.slug}`}
+                  className="spts-prog-card"
                   style={{
                     display: "block", padding: "2.25rem",
                     borderRadius: "16px", border: "1px solid rgba(26,20,16,0.08)",
                     background: "white", textDecoration: "none",
                   }}
-                  onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = "0 8px 32px rgba(26,20,16,0.10)"; el.style.transform = "translateY(-3px)"; }}
-                  onMouseLeave={(e) => { const el = e.currentTarget as HTMLElement; el.style.boxShadow = "none"; el.style.transform = "none"; }}
                 >
                   <div style={{ width: "28px", height: "3px", borderRadius: "2px", background: prog.color, marginBottom: "1.25rem" }} />
                   {prog.name_ta && (
