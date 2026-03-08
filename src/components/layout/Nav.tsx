@@ -32,13 +32,18 @@ export default function Nav() {
   const [paused, setPaused] = useState(false);
   const pathname = usePathname();
 
+  // Derive locale prefix from current path for locale-aware home link
+  const locale = pathname.startsWith("/ta") ? "ta" : "en";
+  const homeHref = `/${locale}`;
+
   // On home page use hash anchors (smooth scroll); on inner pages use full routes
   const isHome = pathname === "/en" || pathname === "/ta" || pathname === "/" || pathname === "";
   const NAV_LINKS = [
-    { href: isHome ? "#mullai"   : "/programs",  label: "Programs" },
-    { href: isHome ? "#marutam" : "/events",     label: "Events" },
-    { href: isHome ? "#neytal"  : "/#neytal",    label: "Achievements" },
-    { href: isHome ? "#palai"   : "/board",      label: "About" },
+    { href: isHome ? "#hero"    : homeHref,       label: "Home" },
+    { href: isHome ? "#mullai"  : "/programs",    label: "Programs" },
+    { href: isHome ? "#marutam": "/events",       label: "Events" },
+    { href: isHome ? "#neytal" : `${homeHref}#neytal`, label: "Achievements" },
+    { href: isHome ? "#palai"  : "/board",        label: "About" },
   ];
 
   useEffect(() => {
@@ -201,8 +206,8 @@ export default function Nav() {
           }}
           aria-label="Main navigation"
         >
-          {/* Brand — Tamil crest + name → always links to home */}
-          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
+          {/* Brand — Tamil crest + name → goes to hero on home, locale home on inner pages */}
+          <Link href={isHome ? "#hero" : homeHref} style={{ display: "flex", alignItems: "center", gap: "0.75rem", textDecoration: "none" }}>
             <div
               style={{
                 width: "34px", height: "34px", borderRadius: "50%",
@@ -254,7 +259,7 @@ export default function Nav() {
 
           {/* Join CTA — crimson pill */}
           <Link
-            href="#palai"
+            href={isHome ? "#palai" : "/join"}
             style={{
               display: "inline-flex", alignItems: "center", gap: "0.3rem",
               padding: "0.65rem 1.4rem", borderRadius: "999px",
