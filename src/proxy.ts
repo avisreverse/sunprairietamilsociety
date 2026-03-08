@@ -24,6 +24,12 @@ const ADMIN_PROTECTED_RE = /^\/(en|ta)\/admin(?!\/login)(\/.*)?$/;
 export default async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // ─── Skip locale routing for API routes ───────────────────────────────────
+  // next-intl must not rewrite /api/* paths — they are locale-agnostic.
+  if (pathname.startsWith("/api/")) {
+    return NextResponse.next();
+  }
+
   // ─── Admin auth guard ─────────────────────────────────────────────────────
   if (ADMIN_PROTECTED_RE.test(pathname)) {
     // Create a mutable response to allow Supabase to refresh cookies if needed
