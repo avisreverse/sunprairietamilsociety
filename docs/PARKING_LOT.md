@@ -17,7 +17,7 @@ Items land here when:
 |----|------|---------|------------|-------|
 | PL-002 | Real content from user | Photos (event, board headshots), real board names/bios, real event dates, real org stats | User to supply when ready | 2026-03-07 |
 | PL-004 | Admin auth — share spts-clean Supabase (D-017) | Decision made: Option A — point community site to spts-clean's Supabase project. Add `community_admin` role to existing school admins' `user_roles`. Reuse spts-clean auth pattern (email+password, requireAdminAuth). Implement AFTER rest of site is complete. | Implement when site is feature-complete | 2026-03-09 |
-| PL-005 | Run migration 002 (Supabase Storage) | User must manually run database/migrations/002_create_media_storage.up.sql in Supabase SQL editor before photo uploads work | User to run SQL in Supabase dashboard | 2026-03-08 |
+| PL-005 | ~~Run migration 002 (Supabase Storage)~~ | RESOLVED — user ran SQL 2026-03-08, DEF-202603-015 fixed | Resolved | 2026-03-08 |
 
 ---
 
@@ -27,9 +27,7 @@ Items land here when:
 |-------------|--------------|--------------|--------|
 | REQ-202603-003 Thirukkural | Full chapter lookup, watermarks, 3-line fix | Verify GitHub raw fetch works on Vercel (CORS) — test from live URL in incognito | Needs verification |
 | Mobile responsiveness | Not yet audited | Test all pages at 375px (iPhone SE), 768px (tablet) | Deferred — active feedback cycle in progress |
-| Events detail pages | /events listing exists | Create /events/[slug] individual event pages | Not started |
-| /en/events DB wire-up | Page exists but hardcoded. Needs Supabase fetch — DEF-202603-013 | Replace hardcoded EVENTS array with server fetch | DEF-202603-013 |
-| /achievements/[id] DB wire-up | Detail page uses hardcoded array — DEF-202603-014 | Replace with Supabase fetch by UUID | DEF-202603-014 |
+| Events detail pages | /events listing exists + DB-driven | Create /events/[slug] individual event pages | Not started |
 | Playwright E2E testing | User requested automated testing to replace manual testing | Set up Playwright test suite for all user flows (programs, events, achievements, board, admin) | Next session priority |
 
 ---

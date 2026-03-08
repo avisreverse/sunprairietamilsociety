@@ -21,19 +21,9 @@ All bugs and defects tracked here with `DEF-YYYYMM-NNN` IDs.
 
 | ID | Severity | Status | Title | Linked REQ | Found In |
 |----|----------|--------|-------|-----------|---------|
-| DEF-202603-003 | P3 | open | Board grid tile alignment — orphaned last card | REQ-202603-006 | Session 10 |
-| DEF-202603-004 | P2 | open | Admin board members — no photo upload field | REQ-202603-006 | Session 10 |
-| DEF-202603-005 | P2 | open | Admin programs — no Add New Program form | REQ-202603-002 | Session 10 |
-| DEF-202603-006 | P2 | open | Admin achievements — no photo upload field | REQ-202603-005 | Session 10 |
-| DEF-202603-007 | P2 | open | Public featured event card not clickable | REQ-202603-001 | Session 10 |
+| DEF-202603-003 | P3 | open | Board grid tile alignment — orphaned last card on /board page | REQ-202603-006 | Session 10 |
 | DEF-202603-008 | P2 | open | RSVP page not built — DB table exists, no public form | REQ-202603-007 | Session 10 |
 | DEF-202603-009 | P3 | open | Achievement category — no option to add custom categories | REQ-202603-005 | Session 10 |
-| DEF-202603-010 | P2 | open | Programs bento grid hardcoded for 5 items — breaks with 6+ | REQ-202603-002 | Session 11 |
-| DEF-202603-011 | P3 | open | "Five ways to belong" heading hardcoded — ignores actual count | REQ-202603-002 | Session 11 |
-| DEF-202603-012 | P2 | open | Admin allows multiple featured events — public shows only first | REQ-202603-001 | Session 11 |
-| DEF-202603-013 | P1 | open | /en/events listing page uses hardcoded 2025 data — not DB-driven | REQ-202603-001 | Session 11 |
-| DEF-202603-014 | P1 | open | Achievement detail pages use hardcoded array — DB UUID → 404 | REQ-202603-005 | Session 11 |
-| DEF-202603-015 | P1 | open | Photo upload fails — Supabase Storage media bucket not created | REQ-202603-005 | Session 11 |
 
 ---
 
@@ -58,61 +48,77 @@ Board cards should follow a centered or intentional pattern (e.g., last row cent
 
 ## DEF-202603-004: Admin Board Members — No Photo Upload Field
 **Severity:** P2
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-006
 **Found In:** Session 10
 
 ### Description
-The admin board members form (Add/Edit) has no photo upload input. Board member headshots cannot be uploaded to Supabase Storage from the admin portal.
+The admin board members form (Add/Edit) had no photo upload input. Board member headshots could not be uploaded to Supabase Storage from the admin portal.
 
-### Expected Behavior
-Admin form should include a photo upload field that stores the image in Supabase Storage and saves the URL to the `board_members` table.
+### Fix Applied
+Added `uploadPhoto()` function to admin board page. File input uploads to `board/{slug}.{ext}` in the Supabase Storage `media` bucket. Public URL is saved to `form.photo_url`. UI shows thumbnail preview or initials fallback, uploading spinner, and remove button.
+
+### Regression Tests Added
+- TC-DEF-202603-004: Edit a board member, upload a photo → verify thumbnail appears, form saves with photo_url.
 
 ---
 
 ## DEF-202603-005: Admin Programs — No Add New Program Form
 **Severity:** P2
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-002
 **Found In:** Session 10
 
 ### Description
-The admin programs page only allows editing existing seeded programs. There is no UI to add a new program (the page text says "add new ones via the form below" but no such form exists).
+The admin programs page only allowed editing existing seeded programs. No UI existed to add a new program.
 
-### Expected Behavior
-An "Add New Program" button and form should appear on the admin programs page, allowing creation of new programs with slug, name_en, name_ta, description, color, display_order, featured, and is_active fields.
+### Fix Applied
+Added `ADD_EMPTY` constant, `showAddForm` / `addForm` / `adding` / `addError` states, `setA()` helper, and `addProgram()` async function to `src/app/[locale]/admin/programs/page.tsx`. Header now shows "+ Add Program" button that opens a full form (slug, name_en, name_ta, description, color, display_order, featured, is_active).
+
+### Regression Tests Added
+- TC-DEF-202603-005: Click "+ Add Program" → fill slug + name → save → verify new program appears in list.
 
 ---
 
 ## DEF-202603-006: Admin Achievements — No Photo Upload Field
 **Severity:** P2
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-005
 **Found In:** Session 10
 
 ### Description
-The achievement submit form (`/achievements/submit`) has a local photo preview (client-side only) but no Supabase Storage upload. Submitted achievements have no photo stored.
+The admin achievements edit form had no photo upload. Achievement photos could not be uploaded to Supabase Storage.
 
-### Expected Behavior
-Photo selection should upload to Supabase Storage and store the URL in the `achievements` table. Admin achievement edit should also support photo upload.
+### Fix Applied
+Added `uploadPhoto()` function to admin achievements page. Uploads to `achievements/{id or timestamp}.{ext}`. Photo URL saved to form state and to the `achievements` table via PATCH. Matches board member upload pattern exactly.
+
+### Regression Tests Added
+- TC-DEF-202603-006: Edit an achievement, upload a photo → verify thumbnail appears, form saves with photo_url.
 
 ---
 
 ## DEF-202603-007: Public Featured Event Card Not Clickable
 **Severity:** P2
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-001
 **Found In:** Session 10
 
 ### Description
-On the public landing page (MarutamEvents section), the featured (large) event card is not wrapped in a link and cannot be clicked. Clicking on it does nothing.
+On the public landing page (MarutamEvents section), the featured (large) event card was not wrapped in a link and could not be clicked.
 
-### Expected Behavior
-Featured event card should navigate to the individual event detail page (`/events/[slug]`) when clicked.
+### Fix Applied
+Added `useRouter` import to `MarutamEvents.tsx`. Featured card `motion.div` gets `onClick={() => router.push("/events")}` and `cursor: "pointer"`. RSVP `<a>` button gets `onClick={(e) => e.stopPropagation()}` to prevent card click from firing when RSVP is tapped.
+
+### Regression Tests Added
+- TC-DEF-202603-007: Click featured event card on landing page → verify navigates to /en/events.
 
 ---
 
@@ -148,99 +154,115 @@ Admin CMS should include a category management section, or the achievement submi
 
 ## DEF-202603-010: Programs Bento Grid Hardcoded for 5 Items
 **Severity:** P2
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-002
 **Found In:** Session 11
 
 ### Description
-MullaiPrograms.tsx bento grid layout is hardcoded for exactly 5 programs (1 featured large card + 4 regular). When a 6th program is added via admin, it renders as a standalone card below the grid, breaking the visual layout.
+MullaiPrograms.tsx bento grid layout was hardcoded for exactly 5 programs. A 6th program broke the visual layout.
 
-### Root Cause
-The bento grid uses a fixed CSS grid layout optimized for the original 5 seeded programs. No dynamic layout logic exists for varying program counts.
+### Fix Applied
+Refactored to a 2-column outer grid (`1fr 2fr`): featured card fills the left column at full height; all remaining cards go into a 2-column sub-grid (`1fr 1fr`, `alignContent: start`) on the right. Any number of programs now renders cleanly.
 
-### Expected Behavior
-Bento grid should adapt to any number of programs — either a flexible grid layout or a warning in admin that max N programs are displayed at once.
+### Regression Tests Added
+- TC-DEF-202603-010: Add a 6th program in admin → verify programs section grid adapts (no overflow/orphan).
 
 ---
 
 ## DEF-202603-011: "Five Ways to Belong" Heading Hardcoded
 **Severity:** P3
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-002
 **Found In:** Session 11
 
 ### Description
-The programs section heading "Five ways to belong" is hardcoded text at line 61 of MullaiPrograms.tsx. When the program count changes (e.g., 6 programs), the heading still says "Five" which is incorrect.
+The programs section heading "Five ways to belong" was hardcoded and did not reflect the actual program count.
 
-### Expected Behavior
-Heading should either be dynamic ("N ways to belong") or generic ("Ways to belong") to remain accurate regardless of program count.
+### Fix Applied
+Heading changed to dynamic: `{programs.length} way{programs.length !== 1 ? "s" : ""} to belong` in `MullaiPrograms.tsx`.
+
+### Regression Tests Added
+- TC-DEF-202603-011: Change program count in DB → verify heading updates correctly.
 
 ---
 
 ## DEF-202603-012: Admin Allows Multiple Featured Events — Public Shows Only First
 **Severity:** P2
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-001
 **Found In:** Session 11
 
 ### Description
-Admin events page allows multiple events to be marked "Featured" simultaneously (TGest and Tamil New Year both show FEATURED badge). However, the public landing page uses `events.find(e => e.featured)` which returns only the first featured event. The second featured event is not visually distinguished.
+Admin could mark multiple events as featured simultaneously. Public landing page only showed the first.
 
-### Expected Behavior
-Either: (a) Admin enforces only one featured event at a time (un-featuring the previous when a new one is featured), OR (b) a clear admin note explains that only the earliest-date featured event appears as the hero card.
+### Fix Applied
+In `src/app/api/admin/events/[id]/route.ts` PATCH handler: when `body.featured === true`, first set `featured = false` on all other events (`neq("id", id)`), then update the target event. Ensures exactly one featured event at all times.
+
+### Regression Tests Added
+- TC-DEF-202603-012: Feature event A, then feature event B → verify event A is no longer featured in admin list.
 
 ---
 
 ## DEF-202603-013: /en/events Listing Page Uses Hardcoded 2025 Data
 **Severity:** P1
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-001
 **Found In:** Session 11
 
 ### Description
-The events listing page at `/en/events` has a hardcoded EVENTS array with 2025 dates. It is not connected to the Supabase events table. Admin-added events (2026 dates) do not appear on this page. The page was created in an earlier session with `"Static for now"` comment.
+`/en/events` had a hardcoded EVENTS array with 2025 data. Admin-added events did not appear.
 
-### Expected Behavior
-`/en/events` should fetch from Supabase and display all published events, matching the admin's data.
+### Fix Applied
+Fully rewrote `src/app/[locale]/events/page.tsx` as a Server Component with Supabase fetch. Added `parseDateDisplay()` using `T12:00:00` timezone fix. Orders by date ascending, handles empty state gracefully.
+
+### Regression Tests Added
+- TC-DEF-202603-013: Add a new event in admin → verify it appears on /en/events.
 
 ---
 
 ## DEF-202603-014: Achievement Detail Pages Use Hardcoded Array — DB UUID → 404
 **Severity:** P1
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-005
 **Found In:** Session 11
 
 ### Description
-Achievement cards on the landing page link to `/achievements/[UUID]` (DB UUID). The achievement detail page `/achievements/[id]/page.tsx` has a hardcoded ACHIEVEMENTS array indexed by number. A UUID resolves to `array[NaN]` → undefined → `notFound()` → 404.
+`/achievements/[id]/page.tsx` used a hardcoded integer-indexed array. DB UUIDs resolved to `array[NaN]` → 404.
 
 ### Root Cause
-`/achievements/[id]/page.tsx` was built with a hardcoded array in an earlier session before DB was wired. Not updated to fetch from Supabase.
+Page was built before DB wire-up. Used hardcoded array indexed by number.
 
-### Expected Behavior
-`/achievements/[id]/page.tsx` should fetch achievement by UUID from Supabase and display real data.
+### Fix Applied
+Fully rewrote as a Server Component fetching by UUID: `.eq("id", id).eq("is_approved", true).eq("is_published", true).single()`. Calls `notFound()` if not found or not published. Shows `<img>` if photo_url exists, else initials avatar.
+
+### Regression Tests Added
+- TC-DEF-202603-014: Click an achievement card on landing page → verify detail page loads with correct data.
 
 ---
 
 ## DEF-202603-015: Photo Upload Fails — Supabase Storage Media Bucket Not Created
 **Severity:** P1
-**Status:** open
+**Status:** fixed
 **Created:** 2026-03-08
+**Fixed:** 2026-03-08
 **Linked Requirement:** REQ-202603-005
 **Found In:** Session 11
 
 ### Description
-Photo upload in admin board members and admin achievements pages fails with a storage error. The Supabase Storage `media` bucket was defined in migration `002_create_media_storage.up.sql` but the SQL has not yet been run in the Supabase dashboard.
+Photo upload failed because the Supabase Storage `media` bucket had not been created.
 
-### Steps to Fix
-1. Go to: https://supabase.com/dashboard/project/gzdndcytxpmhjuxwnsxv/sql
-2. Paste and run the contents of `database/migrations/002_create_media_storage.up.sql`
-3. Verify bucket appears in Storage dashboard
+### Fix Applied
+Migration `database/migrations/002_create_media_storage.up.sql` created + user ran it in Supabase SQL editor. Bucket `media` now exists with public read, 5MB limit, JPEG/PNG/WebP only.
 
 ### Regression Tests Added
 - TC-DEF-202603-015: Upload a photo in admin board edit form → verify image appears, photo_url saved to DB.

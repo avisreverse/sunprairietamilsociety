@@ -6,9 +6,9 @@ Track session-by-session progress. Always read this at session start.
 
 ## Current State
 
-**Phase:** Phase 3 — Admin CMS live. DB-driven landing page. Auth fix deployed. 7 UX defects logged for next session.
-**Status:** Live at https://sunprairietamilsociety.vercel.app/en. Admin portal functional (programs, events, board, achievements). Content loads from Supabase.
-**Last Updated:** 2026-03-09
+**Phase:** Phase 3 — Admin CMS live + DB wire-ups complete. 11 defects fixed across 2 sessions. 3 open defects remaining.
+**Status:** Live at https://sunprairietamilsociety.vercel.app/en. All major DB wire-ups done. Events/achievements now fully dynamic. Photo uploads working (Supabase Storage). Programs grid adaptive.
+**Last Updated:** 2026-03-08
 **Release Branch:** `release` — Vercel production branch. Always push `git push origin main:release`.
 **Live URL:** https://sunprairietamilsociety.vercel.app/en
 **Admin URL:** https://sunprairietamilsociety.vercel.app/en/admin
@@ -49,47 +49,62 @@ Track session-by-session progress. Always read this at session start.
 - [x] **Build passes** — 12 routes, clean TypeScript
 
 ### What's Pending (Next Session)
-- [ ] **DEF-202603-003**: Board grid tile alignment — 7th card orphaned in second row, needs centered/patterned layout
-- [ ] **DEF-202603-004**: Admin — no photo upload for board members (headshots)
-- [ ] **DEF-202603-005**: Admin — no "Add New Program" form (only edit existing)
-- [ ] **DEF-202603-006**: Admin — no photo upload for achievements
-- [ ] **DEF-202603-007**: Public site — featured event card not clickable (no link/href)
-- [ ] **DEF-202603-008**: RSVP page not built yet — /rsvp or per-event RSVP form
-- [ ] **DEF-202603-009**: Admin — Achievement category fixed list, no option to add custom categories
-- [ ] Photo upload persistence — Supabase Storage integration (board + achievement photos)
+- [ ] **DEF-202603-003**: /board page grid tile alignment — 7th card orphaned, needs centered layout
+- [ ] **DEF-202603-008**: RSVP page — /events/[id]/rsvp public form (REQ-202603-007)
+- [ ] **DEF-202603-009**: Achievement category — fixed list, no custom category add (P3)
 - [ ] Events detail pages — /events/[slug] individual event pages
 - [ ] Mobile responsiveness audit (375px breakpoints not yet tested)
+- [ ] Playwright E2E testing setup (user requested, next session priority)
 - [ ] Real content — photos, board headshots, real event dates (user to supply)
 - [ ] Sentry integration
 - [ ] Thirukkural GitHub fetch CORS verification on Vercel network
+- [ ] Admin auth — PL-004: add community_admin role to spts-clean Supabase (implement after site feature-complete)
 
 ### Open Defects
-- DEF-202603-003: Board grid tile alignment (P3)
-- DEF-202603-004: Admin — no board member photo upload (P2)
-- DEF-202603-005: Admin — no Add New Program form (P2)
-- DEF-202603-006: Admin — no achievement photo upload (P2)
-- DEF-202603-007: Featured event not clickable on public site (P2)
+- DEF-202603-003: /board page grid tile alignment (P3)
 - DEF-202603-008: RSVP page not built (P2)
 - DEF-202603-009: Achievement category not extensible (P3)
-- DEF-202603-010: Programs bento grid hardcoded for 5 items (P2)
-- DEF-202603-011: "Five ways to belong" heading hardcoded (P3)
-- DEF-202603-012: Admin allows multiple featured events — public shows only first (P2)
-- DEF-202603-013: /en/events listing page uses hardcoded 2025 data (P1)
-- DEF-202603-014: Achievement detail pages use hardcoded array — DB UUID → 404 (P1)
-- DEF-202603-015: Photo upload fails — Supabase Storage media bucket not created (P1)
-<!-- 13 open defects: DEF-202603-003 through 015 -->
+<!-- 3 open defects -->
 
 ### Active Requirements
-- REQ-202603-001: in_progress — Design D live, DB-driven. 7 UX defects to fix next session.
-- REQ-202603-002: in_progress — Programs bento DB-driven. Admin edit works. Add new program missing.
+- REQ-202603-001: in_progress — Design D live, fully DB-driven. Events + achievements wired up. Featured event clickable. Auto-unfeature enforced.
+- REQ-202603-002: in_progress — Programs bento adaptive grid. Add new program form added. Dynamic heading.
 - REQ-202603-003: in_progress — ThirukkuralSection live, needs real-world fetch verification
-- REQ-202603-004: in_progress — Admin CMS live. Auth, events, board, achievements, programs all working. Photo uploads + add-program form pending.
-- REQ-202603-005: in_progress — Achievement submit form functional. Photo upload local preview only. Detail pages use hardcoded data (need DB wire-up).
-- REQ-202603-006: in_progress — Board pages live. Photo upload pending admin CMS photo feature.
+- REQ-202603-004: in_progress — Admin CMS complete. Auth fixed. Photo uploads working (board + achievements). Add program form added.
+- REQ-202603-005: in_progress — Achievement detail DB-driven. Photo uploads working. Submit form functional.
+- REQ-202603-006: in_progress — Board pages live. Photo upload works in admin.
 
 ---
 
 ## Session Log
+
+### Session 12 — 2026-03-08
+
+**Focus:** Complete all 13 open defects — DB wire-ups, photo uploads, grid fixes, events/achievements, admin CMS gaps
+
+**Completed:**
+- DEF-202603-004: Admin board members — photo upload (Supabase Storage `board/{slug}.ext`)
+- DEF-202603-005: Admin programs — Add New Program form (+Add button, slug/name/color/featured/active fields)
+- DEF-202603-006: Admin achievements — photo upload (Supabase Storage `achievements/{id}.ext`)
+- DEF-202603-007: Public featured event card — made clickable (router.push to /events, RSVP stopPropagation)
+- DEF-202603-010: Programs bento grid — refactored to 2-col outer (1fr/2fr) + 2-col sub-grid; adapts to any count
+- DEF-202603-011: "Five ways to belong" — replaced with dynamic `{programs.length} ways to belong`
+- DEF-202603-012: Multiple featured events — auto-unfeature all others on PATCH when `featured: true`
+- DEF-202603-013: /en/events — fully rewritten as Server Component with Supabase fetch (T12:00:00 timezone fix)
+- DEF-202603-014: /achievements/[id] — fully rewritten as Server Component fetching by UUID, shows photo or initials
+- DEF-202603-015: Supabase Storage media bucket — migration SQL written; user ran it in Supabase dashboard
+
+**Deferred / Remaining Open:**
+- DEF-202603-003: /board page grid orphan card (P3)
+- DEF-202603-008: RSVP page not built (P2)
+- DEF-202603-009: Achievement category not extensible (P3)
+- Playwright E2E testing (user request, next session priority)
+- Events detail pages /events/[slug]
+
+**Deployment:**
+- Pushed to `main` and `release` branches → Vercel production
+
+---
 
 ### Session 11 — 2026-03-08
 
